@@ -1,3 +1,5 @@
+import decimal
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -44,12 +46,13 @@ class Dish(models.Model):
 
     max_digits=4 and decimal_places=2 limits the price to no more than $99.99.
     """
-    default_price = models.DecimalField(max_digits=4, decimal_places=2)
+    name = models.CharField(max_length=128)
     description = models.TextField("Dish Description")
+    default_price = models.DecimalField(max_digits=4, decimal_places=2)
     cuisine_tags = models.ManyToManyField(CuisineTag)
     serving_size = models.DecimalField(max_digits=3,
                                        decimal_places=1,
-                                       default=4.99)
+                                       default=decimal.Decimal(1.0))
 
 class DishPost(models.Model):
     """
@@ -125,6 +128,12 @@ class DishPost(models.Model):
 
     status = models.IntegerField(choices=STATUS_CHOICES, default=OPEN)
 
+    def available_servings(self):
+        servings_ordered = 0
+        for order in self.order_set.all():
+            servings_ordered += order.num_servings
+        return self.max_servings - servings_ordered
+
 class Order(models.Model):
     """
     Django model class representing an Order made by a Diner for a Posted Dish.
@@ -145,3 +154,6 @@ class Order(models.Model):
     diner = models.ForeignKey(Diner, on_delete=models.SET_NULL, null=True)
     dish_post = models.ForeignKey(DishPost, on_delete=models.PROTECT)
     num_servings = models.IntegerField(default=1)
+
+    def total(self):
+        return self.num_servings * self.dish_post.price
