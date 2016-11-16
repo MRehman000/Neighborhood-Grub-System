@@ -5,6 +5,7 @@ import datetime
 import argparse
 
 import django
+from django.utils import timezone
 
 os.environ["DJANGO_SETTINGS_MODULE"] = "ngs.settings"
 ngs_dir, gbg = os.path.split(os.path.abspath(__file__))
@@ -46,9 +47,18 @@ cuisine_tags = {
 
 dishes = {
     0: {
+        "name": "Sesame Chicken",
         "default_price": decimal.Decimal(7.50),
-        "description": "Sesame Chicken",
-        "serving_size": 5
+        "description": ("Classic sesame chicken with white rice and choice "
+                        "of sauce. More MSG than is legal!!!"),
+        "serving_size": decimal.Decimal(1.5)
+    },
+    1: {
+        "name": "Rice and Beans",
+        "default_price": decimal.Decimal(5.75),
+        "description": ("Does rice and beans need a description? "
+                        "Of course not!"),
+        "serving_size": decimal.Decimal(1)
     }
 }
 
@@ -59,8 +69,17 @@ dish_posts = {
         "dish": 0,
         "price": decimal.Decimal(6.50),
         "serving_size": decimal.Decimal(0.7),
-        "last_call": datetime.datetime.now() + datetime.timedelta(days=1),
-        "meal_time": datetime.datetime.now() + datetime.timedelta(days=2)
+        "last_call": timezone.now() + datetime.timedelta(days=1),
+        "meal_time": timezone.now() + datetime.timedelta(days=2)
+    },
+    1: {
+        "chef": 0,
+        "max_servings": 4,
+        "dish": 1,
+        "price": decimal.Decimal(5.00),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4)
     }
 }
 
@@ -75,9 +94,11 @@ orders = {
 def load():
 
     for user_info in users:
-        user = User.objects.create(**users[user_info])
+        user = User(username=users[user_info]["username"],
+                    email=users[user_info]["email"])
         user.set_password(users[user_info]["password"])
         users[user_info] = user
+        user.save()
 
     for diner_info in diners:
         diner_user = users[diners[diner_info]["user"]]
@@ -122,6 +143,11 @@ def main(command):
         load()
     elif command == "delete":
         delete()
+    elif command == "reload":
+        delete()
+        load()
+    else:
+        print("Please pass as argument either load, delete, or reload")
 
 
 if __name__ == "__main__":
