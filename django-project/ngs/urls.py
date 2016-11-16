@@ -19,7 +19,10 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r"^login/$", auth_views.login, name="login"),
-    url(r"^logout/$", auth_views.logout, name="logout"),
+    url(r"^logout/$",
+        auth_views.logout,
+        name="logout",
+        kwargs={"next_page": "/dishes/"}),
     url(r"^dishes/", include("dishes.urls")),
     url(r'^admin/', admin.site.urls),
 ]
