@@ -1,0 +1,28 @@
+{% include "ngs/header.html" %}
+
+<h2>Orders</h2>
+<ul>
+{% for order in orders %}
+  <li>
+    <h3>{{ order.dish_post.dish.name }}</h3>
+    <p>{{ order.dish_post.dish.description }}</p>
+    <table>
+      <tr>
+        <td>Meal Time</td><td>{{order.dish_post.meal_time}}</td>
+      </tr>
+      <tr>
+        <td>Chef</td><td>{{order.dish_post.chef.user.username}}</td>
+      </tr>
+      <tr>
+        <td>Serving Price</td><td>${{order.dish_post.price}}</td>
+      </tr>
+      <tr>
+        <td>Servings Ordered</td><td>{{order.num_servings}}</td>
+      </tr>
+      <tr>
+        <td>Total</td><td>${{ order.total }}</td>
+      </tr>
+    </table>
+  </li>
+{% endfor %}
+</ul>

@@ -1,0 +1,14 @@
+{% include "ngs/header.html" %}
+
+<h2>Dish Posts</h2>
+{% if dish_posts %}
+  <ul>
+    {% for dish_post in dish_posts %}
+      <li>
+        <a href="/dishes/posts/{{ dish_post.id }}/">{{dish_post.dish.name}}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No Dish Posts or Requests are available.</p>
+{% endif %}
