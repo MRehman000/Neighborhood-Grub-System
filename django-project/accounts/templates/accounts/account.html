@@ -2,7 +2,14 @@
 
 {% if user.is_authenticated %}
 <h2>{{ user.username }} Account</h2>
-<a href="terminate/">Request account termination</a>
+<ul>
+  <li>
+    <a href="terminate/">Request account termination</a>
+  </li>
+  <li>
+    <a href="request-chef-permissions/">Request Chefs Permissions</a>
+  </li>
+</ul>
 {% else %}
 <p>You don't have an account!</p>
 {% endif %}
