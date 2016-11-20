@@ -134,6 +134,74 @@ class DishPost(models.Model):
             servings_ordered += order.num_servings
         return self.max_servings - servings_ordered
 
+class DishRequest(models.Model):
+    """
+    Django model class representing a dish posted by a Diner for a Chef to
+    fill.
+
+    Attributes:
+
+    diner:
+        The Diner creating the dish request.
+
+    dish:
+        Foreign key field referencing the Dish the Diner is requesting.
+
+    portion_size:
+        Decimal field that indicates the requested portion size of one serving
+        of the dish.
+
+    num_servings:
+        Integer field that indicates the number of servings the Diner is
+        requesting the Chef to cook.
+
+    price:
+        Decimal field that stores the price of one serving of this Dish.
+
+    meal_time:
+        Date time field that indicates the approximate time the Dish is to be
+        served. The Chef and Diner should coordinate the exchange of food at or
+        around this time.
+
+    status:
+        Integer field that indicates the status of the order. The status
+        descriptions are below.
+
+        Open:
+            No Chef has yet agreed to fulfill the request and the request is still
+            standing.
+        Closed:
+            A Chef has agreed to fulfill the request, but the dish has not yet
+            been served.
+        Cancelled:
+            The Diner has cancelled this Dish Request.
+        Complete:
+            The Dish has been served and the Chef has been paid.
+    """
+    diner = models.ForeignKey(Diner, on_delete=models.SET_NULL, null=True)
+    dish = models.ForeignKey(Dish, on_delete=models.PROTECT)
+    portion_size = models.DecimalField(max_digits=3, decimal_places=1)
+    num_servings = models.IntegerField(default=1)
+    price = models.DecimalField(max_digits=4, decimal_places=2)
+    meal_time = models.DateTimeField("Meal Time")
+
+    OPEN = 0
+    CLOSED = 1
+    CANCELLED = 2
+    COMPLETE = 3
+
+    STATUS_CHOICES = (
+        (OPEN, "Open"),
+        (CLOSED, "Closed"),
+        (CANCELLED, "Cancelled"),
+        (COMPLETE, "Complete")
+    )
+
+    status = models.IntegerField(choices=STATUS_CHOICES, default=OPEN)
+
+    def total(self):
+        return self.price * self.num_servings
+
 class Order(models.Model):
     """
     Django model class representing an Order made by a Diner for a Posted Dish.
