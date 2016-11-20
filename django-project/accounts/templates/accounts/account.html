@@ -1,0 +1,8 @@
+{% include "ngs/header.html" %}
+
+{% if user.is_authenticated %}
+<h2>{{ user.username }} Account</h2>
+<a href="terminate/">Request account termination</a>
+{% else %}
+<p>You don't have an account!</p>
+{% endif %}

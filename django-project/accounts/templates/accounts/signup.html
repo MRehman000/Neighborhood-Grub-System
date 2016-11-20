@@ -1,0 +1,8 @@
+{% include "ngs/header.html" %}
+
+<h2>Sign up</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">Submit application!</button>
+</form>

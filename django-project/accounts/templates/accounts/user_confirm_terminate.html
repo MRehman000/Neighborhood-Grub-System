@@ -1,0 +1,13 @@
+{% include "ngs/header.html" %}
+
+<h2>Confirm</h2>
+{% if request_confirmed %}
+<p>Your account termination request has been submitted and will be reviewed shortly</p>
+{% else %}
+Are you sure you want to delete your account?
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">Submit</button>
+</form>
+{% endif %}
