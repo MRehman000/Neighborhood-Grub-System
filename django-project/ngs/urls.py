@@ -25,7 +25,7 @@ urlpatterns = [
     url(r"^logout/$",
         auth_views.logout,
         name="logout",
-        kwargs={"next_page": "/dishes/"}),
+        kwargs={"next_page": "index"}),
     url(r"^accounts/", include("accounts.urls")),
     url(r"^dishes/", include("dishes.urls")),
     url(r'^admin/', admin.site.urls),
