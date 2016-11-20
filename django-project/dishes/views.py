@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404, render, redirect
 
-from dishes.models import *
+from dishes.models import DishPost, Diner, Order, DishRequest
 
-def index(request):
+def posts(request):
     dish_posts = DishPost.objects.all()
     context = {"dish_posts": dish_posts}
-    return render(request, "dishes/index.html", context)
+    return render(request, "dishes/posts.html", context)
 
 def post_detail(request, dish_post_id):
     dish_post = get_object_or_404(DishPost, pk=dish_post_id)
@@ -31,3 +31,15 @@ def orders(request):
         orders = Order.objects.filter(diner=diner)
         context = {"orders": orders}
         return render(request, "dishes/orders.html", context)
+
+def requests(request):
+    dish_requests = DishRequest.objects.all()
+    context = {"dish_requests": dish_requests}
+    return render(request, "dishes/requests.html", context)
+
+def request_detail(request, dish_request_id):
+    dish_request = get_object_or_404(DishRequest, pk=dish_request_id)
+    context = {"dish_request": dish_request}
+    if request.user.is_authenticated:
+        context["user"] = request.user
+    return render(request, "dishes/request_detail.html", context)
