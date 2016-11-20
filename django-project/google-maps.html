@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+    <h3>My Google Maps Demo</h3>
+    <div id="map"></div>
+    <script>
+      function initMap() {
+        //Our map will start at CCNY as default
+        var NYCenter = {lat: 40.847538, lng: -73.933314};
+        var mapOptions = {
+
+          zoom: 14,
+          center: NYCenter,
+
+        };
+        var map = new google.maps.Map(document.getElementById('map'),mapOptions);
+
+        //If user shares location, set that as center
+        if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition(function (position) {
+             initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+             map.setCenter(initialLocation);
+         });
+        }
+        //Create a marker at CCNY
+        var marker = new google.maps.Marker({
+          position: NYCenter,
+          map: map,
+          title: 'City College of New York'
+        });
+
+    
+        var infowindowcontent = '<div id="content">'+ 
+            '<div id="Dish">'+
+            '</div>'+
+            '<h3 id="firstHeading" class="firstHeading">Dish</h3>'+
+            '<div id="bodyContent">'+
+            '<p>Dish: Chicken and Beans</p>'+
+            '<p>Chef: Gordon Ramsay</p>'+
+            '<p>Price: $10</p>'+
+            '</div>'+
+            '</div>';
+        //Create infowindow that displays when you click marker
+        var infowindow = new google.maps.InfoWindow({
+            content: infowindowcontent
+          });
+        //What happens when you click marker
+        marker.addListener('click', function(){
+
+          infowindow.open(map,marker);
+
+        });
+
+
+      }
+      initMap();
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADA4evIaL4acoxA1c8VsZCSeW-VKcIEdY&callback=initMap">
+    </script>
+  </body>
+</html>
