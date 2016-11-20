@@ -1,0 +1,13 @@
+{% include "ngs/header.html" %}
+
+<h2>Create Chef Permissions Request</h2>
+{% if request_confirmed %}
+<p>Your chef permissions request has been submitted and will be reviewed shortly</p>
+{% else %}
+Please fill out this form
+<form enctype="multipart/form-data" method="post">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">Submit</button>
+</form>
+{% endif %}
