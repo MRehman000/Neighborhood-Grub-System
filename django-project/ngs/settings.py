@@ -31,7 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "dishes.apps.DishesConfig",
+    "dishes",
+    "requests",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
