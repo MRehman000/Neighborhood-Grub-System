@@ -34,3 +34,22 @@ class TerminateAccountRequest(models.Model):
         The user who has requested that their account be terminated.
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class ChefPermissionsRequest(models.Model):
+    """
+    Django class representing a chef permissions request.
+
+    Attributes:
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    first_dish_name = models.CharField(max_length=256)
+    first_dish_image = models.ImageField(max_length=256)
+
+    second_dish_name = models.CharField(max_length=256)
+    second_dish_image = models.ImageField(max_length=256)
+
+    third_dish_name = models.CharField(max_length=256)
+    third_dish_image = models.ImageField(max_length=256)
+
+    video_biography = models.FileField(max_length=256)
