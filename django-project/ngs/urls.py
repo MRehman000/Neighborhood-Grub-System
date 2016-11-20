@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
 from ngs import views
-from requests import views as req_views
 
 urlpatterns = [
     url(r"^$", views.index, name="index"),
@@ -27,7 +26,7 @@ urlpatterns = [
         auth_views.logout,
         name="logout",
         kwargs={"next_page": "/dishes/"}),
-    url(r"^signup/$", req_views.signup, name="signup"),
+    url(r"^accounts/", include("accounts.urls")),
     url(r"^dishes/", include("dishes.urls")),
     url(r'^admin/', admin.site.urls),
 ]
