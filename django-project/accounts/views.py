@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 
-from accounts.forms import *
+from accounts.forms import ChefPermissionsRequestForm, CreateAccountRequestForm
+from accounts.forms import TerminateAccountRequestForm
+
 from accounts.models import *
 from dishes.models import *
 
@@ -25,7 +27,6 @@ def terminate(request):
     if request.method == "POST":
         form = TerminateAccountRequestForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data)
             choice = int(form.cleaned_data["choice"])
             if choice == TerminateAccountRequestForm.YES:
                 TerminateAccountRequest.objects.create(user=request.user)
@@ -34,6 +35,19 @@ def terminate(request):
                 return redirect("account")
     else:
         form = TerminateAccountRequestForm()
+    return render(request, "accounts/user_confirm_terminate.html", context)
+
+def request_chef_permissions(request):
+    context = {}
+    if request.method == "POST":
+        form = ChefPermissionsRequestForm(request.POST, request.FILES)
+        if form.is_valid():
+            ChefPermissionsRequest.objects.create(user=request.user,
+                                                  **form.cleaned_data)
+            context["request_confirmed"] = True
+    else:
+        form = ChefPermissionsRequestForm()
+
     context["form"] = form
     print(context)
-    return render(request, "accounts/user_confirm_terminate.html", context)
+    return render(request, "accounts/request-chef-permissions.html", context)
