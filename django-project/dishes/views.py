@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
 
-from dishes.models import DishPost, Diner, Order, DishRequest
+from dishes.models import DishPost, Diner, Order, DishRequest, Chef
 
 def posts(request):
     dish_posts = DishPost.objects.all()
@@ -43,3 +43,8 @@ def request_detail(request, dish_request_id):
     if request.user.is_authenticated:
         context["user"] = request.user
     return render(request, "dishes/request_detail.html", context)
+
+def chef_detail(request, chef_id):
+    chef = get_object_or_404(Chef, pk=chef_id)
+    context = {"chef": chef}
+    return render(request, "dishes/chef_detail.html", context)
