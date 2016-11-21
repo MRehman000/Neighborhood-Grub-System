@@ -17,7 +17,10 @@
       <td>Available Servings</td><td>{{dish_post.available_servings}}</td>
     </tr>
     <tr>
-      <td>Chef</td><td>{{dish_post.chef.user.username}}</td>
+      <td>Chef</td>
+      <td>
+        <a href="/dishes/chefs/{{ dish_post.chef.id }}/">{{dish_post.chef.user.username}}</a>
+      </td>
     </tr>
   </table>
   {% if user.is_authenticated and dish_post.available_servings > 0%}
