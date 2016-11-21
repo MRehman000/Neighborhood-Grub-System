@@ -8,6 +8,7 @@ edges = (
     ("home", "dish posts"),
     ("home", "dish requests"),
     ("home", "account"),
+    ("home", "suggestion"),
     ("login", "signup"),
     ("login", "home"),
     ("dish posts", "post detail"),
