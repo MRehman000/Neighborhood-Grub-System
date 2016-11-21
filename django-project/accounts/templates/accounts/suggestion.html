@@ -1,0 +1,13 @@
+{% include "ngs/header.html" %}
+
+<h2>Make a Suggestion</h2>
+{% if suggestion_received %}
+<p>Thank you for your suggestion!</p>
+{% else %}
+Please fill out your suggestion
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">Submit</button>
+</form>
+{% endif %}
