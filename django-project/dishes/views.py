@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
+from django.http import HttpResponseForbidden
 
 from dishes.models import DishPost, Diner, Order, DishRequest, Chef
 
@@ -48,3 +49,10 @@ def chef_detail(request, chef_id):
     chef = get_object_or_404(Chef, pk=chef_id)
     context = {"chef": chef}
     return render(request, "dishes/chef_detail.html", context)
+
+def cancel_order(request, order_id):
+    if request.method == "POST":
+        return redirect("orders")
+    order = get_object_or_404(Order, pk=order_id)
+    context = {"order": order}
+    return render(request, "dishes/cancel_order.html", context)
