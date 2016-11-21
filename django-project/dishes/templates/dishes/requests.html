@@ -1,0 +1,18 @@
+{% include "ngs/header.html" %}
+
+<h2>Dish Requests</h2>
+{% if dish_requests %}
+  <ul>
+    {% for dish_request in dish_requests %}
+      <li>
+        <a href="/dishes/requests/{{ dish_request.id }}/">{{dish_request.dish.name}}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No Dish Requests are available.</p>
+{% endif %}
+
+{% if user.is_authenticated %}
+<a href="/dishes/orders/">Orders</a>
+{% endif %}

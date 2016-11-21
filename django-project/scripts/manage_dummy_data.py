@@ -59,6 +59,12 @@ dishes = {
         "description": ("Does rice and beans need a description? "
                         "Of course not!"),
         "serving_size": decimal.Decimal(1)
+    },
+    2: {
+        "name": "Beef with Broccoli",
+        "default_price": decimal.Decimal(6.75),
+        "description": "Masscared cow and harvested greens",
+        "serving_size": decimal.Decimal(1.0)
     }
 }
 
@@ -88,6 +94,17 @@ orders = {
         "diner": 0,
         "dish_post": 0,
         "num_servings": 1
+    }
+}
+
+dish_requests = {
+    0: {
+        "diner": 0,
+        "dish": 2,
+        "portion_size": decimal.Decimal(1.1),
+        "num_servings": 5,
+        "price": decimal.Decimal(6.50),
+        "meal_time": timezone.now() + datetime.timedelta(days=7)
     }
 }
 
@@ -129,6 +146,12 @@ def load():
         orders[key]["dish_post"] = dish_posts[orders[key]["dish_post"]]
         order = Order.objects.create(**orders[key])
         orders[key] = order
+
+    for key in dish_requests:
+        dish_requests[key]["diner"] = diners[dish_requests[key]["diner"]]
+        dish_requests[key]["dish"] = dishes[dish_requests[key]["dish"]]
+        dish_request = DishRequest.objects.create(**dish_requests[key])
+        dish_requests[key] = dish_request
 
 def delete():
 

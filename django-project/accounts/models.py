@@ -53,3 +53,15 @@ class ChefPermissionsRequest(models.Model):
     third_dish_image = models.ImageField(max_length=256)
 
     video_biography = models.FileField(max_length=256)
+
+class Suggestion(models.Model):
+    """
+    Django class representing a suggestion made by a visitor or user to the
+    site.
+
+    Attributes:
+
+    suggestion:
+        The suggestion being made by the visitor or user.
+    """
+    suggestion = models.TextField()

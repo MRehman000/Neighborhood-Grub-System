@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from accounts.forms import ChefPermissionsRequestForm, CreateAccountRequestForm
-from accounts.forms import TerminateAccountRequestForm
+from accounts.forms import TerminateAccountRequestForm, SuggestionForm
 
 from accounts.models import *
 from dishes.models import *
@@ -49,5 +49,17 @@ def request_chef_permissions(request):
         form = ChefPermissionsRequestForm()
 
     context["form"] = form
-    print(context)
     return render(request, "accounts/request-chef-permissions.html", context)
+
+def suggestion(request):
+    context = {}
+    if request.method == "POST":
+        form = SuggestionForm(request.POST)
+        if form.is_valid():
+            Suggestion.objects.create(**form.cleaned_data)
+            context["suggestion_received"] = True
+    else:
+        form = SuggestionForm()
+
+    context["form"] = form
+    return render(request, "accounts/suggestion.html", context)

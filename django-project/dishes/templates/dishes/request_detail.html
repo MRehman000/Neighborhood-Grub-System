@@ -1,0 +1,28 @@
+{% include "ngs/header.html" %}
+
+{% if dish_request %}
+  <h1>{{dish_request.dish.name}}</h1>
+  <p>{{dish_request.dish.description}}</p>
+  <table>
+    <tr>
+      <td>Diner</td><td>{{dish_request.diner.user.username}}</td>
+    </tr>
+    <tr>
+      <td>Meal Time</td><td>{{dish_request.meal_time}}</td>
+    </tr>
+    <tr>
+      <td>Portion Size</td><td>{{ dish_request.portion_size }}</td>
+    </tr>
+    <tr>
+      <td>Requested Servings</td><td>{{dish_request.num_servings}}</td>
+    </tr>
+    <tr>
+      <td>Serving Price</td><td>${{dish_request.price}}</td>
+    </tr>
+    <tr>
+      <td>Total</td><td>${{ dish_request.total }}</td>
+    </tr>
+  </table>
+{% else %}
+  <p>Oops... it appears this request does not exist...</p>
+{% endif %}

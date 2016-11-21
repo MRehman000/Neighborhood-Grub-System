@@ -1,5 +1,6 @@
 from django import forms
 from accounts.models import CreateAccountRequest, ChefPermissionsRequest
+from accounts.models import Suggestion
 
 class CreateAccountRequestForm(forms.ModelForm):
     class Meta:
@@ -23,3 +24,8 @@ class ChefPermissionsRequestForm(forms.ModelForm):
             "third_dish_image",
             "video_biography"
         ]
+
+class SuggestionForm(forms.ModelForm):
+    class Meta:
+        model = Suggestion
+        fields = ["suggestion"]

@@ -122,4 +122,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Redirect after successful login
-LOGIN_REDIRECT_URL = "/dishes/"
+LOGIN_REDIRECT_URL = "/"
