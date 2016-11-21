@@ -9,4 +9,5 @@ urlpatterns = [
     url(r"^request-chef-permissions/$",
         views.request_chef_permissions,
         name="request-chef-permissions"),
+    url(r"^suggestion/$", views.suggestion, name="suggestion"),
 ]
