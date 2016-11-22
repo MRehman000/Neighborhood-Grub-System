@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseForbidden
 
 from dishes.models import DishPost, Diner, Order, DishRequest, Chef
+from dishes.forms import DishForm, DishRequestForm
 
 def posts(request):
     dish_posts = DishPost.objects.all()
@@ -56,3 +57,19 @@ def cancel_order(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     context = {"order": order}
     return render(request, "dishes/cancel_order.html", context)
+
+def create_request(request):
+    context = {}
+    if request.method == "POST":
+        dish_request_form = DishRequestForm(prefix="dish_request",
+                                            data=data.request.POST)
+        dish_form = DishForm(prefix="dish", data=data.request.POST)
+        if dish_request_form.is_valid() and dish_form.is_valid():
+            # Create the Dish and DishRequest
+            return redirect("orders")
+    else:
+        dish_request_form = DishRequestForm(prefix="dish_request")
+        dish_form = DishForm(prefix="dish")
+    context["dish_request_form"] = dish_request_form
+    context["dish_form"] = dish_form
+    return render(request, "dishes/create_request.html", context)
