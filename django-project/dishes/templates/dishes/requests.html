@@ -14,5 +14,12 @@
 {% endif %}
 
 {% if user.is_authenticated %}
-<a href="/dishes/orders/">Orders</a>
+<ul>
+  <li>
+    <a href="/dishes/requests/create/">Make a Request<a>
+  </li>
+  <li>
+    <a href="/dishes/orders/">View Your Orders</a>
+  </li>
+</ul>
 {% endif %}
