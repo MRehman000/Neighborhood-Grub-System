@@ -62,8 +62,8 @@ def create_request(request):
     context = {}
     if request.method == "POST":
         dish_request_form = DishRequestForm(prefix="dish_request",
-                                            data=data.request.POST)
-        dish_form = DishForm(prefix="dish", data=data.request.POST)
+                                            data=request.POST)
+        dish_form = DishForm(prefix="dish", data=request.POST)
         if dish_request_form.is_valid() and dish_form.is_valid():
             # Create the Dish and DishRequest
             return redirect("orders")
