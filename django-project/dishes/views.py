@@ -73,3 +73,10 @@ def create_request(request):
     context["dish_request_form"] = dish_request_form
     context["dish_form"] = dish_form
     return render(request, "dishes/create_request.html", context)
+
+def edit_request(request, dish_request_id):
+    if request.method == "POST":
+        return redirect("requests")
+    dish_request = get_object_or_404(DishRequest, pk=dish_request_id)
+    context = {"dish_request": dish_request}
+    return render(request, "dishes/edit_request.html", context)

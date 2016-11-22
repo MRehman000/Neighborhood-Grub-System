@@ -1,0 +1,17 @@
+{% include "ngs/header.html" %}
+
+<h2> Edit Request </h2>
+
+<p>Are you sure you would like to edit this active request?</p>
+<button type="submit" form="no_form"> Cancel Edit </button>
+<button type="submit" form="yes_form"> Continue To Edit </button>
+
+
+<form id="yes_form"
+      method="post">
+</form>
+
+<form id="no_form"
+      action="/dishes/requests/"
+      method="get">
+</form>
