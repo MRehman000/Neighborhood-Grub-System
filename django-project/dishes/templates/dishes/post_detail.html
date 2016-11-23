@@ -34,6 +34,11 @@
            max="{{dish_post.available_servings}}"/>
     <button>Submit</button>
   </form>
+  <script>
+    var dish_post_info = {
+      "name": "{{ dish_post.dish.name }}"
+    };
+  </script>
   {% endif %}
 {% else %}
   <p>Oops... it appears this dish does not exist...</p>
