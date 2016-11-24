@@ -1,3 +1,4 @@
+
 from django.shortcuts import get_object_or_404, render, redirect
 
 from dishes.models import DishPost, Diner, Order, DishRequest, Chef
@@ -6,6 +7,8 @@ def posts(request):
     dish_posts = DishPost.objects.all()
     context = {"dish_posts": dish_posts}
     return render(request, "dishes/posts.html", context)
+
+
 
 def post_detail(request, dish_post_id):
     dish_post = get_object_or_404(DishPost, pk=dish_post_id)

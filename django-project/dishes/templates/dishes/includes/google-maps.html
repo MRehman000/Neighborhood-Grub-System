@@ -1,29 +1,82 @@
-
+{% block content %}
 
 <!DOCTYPE html>
 <html>
   <head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+
     <style>
-       #map {
-        height: 400px;
+      /*Code provided by Google*/
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 500px;
         width: 100%;
        }
+      /* Optional: Makes the sample page fill the window. */
+      .controls {
+        margin-top: 10px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      #pac-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 300px;
+      }
+
+      #pac-input:focus {
+        border-color: #4d90fe;
+      }
+
+      .pac-container {
+        font-family: Roboto;
+      }
+
+      #type-selector {
+        color: #fff;
+        background-color: #4d90fe;
+        padding: 5px 11px 0px 11px;
+      }
+
+      #type-selector label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+      #target {
+        width: 345px;
+      }
     </style>
   </head>
   <body>
     <h3>Dishes on the map</h3>
-    <p>Click "Allow" to show your location</p>
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
     <div id="map"></div>
     <script>
+
       function initMap() {
         //Our map will start at CCNY as default
         var NYCenter = {lat: 40.847538, lng: -73.933314};
         var mapOptions = {
-
+          mapTypeId: 'roadmap',
           zoom: 14,
-          center: NYCenter,
+          center: NYCenter
 
         };
+
         var map = new google.maps.Map(document.getElementById('map'),mapOptions);
 
         //If user shares location, set that as center
@@ -33,46 +86,129 @@
              map.setCenter(initialLocation);
          });
         }
+        else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+      }
+        
         //Create a marker at CCNY
-        var marker = new google.maps.Marker({
-          position: NYCenter,
+        {% for c in dish_posts %}
+         var marker = new google.maps.Marker({
+          position: {lat: {{c.latitude}}, lng: {{c.longitude}}},
           map: map,
           title: 'City College of New York'
         });
-
-    
-        var infowindowcontent = '<div id="content">'+ 
+        
+        var content = '<div id="content">'+ 
             '<div id="Dish">'+
             '</div>'+
-            '<h3 id="firstHeading" class="firstHeading">Dish</h3>'+
+            '<h3 id="firstHeading" class="firstHeading">{{c.dish.name}}</h3>'+
             '<div id="bodyContent">'+
-            '<p>Dish: Chicken and Beans</p>'+
-            '<p>Chef: Gordon Ramsay</p>'+
-            '<p>Price: $10</p>'+
+            '<p>' +  '{{c.dish.description}}' + '</p>'+
+            '<p>Chef: {{c.chef.user.username}}</p>'+
+            '<p>Servings: {{c.available_servings}}</p>'+ 
+            '<p>Price: {{c.price}}</p>'+
             '</div>'+
             '</div>';
-        //Create infowindow that displays when you click marker
+        
         var infowindow = new google.maps.InfoWindow({
-            content: infowindowcontent
+            content: this.infowindowcontent
           });
-        //What happens when you click marker
-        marker.addListener('mouseover', function(){
+       google.maps.event.addListener(marker,'mouseover', 
+        (function(marker,content,infowindow){ 
+          return function() {
+             infowindow.setContent(content);
+             infowindow.open(map,marker);
+          };
+        })(marker,content,infowindow)); 
 
-          infowindow.open(map,marker);
 
+       google.maps.event.addListener(marker,'mouseout', 
+        (function(marker,infowindow){ 
+          return function() {
+             infowindow.close(map,marker);
+          };
+        })(marker,infowindow)); 
+        {% endfor %}
+
+
+
+        //CODE FROM GOOGLE
+
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
         });
 
-        marker.addListener('mouseout',function(){
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
 
-          infowindow.close(map,marker);
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            }));
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
         });
 
+        //END CODE FROM GOOGLE
 
       }
+
       initMap();
     </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADA4evIaL4acoxA1c8VsZCSeW-VKcIEdY&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADA4evIaL4acoxA1c8VsZCSeW-VKcIEdY&callback=initMap&libraries=places">
     </script>
   </body>
 </html>
+
+{% endblock %}
