@@ -1,15 +1,18 @@
+{% load static %}
 {% include "ngs/header.html" %}
 
 <!DOCTYPE html>
 <html>
 	<head>
 		<title>Login</title>
+		<!-- <link rel = "stylesheet" type="text/css" href="{% static 'css/test.css' %}" media="screen"> -->
 		<style type="text/css">
 			.input a{text-decoration:none; color:lime}
 			.input h2{font-family: 'Open Sans', sans-serif;}
 
 			body{
-				background: url(img/food1.jpg) no-repeat center center fixed;
+				background: url({% static 'img/food1.jpg' %}) no-repeat center center fixed;
+				
 				-webkit-background-size: cover;
 		        -moz-background-size: cover;
 		        -o-background-size: cover;
@@ -78,9 +81,14 @@
 				padding-bottom: 25px;
 			}
 			
+			.errorlist{
+				color: red;
+			}
+
 		</style>
 	</head> 
 	<body>
+		
 		<div class = "input">
 			<h2>Login</h2>
 			<form method="post">
