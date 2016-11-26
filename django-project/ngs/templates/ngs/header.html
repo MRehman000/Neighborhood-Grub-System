@@ -16,9 +16,11 @@
 				<div class="fix mainmenu float_right">
 					<ul>
 						{% if user.is_authenticated %}
+							<li> <a href="/">Home</a> </li>
 							<li> <a href="/logout/">Logout</a> </li>
 							<li> <a href="/accounts/">Account</a> </li>
 						{% else %}
+							<li> <a href="/">Home</a> </li>
 							<li>  <a href="/login/">Login</a> </li>
 						{% endif %}
 							<li>  <a href="/accounts/suggestion/">Suggestion</a> </li>
