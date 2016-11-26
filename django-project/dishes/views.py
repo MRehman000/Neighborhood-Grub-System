@@ -76,7 +76,10 @@ def create_request(request):
 
 def edit_request(request, dish_request_id):
     if request.method == "POST":
-        return redirect("requests")
-    dish_request = get_object_or_404(DishRequest, pk=dish_request_id)
-    context = {"dish_request": dish_request}
-    return render(request, "dishes/edit_request.html", context)
+        dish_request_form = DishRequestForm(perfix="dish_request", data=request.POST)
+        if dish_request_form.is_valid():
+            dish_request_form.save()
+            return redirect("request_detail", pk=dish_request_id)
+        else:
+            dish_request_form = DishRequest(prefix="dish_request")
+        return render(request, "dishes/request_detail.html", {"dish_request_form": dish_request_form})
