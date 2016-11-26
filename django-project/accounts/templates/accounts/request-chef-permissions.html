@@ -1,5 +1,63 @@
+{% load static %}
 {% include "ngs/header.html" %}
 
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Chef Permission</title>
+
+		<style type="text/css">
+			body{
+				background: url({% static 'img/food3.jpg' %}) no-repeat center center fixed;
+				
+				-webkit-background-size: cover;
+		        -moz-background-size: cover;
+		        -o-background-size: cover;
+		        background-size: cover;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<div class = "header2 input">
+			<h2>Create Chef Permissions Request</h2>
+		</div>
+		<div class="input">
+			{% if request_confirmed %}
+			<p>Your chef permissions request has been submitted and will be reviewed shortly</p>
+			{% else %}
+			<p>Please fill out this form</p>
+			<form enctype="multipart/form-data" method="post">
+			  {% csrf_token %}
+			  {{ form }}
+			  <button type="submit">Submit</button>
+			</form>
+			{% endif %}
+		</div>	
+	</body>
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
 <h2>Create Chef Permissions Request</h2>
 {% if request_confirmed %}
 <p>Your chef permissions request has been submitted and will be reviewed shortly</p>
@@ -11,3 +69,4 @@ Please fill out this form
   <button type="submit">Submit</button>
 </form>
 {% endif %}
+-->
