@@ -135,6 +135,14 @@
              infowindow.close(map,marker);
           };
         })(marker,infowindow)); 
+
+
+       google.maps.event.addListener(marker,'click', 
+        (function(marker){ 
+          return function() {
+             location.href = "/dishes/posts/{{ c.id }}/"
+          };
+        })(marker)); 
         {% endfor %}
 
 
