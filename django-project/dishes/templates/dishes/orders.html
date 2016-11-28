@@ -1,9 +1,5 @@
 {% include "ngs/header.html" %}
 
-<div>
-  <a href="/dishes/">Dishes</a>
-</div>
-
 <h2>Orders</h2>
 <ul>
 {% for order in orders %}
@@ -27,6 +23,8 @@
         <td>Total</td><td>${{ order.total }}</td>
       </tr>
     </table>
+    <a href="{{ order.id }}/cancel/">Cancel order</a>
   </li>
 {% endfor %}
 </ul>
+<a href="/dishes/requests/create/">Make a Request</a>
