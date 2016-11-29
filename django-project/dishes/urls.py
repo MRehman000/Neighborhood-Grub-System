@@ -14,5 +14,6 @@ urlpatterns = [
     url(r"^requests/(?P<dish_request_id>[0-9]+)/$", views.request_detail),
     url(r"^requests/(?P<dish_request_id>[0-9]+)/edit/$", views.edit_request),
     url(r"^chefs/(?P<chef_id>[0-9]+)/$", views.chef_detail),
+    url(r"^chefs/(?P<chef_id>[0-9]+)/rate/$", views.rate_chef),
 
 ]

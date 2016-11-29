@@ -51,6 +51,9 @@ def chef_detail(request, chef_id):
     context = {"chef": chef}
     return render(request, "dishes/chef_detail.html", context)
 
+# TODO: def rate_chef(requesr, chef_id):
+
+
 def order_feedback(request, order_id):
     context = {}
     if request.method =="POST":
@@ -58,7 +61,7 @@ def order_feedback(request, order_id):
         if form.is_valid():
             # title = form.cleaned_data("title")
             # feedback = form.cleaned_data("feedback")
-            OrderFeedBack.objects.create(**form.cleaned_data)
+            OrderFeedback.objects.create(**form.cleaned_data)
             context["feedback_submitted"] = True
         else:
             form = FeedbackForm()
