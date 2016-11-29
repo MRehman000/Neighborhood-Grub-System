@@ -3,7 +3,7 @@
 <h2>Orders</h2>
 <ul>
 {% for order in orders %}
-  <li>
+  <>
     <h3>{{ order.dish_post.dish.name }}</h3>
     <p>{{ order.dish_post.dish.description }}</p>
     <table>
@@ -24,7 +24,7 @@
       </tr>
     </table>
     <a href="{{ order.id }}/cancel/">Cancel order</a>
-  </li>
+    <a href="{{ order.id }}/feedback/">Provide Order Feedback</a>
 {% endfor %}
 </ul>
 <a href="/dishes/requests/create/">Make a Request</a>
