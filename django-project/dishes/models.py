@@ -226,7 +226,7 @@ class Order(models.Model):
     def total(self):
         return self.num_servings * self.dish_post.price
 
-class OrderFeedBack(models.Model):
+class OrderFeedback(models.Model):
     """
     Django model class representing feedback from a diner about an
     order that has been placed and received (i.e. completed)

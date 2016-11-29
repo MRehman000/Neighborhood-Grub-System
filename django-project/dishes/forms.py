@@ -24,6 +24,6 @@ class FeedbackForm(forms.ModelForm):
     class Meta:
         model = OrderFeedback
         fields = [
-            "Title",
-            "Feedback"
+            "feedback",
+            "title"
         ]
