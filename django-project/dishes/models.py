@@ -189,6 +189,9 @@ class DishRequest(models.Model):
     num_servings = models.IntegerField(default=1)
     price = models.DecimalField(max_digits=4, decimal_places=2)
     meal_time = models.DateTimeField("Meal Time")
+    
+    latitude = models.DecimalField(max_digits = 9, decimal_places = 6)
+    longitude= models.DecimalField(max_digits = 9, decimal_places = 6)
 
     OPEN = 0
     CLOSED = 1
