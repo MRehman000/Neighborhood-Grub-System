@@ -65,6 +65,34 @@ dishes = {
         "default_price": decimal.Decimal(6.75),
         "description": "Masscared cow and harvested greens",
         "serving_size": decimal.Decimal(1.0)
+    },
+
+    3: {
+        "name": "Halal Chicken Over Rice",
+        "default_price": decimal.Decimal(6.00),
+        "description": "Egyptian guy at CCNY with the best Halal!",
+        "serving_size": decimal.Decimal(10.0)
+    },
+
+    4: {
+        "name": "Fish and Chips",
+        "default_price": decimal.Decimal(4.50),
+        "description": "Fried fish served with homemade fries",
+        "serving_size": decimal.Decimal(1.0)
+    },
+
+    5: {
+        "name": "Fried Chicken",
+        "default_price": decimal.Decimal(2.50),
+        "description": "Classic fried chicken, you won't go back to KFC after eating this!",
+        "serving_size": decimal.Decimal(1.0)
+    },
+
+    6: {
+        "name": "Classic NY Cheesecake",
+        "default_price": decimal.Decimal(3.00),
+        "description": "Cheesecake NY style",
+        "serving_size": decimal.Decimal(8.0)
     }
 }
 
@@ -92,6 +120,140 @@ dish_posts = {
 
         "latitude": decimal.Decimal(40.8197061),
         "longitude": decimal.Decimal(-73.9505599)
+    },
+
+    2: {
+        "chef": 0,
+        "max_servings": 10,
+        "dish": 2,
+        "price": decimal.Decimal(10.00),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+
+        "latitude": decimal.Decimal(40.7197061),
+        "longitude": decimal.Decimal(-73.9505599)
+    },
+    3: {
+        "chef": 0,
+        "max_servings": 4,
+        "dish": 3,
+        "price": decimal.Decimal(99.00),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+
+        "latitude": decimal.Decimal(40.9197061),
+        "longitude": decimal.Decimal(-73.9505599)
+    },
+    4: {
+        "chef": 0,
+        "max_servings": 4,
+        "dish": 6,
+        "price": decimal.Decimal(5.00),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+
+        "latitude": decimal.Decimal(40.8197061),
+        "longitude": decimal.Decimal(-73.2505599)
+    },
+    5: {
+        "chef": 0,
+        "max_servings": 4,
+        "dish": 5,
+        "price": decimal.Decimal(50.00),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+
+        "latitude": decimal.Decimal(41.8197061),
+        "longitude": decimal.Decimal(-73.9505599)
+    },
+    6: {
+        "chef": 0,
+        "max_servings": 4,
+        "dish": 4,
+        "price": decimal.Decimal(5.00),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+
+        "latitude": decimal.Decimal(40.8197061),
+        "longitude": decimal.Decimal(-72.9505599)
+    },
+    7: {
+        "chef": 0,
+        "max_servings": 4,
+        "dish": 2,
+        "price": decimal.Decimal(51.00),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+
+        "latitude": decimal.Decimal(40.8197061),
+        "longitude": decimal.Decimal(-74.005599)
+    },
+    8: {
+        "chef": 0,
+        "max_servings": 4,
+        "dish": 1,
+        "price": decimal.Decimal(8.00),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+
+        "latitude": decimal.Decimal(40.2397061),
+        "longitude": decimal.Decimal(-73.94059)
+    },
+    9: {
+        "chef": 0,
+        "max_servings": 6,
+        "dish": 3,
+        "price": decimal.Decimal(5.43),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+
+        "latitude": decimal.Decimal(38.11961),
+        "longitude": decimal.Decimal(-72.5505599)
+    },
+
+    10: {
+        "chef": 0,
+        "max_servings": 6,
+        "dish": 2,
+        "price": decimal.Decimal(5.43),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+
+        "latitude": decimal.Decimal(40.8197031),
+        "longitude": decimal.Decimal(-73.96128)
+    },
+    11: {
+        "chef": 0,
+        "max_servings": 6,
+        "dish": 4,
+        "price": decimal.Decimal(5.43),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+
+        "latitude": decimal.Decimal(40.8197001),
+        "longitude": decimal.Decimal(-73.938)
+    },
+    12: {
+        "chef": 0,
+        "max_servings": 6,
+        "dish": 2,
+        "price": decimal.Decimal(5.43),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+
+        "latitude": decimal.Decimal(40.87009),
+        "longitude": decimal.Decimal(-73.96021)
     }
 }
 
