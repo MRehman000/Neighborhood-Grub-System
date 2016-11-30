@@ -117,8 +117,8 @@ class DishPost(models.Model):
     serving_size = models.DecimalField(max_digits=3, decimal_places=1)
     last_call = models.DateTimeField("Last Call")
     meal_time = models.DateTimeField("Meal Time")
-    latitude = models.DecimalField(max_digits = 9, decimal_places = 6)
-    longitude= models.DecimalField(max_digits = 9, decimal_places = 6)
+    latitude = models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
+    longitude= models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
     OPEN = 0
     CLOSED = 1
     CANCELLED = 2
@@ -190,8 +190,8 @@ class DishRequest(models.Model):
     price = models.DecimalField(max_digits=4, decimal_places=2)
     meal_time = models.DateTimeField("Meal Time")
     
-    latitude = models.DecimalField(max_digits = 9, decimal_places = 6)
-    longitude= models.DecimalField(max_digits = 9, decimal_places = 6)
+    latitude = models.DecimalField(max_digits = 9, decimal_places = 6,default=decimal.Decimal(0.0))
+    longitude= models.DecimalField(max_digits = 9, decimal_places = 6,default=decimal.Decimal(0.0))
 
     OPEN = 0
     CLOSED = 1
