@@ -76,7 +76,10 @@ dish_posts = {
         "price": decimal.Decimal(6.50),
         "serving_size": decimal.Decimal(0.7),
         "last_call": timezone.now() + datetime.timedelta(days=1),
-        "meal_time": timezone.now() + datetime.timedelta(days=2)
+        "meal_time": timezone.now() + datetime.timedelta(days=2),
+
+        "latitude": decimal.Decimal(40.8197061),
+        "longitude": decimal.Decimal(-73.96078)
     },
     1: {
         "chef": 0,
@@ -85,7 +88,10 @@ dish_posts = {
         "price": decimal.Decimal(5.00),
         "serving_size": decimal.Decimal(1),
         "last_call": timezone.now() + datetime.timedelta(days=3),
-        "meal_time": timezone.now() + datetime.timedelta(days=4)
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+
+        "latitude": decimal.Decimal(40.8197061),
+        "longitude": decimal.Decimal(-73.9505599)
     }
 }
 
