@@ -8,6 +8,7 @@ urlpatterns = [
         name="orders_and_requests"),
     url(r"^orders/(?P<order_id>[0-9]+)/cancel/$", views.cancel_order),
     url(r"^posts/$", views.posts),
+    url(r"^posts/create/$", views.create_post),
     url(r"^posts/(?P<dish_post_id>[0-9]+)/$", views.post_detail),
     url(r"^posts/(?P<dish_post_id>[0-9]+)/order/$", views.order_dish),
     url(r"^requests/$", views.requests),
