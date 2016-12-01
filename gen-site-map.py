@@ -18,8 +18,10 @@ edges = (
     ("post detail", "chef profile"),
     ("orders-requests", "cancel order"),
     ("orders-requests", "create request"),
+    ("orders-requests", "cancel request"),
     ("account", "orders-requests"),
     ("create request", "orders-requests"),
+    ("cancel request", "orders-requests"),
 )
 
 def main():
