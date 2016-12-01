@@ -1,0 +1,26 @@
+{% include "ngs/header.html" %}
+<h2>Dish Posts</h2>
+{% if dish_posts %}
+  <ul>
+    {% for dish_post in dish_posts %}
+      <li>
+        <h3>{{ dish_post.dish.name }}</h3>
+        <p>{{ dish_post.dish.description }}</p>
+        <table>
+          <tr>
+            <td>Meal Time</td><td>{{dish_post.meal_time}}</td>
+          </tr>
+          <tr>
+            <td>Serving Price</td><td>${{dish_post.price}}</td>
+          </tr>
+          <tr>
+            <td>Servings Ordered</td><td>{{num_servings}}</td>
+          </tr>
+        </table>
+        <a href="/dishes/posts/{{ dish_post.id }}/cancel/">Cancel post</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No Dish Posts are available.</p>
+{% endif %}
