@@ -2,6 +2,7 @@ import decimal
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Diner(models.Model):
     """
@@ -229,7 +230,7 @@ class Order(models.Model):
 class OrderFeedback(models.Model):
     """
     Django model class representing feedback from a diner about an
-    order that has been placed and received (i.e. completed)
+    order that has been placed and received (i.e. completed).
 
     Attributes:
 
@@ -245,11 +246,32 @@ class OrderFeedback(models.Model):
     feedback:
         The feedback from the diner about the order
     """
-    diner = models.ForeignKey(Diner, on_delete=models.SET_NULL, null=True)
-    dish_post = models.ForeignKey(DishPost, on_delete=models.PROTECT)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=140)
     date = models.DateTimeField()
     feedback = models.TextField()
 
     def __unicode__(self):
         return self.title
+
+class RateChef(models.Model):
+    """
+    Django model class representing the rating between 0 and 5 of
+    chef by a diner.
+
+    Attributes:
+
+    chef:
+        The chef being rated
+
+    rating: number between 1 and 5
+    """
+
+    chef = models.ForeignKey(Chef, on_delete=models.SET_NULL, null=True)
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+
+    def average_rating(self):
+        curr_sum = 0
+        for rating in RateChef.objects.all():
+            curr_sum += rating.rating
+        return curr_sum/len(RateChef.objects.all)

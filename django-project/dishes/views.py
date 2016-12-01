@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseForbidden
 
-from dishes.models import DishPost, Diner, Order, DishRequest, Chef, OrderFeedback
-from dishes.forms import DishForm, DishRequestForm, FeedbackForm
+from dishes.models import DishPost, Diner, Order, DishRequest, Chef, OrderFeedback, RateChef
+from dishes.forms import DishForm, DishRequestForm, FeedbackForm, RateChefForm
 
 def posts(request):
     dish_posts = DishPost.objects.all()
@@ -51,23 +51,32 @@ def chef_detail(request, chef_id):
     context = {"chef": chef}
     return render(request, "dishes/chef_detail.html", context)
 
-# TODO: def rate_chef(requesr, chef_id):
-
+def rate_chef(request, chef_id):
+    chef = get_object_or_404(Chef, pk=chef_id)
+    if request.method == "POST":
+        form = RateChefForm(request.POST)
+        if form.is_valid():
+            int_rating = request.POST["rating"]
+            rating = RateChef.objects.create(chef,rating=int_rating)
+        else:
+            form = RateChefForm()
+    return redirect("chef_detail")
 
 def order_feedback(request, order_id):
     context = {}
-    if request.method =="POST":
+    order = get_object_or_404(Order, pk=order_id)
+    if request.method == "POST":
         form = FeedbackForm(request.POST)
         if form.is_valid():
-            # title = form.cleaned_data("title")
-            # feedback = form.cleaned_data("feedback")
-            OrderFeedback.objects.create(**form.cleaned_data)
+            feedback = form.save(commit=False)
+            feedback.order = order
+            feedback.save()
             context["feedback_submitted"] = True
+            return redirect("orders")
         else:
             form = FeedbackForm()
+    return render(request, "dishes/orders.html", {'form': form})
 
-    context["form"] = form
-    return render(request, "dishes/orders.html", context)
 
 def cancel_order(request, order_id):
     if request.method == "POST":
