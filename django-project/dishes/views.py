@@ -104,3 +104,15 @@ def create_post(request):
     context["dish_post_form"] = dish_post_form
     context["dish_form"] = dish_form
     return render(request, "dishes/create_post.html", context)
+
+def manage_posts(request):
+    dish_posts = DishPost.objects.filter(chef=request.user.chef)
+    context = {"dish_posts": dish_posts}
+    return render(request, "dishes/manage_posts.html", context)
+
+def cancel_post(request, dish_post_id):
+    if request.method == "POST":
+        return redirect("manage_posts")
+    dish_post = get_object_or_404(DishPost, pk=dish_post_id)
+    context = {"dish_post": dish_post}
+    return render(request, "dishes/cancel_post.html", context)
