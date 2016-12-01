@@ -58,7 +58,7 @@ def order_feedback(request, order_id):
         if form.is_valid():
             # title = form.cleaned_data("title")
             # feedback = form.cleaned_data("feedback")
-            OrderFeedBack.objects.create(**form.cleaned_data)
+            OrderFeedback.objects.create(**form.cleaned_data)
             context["feedback_submitted"] = True
         else:
             form = FeedbackForm()
