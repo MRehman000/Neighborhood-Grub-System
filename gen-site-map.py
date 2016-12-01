@@ -24,6 +24,8 @@ edges = (
     ("account", "orders-requests"),
     ("account", "manage posts"),
     ("manage posts", "cancel post"),
+    ("manage posts", "edit post"),
+    ("edit post", "manage posts"),
     ("cancel post", "manage posts"),
     ("create request", "orders-requests"),
     ("cancel request", "orders-requests"),
