@@ -1,6 +1,6 @@
 from django import forms
 
-from dishes.models import Dish, DishRequest
+from dishes.models import Dish, DishRequest, DishPost
 
 class DishForm(forms.ModelForm):
     class Meta:
@@ -17,5 +17,16 @@ class DishRequestForm(forms.ModelForm):
             "portion_size",
             "num_servings",
             "price",
+            "meal_time"
+        ]
+
+class DishPostForm(forms.ModelForm):
+    class Meta:
+        model = DishPost
+        fields = [
+            "max_servings",
+            "serving_size",
+            "price",
+            "last_call",
             "meal_time"
         ]
