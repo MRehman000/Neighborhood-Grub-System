@@ -116,3 +116,21 @@ def cancel_post(request, dish_post_id):
     dish_post = get_object_or_404(DishPost, pk=dish_post_id)
     context = {"dish_post": dish_post}
     return render(request, "dishes/cancel_post.html", context)
+
+def edit_post(request, dish_post_id):
+    context = {}
+    dish_post = get_object_or_404(DishPost, pk=dish_post_id)
+    dish = dish_post.dish
+    if request.method == "POST":
+        dish_post_form = DishPostForm(prefix="dish_post",
+                                      data=request.POST)
+        dish_form = DishForm(prefix="dish", data=request.POST)
+        if dish_post_form.is_valid() and dish_form.is_valid():
+            # Update the Dish and DishPost
+            return redirect("manage_posts")
+    else:
+        dish_post_form = DishPostForm(prefix="dish_post", instance=dish_post)
+        dish_form = DishForm(prefix="dish", instance=dish)
+    context["dish_post_form"] = dish_post_form
+    context["dish_form"] = dish_form
+    return render(request, "dishes/edit_post.html", context)
