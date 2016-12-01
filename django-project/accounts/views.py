@@ -19,7 +19,8 @@ def signup(request):
     return render(request, "accounts/signup.html", context)
 
 def account(request):
-    context = {}
+    is_chef = hasattr(request.user, "chef")
+    context = {"is_chef": is_chef}
     return render(request, "accounts/account.html", context)
 
 def terminate(request):
