@@ -27,6 +27,9 @@
   </li>
 {% endfor %}
 </ul>
+{% if is_chef %}
+<a href="/dishes/posts/create/">Post a Dish</a>
+{% endif %}
 <h2>Requests</h2>
 <ul>
 {% for request in requests %}
