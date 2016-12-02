@@ -1,6 +1,59 @@
+{% load static %}
 {% include "ngs/header.html" %}
 
-<h2> Edit Request </h2>
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="{% static 'css/edit_request.css' %}" rel = "stylesheet" type="text/css"/>
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,600italic' rel='stylesheet' type='text/css'>
+		<style type="text/css">
+			body{
+				background: url({% static 'img/food2.jpg' %}) no-repeat center center fixed;
+				-webkit-background-size: cover;
+		        -moz-background-size: cover;
+		        -o-background-size: cover;
+		        background-size: cover;
+			}
+
+		</style>
+
+	</head>
+
+	<body>
+		<!-- <div class = "header2">
+			<h2>Edit Request </h2><h2>Form</h2>
+		</div> -->
+		<div class = "input">
+			<h2>Edit Request </h2><h2>Form</h2>
+			<p>Edit the details of your request {{ dish_request.id }}</p>
+			<form method="POST">
+			  {% csrf_token %}
+			  {{ dish_form }}
+			  {{ dish_request_form }}
+			  <div class="button"><button type="submit">Save Changes </button>
+			</form>
+			<form action="/dishes/orders-requests/">
+			  <button type="submit">Cancel</button>
+		</form>
+		</div>
+
+		</div>
+	</body>
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+<!-- <h2> Edit Request </h2>
 <p>Edit the details of your request {{ dish_request.id }}</p>
 <form method="POST">
   {% csrf_token %}
@@ -10,7 +63,7 @@
 </form>
 <form action="/dishes/orders-requests/">
   <button type="submit">Cancel</button>
-</form>
+</form> -->
 
 
 
