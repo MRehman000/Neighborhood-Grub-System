@@ -1,0 +1,13 @@
+{% include "ngs/header.html" %}
+
+<h2>Order Feedback</h2>
+{% if feedback_submitted %}
+<p>Your feedback has been received.</p>
+{% else %}
+Please provide a review of your order
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">Submit</button>
+</form>
+{% endif %}

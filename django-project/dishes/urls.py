@@ -7,6 +7,7 @@ urlpatterns = [
         views.orders_and_requests,
         name="orders_and_requests"),
     url(r"^orders/(?P<order_id>[0-9]+)/cancel/$", views.cancel_order),
+    url(r"^orders/(?P<order_id>[0-9]+)/feedback/$", views.order_feedback),
     url(r"^posts/$", views.posts),
     url(r"^posts/manage/$", views.manage_posts, name="manage_posts"),
     url(r"^posts/create/$", views.create_post),
@@ -20,4 +21,5 @@ urlpatterns = [
     url(r"^requests/(?P<dish_request_id>[0-9]+)/edit/$", views.edit_request),
     url(r"^requests/(?P<dish_request_id>[0-9]+)/cancel/$", views.cancel_request),
     url(r"^chefs/(?P<chef_id>[0-9]+)/$", views.chef_detail),
+
 ]
