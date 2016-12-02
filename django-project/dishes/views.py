@@ -83,14 +83,22 @@ def create_request(request):
     return render(request, "dishes/create_request.html", context)
 
 def edit_request(request, dish_request_id):
+    context = {}
+    dish_request = get_object_or_404(DishRequest, pk=dish_request_id)
     if request.method == "POST":
-        dish_request_form = DishRequestForm(perfix="dish_request", data=request.POST)
-        if dish_request_form.is_valid():
-            dish_request_form.save()
-            return redirect("request_detail", pk=dish_request_id)
-        else:
-            dish_request_form = DishRequest(prefix="dish_request")
-        return render(request, "dishes/request_detail.html", {"dish_request_form": dish_request_form})
+        dish_request_form = DishRequestForm(perfix="dish_request",
+                                            data=request.POST)
+        dish_form = DishForm(prefix="dish", data=request.POST)
+        if dish_request_form.is_valid() and dish_form.is_valid():
+            # Update the Dish and DishRequest
+            return redirect("orders_and_requests")
+    else:
+        dish_request_form = DishRequestForm(prefix="dish_request",
+                                            instance=dish_request)
+        dish_form = DishForm(prefix="dish", instance=dish_request.dish)
+    context["dish_request_form"] = dish_request_form
+    context["dish_form"] = dish_form
+    return render(request, "dishes/edit_request.html", context)
 
 def cancel_request(request, dish_request_id):
     if request.method == "POST":
