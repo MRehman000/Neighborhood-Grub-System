@@ -1,12 +1,14 @@
+
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseForbidden
 
 from dishes.models import DishPost, Diner, Order, DishRequest, Chef
-from dishes.forms import DishForm, DishRequestForm
+from dishes.forms import DishForm, DishRequestForm, DishPostForm
 
 def posts(request):
     dish_posts = DishPost.objects.all()
-    context = {"dish_posts": dish_posts}
+    is_chef = hasattr(request.user, "chef")
+    context = {"dish_posts": dish_posts, "is_chef": is_chef}
     return render(request, "dishes/posts.html", context)
 
 def post_detail(request, dish_post_id):
@@ -23,16 +25,22 @@ def order_dish(request, dish_post_id):
     order = Order.objects.create(diner=diner,
                                  dish_post=dish_post,
                                  num_servings=num_servings)
-    return redirect("orders")
+    return redirect("orders_and_requests")
 
-def orders(request):
+def orders_and_requests(request):
     if not request.user.is_authenticated:
         return redirect("dishes")
     else:
         diner = Diner.objects.get(user=request.user)
         orders = Order.objects.filter(diner=diner)
-        context = {"orders": orders}
-        return render(request, "dishes/orders.html", context)
+        requests = DishRequest.objects.filter(diner=diner)
+        is_chef = hasattr(request.user, "chef")
+        context = {
+            "orders": orders,
+            "requests": requests,
+            "is_chef": is_chef
+        }
+        return render(request, "dishes/orders-requests.html", context)
 
 def requests(request):
     dish_requests = DishRequest.objects.all()
@@ -53,7 +61,7 @@ def chef_detail(request, chef_id):
 
 def cancel_order(request, order_id):
     if request.method == "POST":
-        return redirect("orders")
+        return redirect("orders_and_requests")
     order = get_object_or_404(Order, pk=order_id)
     context = {"order": order}
     return render(request, "dishes/cancel_order.html", context)
@@ -66,7 +74,7 @@ def create_request(request):
         dish_form = DishForm(prefix="dish", data=request.POST)
         if dish_request_form.is_valid() and dish_form.is_valid():
             # Create the Dish and DishRequest
-            return redirect("orders")
+            return redirect("orders_and_requests")
     else:
         dish_request_form = DishRequestForm(prefix="dish_request")
         dish_form = DishForm(prefix="dish")
@@ -83,3 +91,56 @@ def edit_request(request, dish_request_id):
         else:
             dish_request_form = DishRequest(prefix="dish_request")
         return render(request, "dishes/request_detail.html", {"dish_request_form": dish_request_form})
+
+def cancel_request(request, dish_request_id):
+    if request.method == "POST":
+        return redirect("orders_and_requests")
+    dish_request = get_object_or_404(DishRequest, pk=dish_request_id)
+    context = {"request": dish_request}
+    return render(request, "dishes/cancel_request.html", context)
+
+def create_post(request):
+    context = {}
+    if request.method == "POST":
+        dish_post_form = DishPostForm(prefix="dish_post",
+                                      data=request.POST)
+        dish_form = DishForm(prefix="dish", data=request.POST)
+        if dish_post_form.is_valid() and dish_form.is_valid():
+            # Create the Dish and DishPost
+            return redirect("orders_and_requests")
+    else:
+        dish_post_form = DishPostForm(prefix="dish_post")
+        dish_form = DishForm(prefix="dish")
+    context["dish_post_form"] = dish_post_form
+    context["dish_form"] = dish_form
+    return render(request, "dishes/create_post.html", context)
+
+def manage_posts(request):
+    dish_posts = DishPost.objects.filter(chef=request.user.chef)
+    context = {"dish_posts": dish_posts}
+    return render(request, "dishes/manage_posts.html", context)
+
+def cancel_post(request, dish_post_id):
+    if request.method == "POST":
+        return redirect("manage_posts")
+    dish_post = get_object_or_404(DishPost, pk=dish_post_id)
+    context = {"dish_post": dish_post}
+    return render(request, "dishes/cancel_post.html", context)
+
+def edit_post(request, dish_post_id):
+    context = {}
+    dish_post = get_object_or_404(DishPost, pk=dish_post_id)
+    dish = dish_post.dish
+    if request.method == "POST":
+        dish_post_form = DishPostForm(prefix="dish_post",
+                                      data=request.POST)
+        dish_form = DishForm(prefix="dish", data=request.POST)
+        if dish_post_form.is_valid() and dish_form.is_valid():
+            # Update the Dish and DishPost
+            return redirect("manage_posts")
+    else:
+        dish_post_form = DishPostForm(prefix="dish_post", instance=dish_post)
+        dish_form = DishForm(prefix="dish", instance=dish)
+    context["dish_post_form"] = dish_post_form
+    context["dish_form"] = dish_form
+    return render(request, "dishes/edit_post.html", context)

@@ -54,6 +54,10 @@ class Dish(models.Model):
                                        decimal_places=1,
                                        default=decimal.Decimal(1.0))
 
+    
+    latitude = models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
+    longitude= models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
+
 class DishPost(models.Model):
     """
     Django model class representing a Dish posted by a Chef for a Diner to
@@ -113,7 +117,8 @@ class DishPost(models.Model):
     serving_size = models.DecimalField(max_digits=3, decimal_places=1)
     last_call = models.DateTimeField("Last Call")
     meal_time = models.DateTimeField("Meal Time")
-
+    latitude = models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
+    longitude= models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
     OPEN = 0
     CLOSED = 1
     CANCELLED = 2
@@ -184,6 +189,9 @@ class DishRequest(models.Model):
     num_servings = models.IntegerField(default=1)
     price = models.DecimalField(max_digits=4, decimal_places=2)
     meal_time = models.DateTimeField("Meal Time")
+
+    latitude = models.DecimalField(max_digits = 9, decimal_places = 6,default=decimal.Decimal(0.0))
+    longitude= models.DecimalField(max_digits = 9, decimal_places = 6,default=decimal.Decimal(0.0))
 
     OPEN = 0
     CLOSED = 1

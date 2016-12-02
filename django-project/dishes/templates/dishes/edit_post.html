@@ -1,0 +1,12 @@
+{% include "ngs/header.html" %}
+<h2>Edit Dish Post</h2>
+<p>Please edit the details of this post</p>
+<form method="post">
+  {% csrf_token %}
+  {{ dish_form }}
+  {{ dish_post_form }}
+  <button type="submit">Submit</button>
+</form>
+<form action="/dishes/posts/manage/">
+  <button type="submit">Cancel</button>
+</form>

@@ -1,0 +1,17 @@
+{% include "ngs/header.html" %}
+
+<h2>Cancel Post</h2>
+
+<p>Are you sure you want to cancel this post?</p>
+<button type="submit" form="no_form">No</button>
+<button type="submit" form="yes_form">Yes</button>
+
+<form id="yes_form"
+      method="post">
+  {% csrf_token %}
+</form>
+
+<form id="no_form"
+      action="/dishes/posts/manage/"
+      method="get">
+</form>

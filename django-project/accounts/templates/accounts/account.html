@@ -7,10 +7,14 @@
     <a href="terminate/">Request account termination</a>
   </li>
   <li>
+  {% if is_chef %}
+    <a href="/dishes/posts/manage/">Manage Posts</a>
+  {% else %}
     <a href="request-chef-permissions/">Request Chefs Permissions</a>
+  {% endif %}
   </li>
   <li>
-    <a href="/dishes/orders/">Orders and Requests</a>
+    <a href="/dishes/orders-requests/">Orders and Requests</a>
   </li>
 </ul>
 {% else %}
