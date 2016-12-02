@@ -77,3 +77,73 @@ class Suggestion(models.Model):
         The suggestion being made by the visitor or user.
     """
     suggestion = models.TextField()
+
+class RedFlag(models.Model):
+    """
+    Django class representing a red flag that is raised on a user.
+
+    Attributes:
+
+    user:
+        The user who is flagged by this RedFlag instance.
+
+    status:
+        The status of this RedFlag. Status descriptions are below.
+
+        Pending:
+            A superuser has not yet decided how to resolve this RedFlag.
+        Closed:
+            A superuser has reviewed this RedFlag and the issue has been
+            closed.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    PENDING, CLOSED = 0, 1
+
+    STATUS_CHOICES = (
+        (PENDING, "Pending"),
+        (CLOSED, "Closed")
+    )
+
+    status = models.IntegerField(choices=STATUS_CHOICES, default=PENDING)
+
+class Complaint(models.Model):
+    """
+    Django class representing a complaint made by one user against another.
+
+    Attributes:
+
+    complainant:
+        The user making the complaint against the complainee.
+
+    complainee:
+        The user the complaint is being made against.
+
+    description:
+        A description of the complaint the complainant is making.
+
+    status:
+        The status of this complaint. Status descriptions are given below.
+
+        Pending:
+            A superuser has not yet decided how to resolve this Complaint.
+        Closed:
+            A superuser has reviewed this Complaint and the issue has been
+            closed.
+    """
+    complainant = models.ForeignKey(User,
+                                    on_delete=models.CASCADE,
+                                    related_name="complaint_allegation")
+    complainee = models.ForeignKey(User,
+                                   on_delete=models.CASCADE,
+                                   related_name="complaint_receipt")
+    description = models.TextField("Complaint Description")
+
+    PENDING, CLOSED = 0, 1
+
+    STATUS_CHOICES = (
+        (PENDING, "Pending"),
+        (CLOSED, "Closed")
+    )
+
+    status = models.IntegerField(choices=STATUS_CHOICES, default=PENDING)
