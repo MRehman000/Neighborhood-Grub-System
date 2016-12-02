@@ -1,5 +1,5 @@
 from django.contrib import admin
-from accounts.models import ChefPermissionsRequest, RedFlag
+from accounts.models import ChefPermissionsRequest, RedFlag, Complaint
 
 @admin.register(ChefPermissionsRequest)
 class ChefPermissionsRequestAdmin(admin.ModelAdmin):
@@ -24,3 +24,13 @@ class RedFlagAdmin(admin.ModelAdmin):
 
     def close_red_flag(self, request, queryset):
         print("Rut rut rut rut")
+
+@admin.register(Complaint)
+class ComplaintAdmin(admin.ModelAdmin):
+    """
+    Django ModelAdmin class for providing the Review Complaint functionality.
+    """
+    actions = ["close_complaint"]
+
+    def close_complaint(self, request, queryset):
+        print("Woop woop woop woop")
