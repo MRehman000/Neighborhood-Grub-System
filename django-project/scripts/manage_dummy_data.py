@@ -281,6 +281,14 @@ red_flags = {
     0: { "user": 0 }
 }
 
+complaints = {
+    0: {
+        "complainant": 0,
+        "complainee": 1,
+        "description": "She smiled at me too warmly."
+    }
+}
+
 def load():
 
     for user_info in users:
@@ -331,13 +339,31 @@ def load():
         red_flag = RedFlag.objects.create(**red_flags[key])
         red_flags[key] = red_flag
 
+    for key in complaints:
+        complaints[key]["complainant"] = users[complaints[key]["complainant"]]
+        complaints[key]["complainee"] = users[complaints[key]["complainee"]]
+        complaint = Complaint.objects.create(**complaints[key])
+        complaints[key] = complaint
+
     User.objects.create_superuser("admin",
                                   "admin@example.com",
                                   "uncommonpassword")
 
 def delete():
 
-    models = [User, Diner, Chef, CuisineTag, Order, DishPost, DishRequest, Dish, RedFlag]
+    models = [
+        User,
+        Diner,
+        Chef,
+        CuisineTag,
+        Order,
+        DishPost,
+        DishRequest,
+        Dish,
+        RedFlag,
+        Complaint
+    ]
+
     for model in models:
         model.objects.all().delete()
 
