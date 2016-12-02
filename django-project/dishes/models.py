@@ -24,6 +24,7 @@ class Chef(models.Model):
         The User account associated with this Chef instance.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    follows = models.ManyToManyField('self', related_name='followers', symmetrical=False)
 
 class CuisineTag(models.Model):
     """
