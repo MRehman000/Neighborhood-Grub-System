@@ -19,6 +19,7 @@ edges = (
     ("post detail", "chef profile"),
     ("orders-requests", "cancel order"),
     ("orders-requests", "create request"),
+    ("orders-requests", "edit request"),
     ("orders-requests", "cancel request"),
     ("orders-requests", "create post"),
     ("account", "orders-requests"),
@@ -28,6 +29,7 @@ edges = (
     ("edit post", "manage posts"),
     ("cancel post", "manage posts"),
     ("create request", "orders-requests"),
+    ("edit request", "orders-requests"),
     ("cancel request", "orders-requests"),
     ("create post", "orders-requests"),
 )
