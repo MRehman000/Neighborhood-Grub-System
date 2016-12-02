@@ -1,7 +1,7 @@
 {% include "ngs/header.html" %}
 
 <h2> Edit Request </h2>
-
+{% if user.is_authenticated %}
 <p>Are you sure you would like to edit this active request?</p>
 <button type="submit" form="no_form"> Cancel Edit </button>
 <button type="submit" form="yes_form"> Continue To Edit </button>
@@ -15,3 +15,5 @@
       action="/dishes/requests/"
       method="get">
 </form>
+
+{ % endif %}

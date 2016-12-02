@@ -26,6 +26,9 @@ class Chef(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     followers = models.ManyToManyField('self', related_name='followers', symmetrical=False)
 
+    def count_followers(self):
+        return Chef.objects.all().filter(self.followers).count()
+
 class CuisineTag(models.Model):
     """
     Django model class representing a cuisine tag.
