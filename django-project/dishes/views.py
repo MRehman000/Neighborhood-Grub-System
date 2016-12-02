@@ -86,7 +86,7 @@ def edit_request(request, dish_request_id):
     context = {}
     dish_request = get_object_or_404(DishRequest, pk=dish_request_id)
     if request.method == "POST":
-        dish_request_form = DishRequestForm(perfix="dish_request",
+        dish_request_form = DishRequestForm(prefix="dish_request",
                                             data=request.POST)
         dish_form = DishForm(prefix="dish", data=request.POST)
         if dish_request_form.is_valid() and dish_form.is_valid():
@@ -109,6 +109,7 @@ def cancel_request(request, dish_request_id):
 
 def create_post(request):
     context = {}
+    import pdb; pdb.set_trace()
     if request.method == "POST":
         dish_post_form = DishPostForm(prefix="dish_post",
                                       data=request.POST)
