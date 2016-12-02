@@ -23,6 +23,7 @@
       <td>Total</td><td>${{ dish_request.total }}</td>
     </tr>
   </table>
+    <p> <a href="{{ dish_request.id }}/edit"> Edit Request </a></p>
 {% else %}
   <p>Oops... it appears this request does not exist...</p>
 {% endif %}

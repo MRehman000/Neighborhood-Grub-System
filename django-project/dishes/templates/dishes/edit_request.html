@@ -2,16 +2,16 @@
 
 <h2> Edit Request </h2>
 
-<p>Are you sure you would like to edit this active request?</p>
-<button type="submit" form="no_form"> Cancel Edit </button>
-<button type="submit" form="yes_form"> Continue To Edit </button>
+<p>Edit the details of your request {{ dish_request.id }}</p>
 
-
-<form id="yes_form"
-      method="post">
+<form method="POST">
+      {% csrf_token %}
+        {{ dish_request_form }}
+        <button type="submit">Save Changes </button>
+    </form>
+<form action="/dishes/requests/">
+  <button type="submit">Cancel</button>
 </form>
 
-<form id="no_form"
-      action="/dishes/requests/"
-      method="get">
-</form>
+
+
