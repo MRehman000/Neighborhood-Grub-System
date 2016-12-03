@@ -16,7 +16,7 @@ edges = (
     ("dish posts", "create post"),
     ("dish requests", "request detail"),
     ("dish requests", "create request"),
-    ("post detail", "chef profile"),
+    ("post detail", "chef bio"),
     ("orders-requests", "cancel order"),
     ("orders-requests", "create request"),
     ("orders-requests", "edit request"),

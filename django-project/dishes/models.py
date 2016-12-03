@@ -26,6 +26,9 @@ class Chef(models.Model):
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     followers = models.ManyToManyField('self', related_name='followers', symmetrical=False)
+    name = models.CharField(max_length=128)
+    blurb = models.TextField("Blurb")
+    experience = models.TextField("Experience")
 
     def count_followers(self):
         return Chef.objects.all().filter(self.followers).count()

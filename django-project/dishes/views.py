@@ -52,10 +52,10 @@ def request_detail(request, dish_request_id):
         context["user"] = request.user
     return render(request, "dishes/request_detail.html", context)
 
-def chef_detail(request, chef_id):
+def chef_bio(request, chef_id):
     chef = get_object_or_404(Chef, pk=chef_id)
     context = {"chef": chef}
-    return render(request, "dishes/chef_detail.html", context)
+    return render(request, "dishes/chef_bio.html", context)
 
 def rate_chef(request, chef_id):
     chef = get_object_or_404(Chef, pk=chef_id)
