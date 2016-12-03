@@ -52,7 +52,7 @@ page_to_template_path = (
     ("edit post",           "ngs/django-project/dishes/templates/dishes/edit_post.html"),
     ("cancel order",        "ngs/django-project/dishes/templates/dishes/cancel_order.html"),
     ("chef profile",        "ngs/django-project/dishes/templates/dishes/chef_detail.html"),
-    ("edit chef profile",   "ngs/django-project/dishes/templates/dishes/edit_chef.html")
+    ("edit chef profile",   "ngs/django-project/dishes/templates/dishes/edit_chef.html"),
     ("manage posts",        "ngs/django-project/dishes/templates/dishes/manage_posts.html"),
     ("create request",      "ngs/django-project/dishes/templates/dishes/create_post.html"),
     ("edit request",        "ngs/django-project/dishes/templates/dishes/edit_request.html"),
