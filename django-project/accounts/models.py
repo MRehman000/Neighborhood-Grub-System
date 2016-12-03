@@ -25,6 +25,8 @@ class CreateAccountRequest(models.Model):
     longitude:
         The default longitude coordinates for this account.
     """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    username = models.CharField(max_length=150, unique=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     email = models.EmailField(unique=True)
@@ -34,6 +36,18 @@ class CreateAccountRequest(models.Model):
     longitude = models.DecimalField(max_digits=9,
                                     decimal_places=6,
                                     default=decimal.Decimal(0.0))
+
+    PENDING, APPROVED, REJECTED = 0, 1, 2
+
+    STATUS_CHOICES = (
+        (PENDING, "Pending"),
+        (APPROVED, "Approved"),
+        (REJECTED, "Rejected")
+    )
+
+    status = models.IntegerField(choices=STATUS_CHOICES, default=PENDING)
+
+
 
 class TerminateAccountRequest(models.Model):
     """
