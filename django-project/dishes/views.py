@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from dishes.models import DishPost, Diner, Order, DishRequest, Chef, OrderFeedback, RateChef
-from dishes.forms import DishForm, DishRequestForm, DishPostForm, FeedbackForm, RateChefForm
+from dishes.models import DishPost, Diner, Order, DishRequest, Chef, OrderFeedback, RateChef, RateDiner
+from dishes.forms import DishForm, DishRequestForm, DishPostForm, FeedbackForm, RateChefForm, RateDinerForm
 from dishes.forms import ChefForm
+
 
 
 def posts(request):
@@ -64,10 +65,10 @@ def rate_chef(request, chef_id):
         form = RateChefForm(request.POST)
         if form.is_valid():
             int_rating = request.POST["rating"]
-            rating = RateChef.objects.create(chef,rating=int_rating)
+            rating = RateChef.objects.create(chef, rating=int_rating)
         else:
             form = RateChefForm()
-    return redirect("chef_detail")
+    return redirect(request, "dishes/rate_chef.html")
 
 def order_feedback(request, order_id):
     context = {}
@@ -184,6 +185,17 @@ def follow_chef(request, chef_id):
     context["Following"] = True
     return render(request, "dishes/chef_detail.html", context)
 
+def rate_diner(request, diner_id):
+    diner = get_object_or_404(Diner, pk=diner_id)
+    if request.method == "POST":
+        form = RateDinerForm(request.POST)
+        if form.is_valid():
+            int_rating = request.POST["rating"]
+            rating = RateDiner.objectscreate(diner, rating=int_rating)
+        else:
+            form = RateDinerForm()
+    return redirect(request,"dishes/rate_diner.html")
+
 def edit_chef(request, chef_id):
     context = {}
     chef = get_object_or_404(Chef, pk=chef_id)
@@ -196,3 +208,4 @@ def edit_chef(request, chef_id):
         chef_form = ChefForm(instance=chef)
     context["chef_form"] = chef_form
     return render(request, "dishes/edit_chef.html", context)
+
