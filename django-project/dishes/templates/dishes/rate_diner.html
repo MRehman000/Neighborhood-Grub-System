@@ -1,6 +1,6 @@
 {% include "ngs/header.html" %}
 
-<h2>Chef Ratings</h2>
+<h2>Diner Rating</h2>
 <p>Please submit a rating</p>
 <form method="post">
   {% csrf_token %}
@@ -11,7 +11,7 @@
 <p> Average rating: {{rating.average_rating}}</p>
 
 
-{% for rating in rating.chef.all %}
+{% for rating in rating.diner.all %}
 {% empty %}
-    <p> This chef has not yet been rated</p>
+    <p> This diner has not yet been rated</p>
 {% endfor %}

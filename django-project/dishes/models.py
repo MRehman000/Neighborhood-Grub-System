@@ -59,7 +59,6 @@ class Dish(models.Model):
                                        decimal_places=1,
                                        default=decimal.Decimal(1.0))
 
-    
     latitude = models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
     longitude= models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
 
@@ -268,7 +267,7 @@ class OrderFeedback(models.Model):
 
 class RateChef(models.Model):
     """
-    Django model class representing the rating between 0 and 5 of
+    Django model class representing the rating between 1 and 5 of
     chef by a diner.
 
     Attributes:
@@ -280,10 +279,34 @@ class RateChef(models.Model):
     """
 
     chef = models.ForeignKey(Chef, on_delete=models.SET_NULL, null=True)
-    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    rating = models.IntegerField(validators=[MinValueValidator(1),
+                                             MaxValueValidator(5)])
 
     def average_rating(self):
         curr_sum = 0
         for rating in RateChef.objects.all():
             curr_sum += rating.rating
         return curr_sum/len(RateChef.objects.all)
+
+
+class RateDiner(models.Model):
+    """
+    Django model class representing the rating of diner by a chef
+    with a score between 1 and 5
+
+    Attributes:
+
+    diner:
+     The diner being rated
+
+    rating: between 1 and 5
+    """
+    diner = models.ForeignKey(Chef, on_delete=models.SET_NULL, null=True)
+    rating = models.IntegerField(validators=[MinValueValidator(1),
+                                             MaxValueValidator(5)])
+
+    def average_rating(self):
+        curr_sum = 0
+        for rating in RateDiner.objects.all():
+            curr_sum += rating.rating
+        return curr_sum/len(RateDiner.objects.all)
