@@ -37,6 +37,7 @@ class FeedbackForm(forms.ModelForm):
         fields = [
             "title",
             "feedback"
+
         ]
 
 class RateChefForm(forms.ModelForm):

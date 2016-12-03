@@ -78,7 +78,6 @@ def order_feedback(request, order_id):
             context["feedback_submitted"] = True
         else:
             form = FeedbackForm()
-
         context["form"] = form
         return render(request, "dishes/orders.html", context)
 
@@ -124,6 +123,7 @@ def edit_request(request, dish_request_id):
     context["dish_form"] = dish_form
     return render(request, "dishes/edit_request.html", context)
 
+<<<<<<< HEAD
 def cancel_request(request, dish_request_id):
     if request.method == "POST":
         return redirect("orders_and_requests")
@@ -177,3 +177,11 @@ def edit_post(request, dish_post_id):
     context["dish_post_form"] = dish_post_form
     context["dish_form"] = dish_form
     return render(request, "dishes/edit_post.html", context)
+
+def follow_chef(request, chef_id):
+    context = {}
+    chef = get_object_or_404(Chef, pk=chef_id)
+    chef.userprofile.followers.add(request.user.username)
+    context["Following"] = True
+    return render(request, "dishes/chef_detail.html", context)
+
