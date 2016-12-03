@@ -123,7 +123,6 @@ def edit_request(request, dish_request_id):
     context["dish_form"] = dish_form
     return render(request, "dishes/edit_request.html", context)
 
-<<<<<<< HEAD
 def cancel_request(request, dish_request_id):
     if request.method == "POST":
         return redirect("orders_and_requests")
