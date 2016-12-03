@@ -1,0 +1,11 @@
+{% include "ngs/header.html" %}
+<h2>Edit Your Profile</h2>
+<p>Please edit the details of your profile</p>
+<form method="post">
+  {% csrf_token %}
+  {{ chef_form }}
+  <button type="submit">Submit</button>
+</form>
+<form action="/dishes/chefs/{{ user.chef.id }}/">
+  <button type="submit">Cancel</button>
+</form>
