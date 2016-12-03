@@ -245,8 +245,7 @@ class OrderFeedback(models.Model):
     feedback:
         The feedback from the diner about the order
     """
-    diner = models.ForeignKey(Diner, on_delete=models.SET_NULL, null=True)
-    dish_post = models.ForeignKey(DishPost, on_delete=models.PROTECT)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=140)
     date = models.DateTimeField()
     feedback = models.TextField()
