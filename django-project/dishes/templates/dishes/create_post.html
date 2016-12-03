@@ -7,7 +7,12 @@
   {{ dish_form }}
   {{ dish_post_form }}
   <button type="submit">Submit</button>
+  <input type="hidden" id="latField" value="" />
+  <input type="hidden" id="longField" value="" />
+  <p>"Input your Address or Select it from the map below"</p><input type="text" id="UserAddress" value="[Get Address]" />
+  
 </form>
+{% include "dishes/includes/google-maps-create-order.html" %}
 <form action="/dishes/orders-requests/">
   <button type="submit">Cancel</button>
 </form>
