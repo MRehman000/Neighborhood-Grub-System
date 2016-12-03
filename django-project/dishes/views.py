@@ -180,7 +180,7 @@ def edit_post(request, dish_post_id):
 def follow_chef(request, chef_id):
     context = {}
     chef = get_object_or_404(Chef, pk=chef_id)
-    chef.userprofile.followers.add(request.user.username)
+    chef.userprofile.follows.add(request.user.username)
     context["Following"] = True
     return render(request, "dishes/chef_detail.html", context)
 

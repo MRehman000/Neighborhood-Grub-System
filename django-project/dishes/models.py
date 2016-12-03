@@ -25,7 +25,7 @@ class Chef(models.Model):
         The User account associated with this Chef instance.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    followers = models.ManyToManyField('self', related_name='followers', symmetrical=False)
+    follows = models.ManyToManyField('self', related_name='followers', symmetrical=False)
 
     def count_followers(self):
         return Chef.objects.all().filter(self.followers).count()
