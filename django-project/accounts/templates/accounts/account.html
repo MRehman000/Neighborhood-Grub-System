@@ -8,6 +8,7 @@
   </li>
   <li>
   {% if is_chef %}
+    <a href="/dishes/chefs/{{ user.chef.id }}/edit/">Edit profile</a>
     <a href="/dishes/posts/manage/">Manage Posts</a>
   {% else %}
     <a href="request-chef-permissions/">Request Chefs Permissions</a>

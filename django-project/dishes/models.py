@@ -25,10 +25,13 @@ class Chef(models.Model):
         The User account associated with this Chef instance.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    follows = models.ManyToManyField('self', related_name='followers', symmetrical=False)
+    name = models.CharField(max_length=128)
+    blurb = models.TextField("Blurb")
+    experience = models.TextField("Experience")
+    followers = models.ManyToManyField(Diner, related_name="followees")
 
     def count_followers(self):
-        return Chef.objects.all().filter(self.followers).count()
+        return self.followers.all().count()
 
 class CuisineTag(models.Model):
     """
