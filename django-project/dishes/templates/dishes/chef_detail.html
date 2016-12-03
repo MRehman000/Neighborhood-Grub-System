@@ -1,6 +1,17 @@
 {% include "ngs/header.html" %}
 
 <h2>Chef {{chef.user.username}} Profile</h2>
-<p> Followers: ${{ chef.count_followers}}</p>
-
-
+<table>
+  <tr>
+    <td>Name</td><td>{{ chef.name }}</td>
+  </tr>
+  <tr>
+    <td>About {{ chef.name }}</td><td>{{ chef.blurb }}</td>
+  </tr>
+  <tr>
+    <td>Experience</td><td>{{ chef.experience }}</td>
+  </tr>
+  <tr>
+    <td>Followers</td><td>{{ chef.count_followers }}</td>
+  </tr>
+</table>
