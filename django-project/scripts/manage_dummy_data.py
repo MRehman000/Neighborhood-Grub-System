@@ -289,6 +289,21 @@ complaints = {
     }
 }
 
+create_account_requests = {
+    0: {
+        "username": "mm34",
+        "first_name": "winnie",
+        "last_name": "poo",
+        "email": "walt@disney.com"
+    },
+    1: {
+        "username": "kib210",
+        "first_name": "most",
+        "last_name": "least",
+        "email": "sig@byte.com"
+    }
+}
+
 def load():
 
     for user_info in users:
@@ -345,6 +360,12 @@ def load():
         complaint = Complaint.objects.create(**complaints[key])
         complaints[key] = complaint
 
+    for key in create_account_requests:
+        create_account_request = CreateAccountRequest.objects.create(
+                                    **create_account_requests[key]
+                                )
+        create_account_requests[key] = create_account_request
+
     User.objects.create_superuser("admin",
                                   "admin@example.com",
                                   "uncommonpassword")
@@ -361,7 +382,8 @@ def delete():
         DishRequest,
         Dish,
         RedFlag,
-        Complaint
+        Complaint,
+        CreateAccountRequest
     ]
 
     for model in models:
