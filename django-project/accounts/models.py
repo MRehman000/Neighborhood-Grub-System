@@ -1,3 +1,5 @@
+import decimal
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -14,15 +16,24 @@ class CreateAccountRequest(models.Model):
         The last name of the person applying for an NGS account.
 
     email:
-        The email the person wishes to associate with this account.
+        The email the person wishes to associate with this account. The email
+        must be unique
 
-    location:
-        The default location for the person's account.
+    latitude:
+        The default latitude coordinate for this account.
+
+    longitude:
+        The default longitude coordinates for this account.
     """
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    email = models.EmailField()
-    # TODO: Add location information.
+    email = models.EmailField(unique=True)
+    latitude = models.DecimalField(max_digits=9,
+                                   decimal_places=6,
+                                   default=decimal.Decimal(0.0))
+    longitude = models.DecimalField(max_digits=9,
+                                    decimal_places=6,
+                                    default=decimal.Decimal(0.0))
 
 class TerminateAccountRequest(models.Model):
     """
