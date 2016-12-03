@@ -28,10 +28,10 @@ class Chef(models.Model):
     name = models.CharField(max_length=128)
     blurb = models.TextField("Blurb")
     experience = models.TextField("Experience")
-    follows = models.ManyToManyField('self', related_name='followers', symmetrical=False)
+    followers = models.ManyToManyField(Diner, related_name="followees")
 
     def count_followers(self):
-        return Chef.objects.all().filter(self.followers).count()
+        return self.followers.all().count()
 
 class CuisineTag(models.Model):
     """
