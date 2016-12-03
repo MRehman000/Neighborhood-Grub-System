@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from dishes.models import DishPost, Diner, Order, DishRequest, Chef, OrderFeedback, RateChef, RateDiner
 from dishes.forms import DishForm, DishRequestForm, DishPostForm, FeedbackForm, RateChefForm, RateDinerForm
+from dishes.forms import ChefForm
+
 
 
 def posts(request):
@@ -132,7 +134,6 @@ def cancel_request(request, dish_request_id):
 
 def create_post(request):
     context = {}
-    import pdb; pdb.set_trace()
     if request.method == "POST":
         dish_post_form = DishPostForm(prefix="dish_post",
                                       data=request.POST)
@@ -195,5 +196,16 @@ def rate_diner(request, diner_id):
             form = RateDinerForm()
     return redirect(request,"dishes/rate_diner.html")
 
-
+def edit_chef(request, chef_id):
+    context = {}
+    chef = get_object_or_404(Chef, pk=chef_id)
+    if request.method == "POST":
+        chef_form = ChefForm(data=request.POST, instance=chef)
+        if chef_form.is_valid():
+            chef_form.save()
+            return redirect("chef_detail", chef_id=chef_id)
+    else:
+        chef_form = ChefForm(instance=chef)
+    context["chef_form"] = chef_form
+    return render(request, "dishes/edit_chef.html", context)
 

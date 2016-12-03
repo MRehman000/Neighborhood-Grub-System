@@ -31,6 +31,9 @@
 			  {% csrf_token %}
 			  {{ dish_form }}
 			  {{ dish_request_form }}
+			  
+			  <input type="hidden" id="latField" value="[Get latitude]" />
+			  <input type="hidden" id="longField" value="[Get Longitude]" />
 			  <div class="button"><button type="submit">Submit</button>
 			</form>
 			<form action="/dishes/orders-requests/">
@@ -39,6 +42,8 @@
 		</div>
 
 		</div>
+
+		{% include "dishes/includes/google-maps-create-order.html" %}
 	</body>
 
 
