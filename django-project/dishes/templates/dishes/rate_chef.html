@@ -1,0 +1,16 @@
+{% include "ngs/header.html" %}
+
+<h2>Chef Ratings</h2>
+<p>Please submit a rating</p>
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">Submit</button>
+</form>
+
+
+{% for rating in chef.rating.all %}
+    <p>{{rating.rating}}</p>
+{% empty %}
+    <p> This chef has not yet been rated</p>
+{% endfor %}

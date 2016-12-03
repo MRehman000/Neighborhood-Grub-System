@@ -1,9 +1,7 @@
-
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponseForbidden
+from dishes.models import DishPost, Diner, Order, DishRequest, Chef, OrderFeedback, RateChef
+from dishes.forms import DishForm, DishRequestForm, DishPostForm, FeedbackForm, RateChefForm
 
-from dishes.models import DishPost, Diner, Order, DishRequest, Chef
-from dishes.forms import DishForm, DishRequestForm, DishPostForm
 
 def posts(request):
     dish_posts = DishPost.objects.all()
@@ -58,6 +56,31 @@ def chef_detail(request, chef_id):
     chef = get_object_or_404(Chef, pk=chef_id)
     context = {"chef": chef}
     return render(request, "dishes/chef_detail.html", context)
+
+def rate_chef(request, chef_id):
+    chef = get_object_or_404(Chef, pk=chef_id)
+    if request.method == "POST":
+        form = RateChefForm(request.POST)
+        if form.is_valid():
+            int_rating = request.POST["rating"]
+            rating = RateChef.objects.create(chef,rating=int_rating)
+        else:
+            form = RateChefForm()
+    return redirect("chef_detail")
+
+def order_feedback(request, order_id):
+    context = {}
+    order = get_object_or_404(Order, pk=order_id)
+    if request.method == "POST":
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            OrderFeedback.objects.create(**form.cleaned_data)
+            context["feedback_submitted"] = True
+        else:
+            form = FeedbackForm()
+        context["form"] = form
+        return render(request, "dishes/orders.html", context)
+
 
 def cancel_order(request, order_id):
     if request.method == "POST":
@@ -153,3 +176,11 @@ def edit_post(request, dish_post_id):
     context["dish_post_form"] = dish_post_form
     context["dish_form"] = dish_form
     return render(request, "dishes/edit_post.html", context)
+
+def follow_chef(request, chef_id):
+    context = {}
+    chef = get_object_or_404(Chef, pk=chef_id)
+    chef.userprofile.followers.add(request.user.username)
+    context["Following"] = True
+    return render(request, "dishes/chef_detail.html", context)
+

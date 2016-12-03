@@ -1,6 +1,6 @@
 from django import forms
+from dishes.models import Dish, DishRequest, DishPost, OrderFeedback, RateChef
 
-from dishes.models import Dish, DishRequest, DishPost
 
 class DishForm(forms.ModelForm):
     class Meta:
@@ -30,3 +30,20 @@ class DishPostForm(forms.ModelForm):
             "last_call",
             "meal_time"
         ]
+
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = OrderFeedback
+        fields = [
+            "title",
+            "feedback"
+
+        ]
+
+class RateChefForm(forms.ModelForm):
+    class Meta:
+        model = RateChef
+        fields =[
+            "rating"
+        ]
+
