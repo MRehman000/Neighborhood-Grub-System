@@ -54,9 +54,7 @@ class Dish(models.Model):
                                        decimal_places=1,
                                        default=decimal.Decimal(1.0))
 
-    
-    latitude = models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
-    longitude= models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
+
 
 class DishPost(models.Model):
     """
