@@ -37,6 +37,6 @@ class FeedbackForm(forms.ModelForm):
         model = OrderFeedback
         fields = [
             "feedback",
-            "title"
+            "title",
             "tip"
         ]

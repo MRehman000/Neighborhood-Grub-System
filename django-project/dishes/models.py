@@ -233,3 +233,30 @@ class Order(models.Model):
 
     def total(self):
         return self.num_servings * self.dish_post.price
+
+
+class OrderFeedback(models.Model):
+    """
+    Django model class representing feedback from a diner about an
+    order that has been placed and received (i.e. completed)
+
+    Attributes:
+
+    order:
+        diner submitting review about dish post
+
+    title:
+        short "reaction" about the dish
+
+    feedback:
+        The feedback from the diner about the order
+    """
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
+    title = models.CharField(max_length=140)
+    date = models.DateTimeField()
+    feedback = models.TextField()
+    tip = models.PositiveSmallIntegerField()
+
+    def __unicode__(self):
+        return self.title
+
