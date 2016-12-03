@@ -57,6 +57,21 @@ def chef_detail(request, chef_id):
     context = {"chef": chef}
     return render(request, "dishes/chef_detail.html", context)
 
+def order_feedback(request, order_id):
+    context = {}
+    if request.method =="POST":
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            # title = form.cleaned_data("title")
+            # feedback = form.cleaned_data("feedback")
+            OrderFeedback.objects.create(**form.cleaned_data)
+            context["feedback_submitted"] = True
+        else:
+            form = FeedbackForm()
+
+    context["form"] = form
+    return render(request, "dishes/orders-requests.html", context)
+
 def cancel_order(request, order_id):
     if request.method == "POST":
         return redirect("orders_and_requests")
