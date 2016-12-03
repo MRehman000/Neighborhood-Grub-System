@@ -10,7 +10,7 @@ def signup(request):
     if request.method == "POST":
         form = CreateAccountRequestForm(request.POST)
         if form.is_valid():
-            CreateAccountRequest.objects.create(**form.cleaned_data)
+            form.save()
             return redirect("index")
     else:
         form = CreateAccountRequestForm()
