@@ -68,7 +68,7 @@ def suggestion(request):
     if request.method == "POST":
         form = SuggestionForm(request.POST)
         if form.is_valid():
-            Suggestion.objects.create(**form.cleaned_data)
+            form.save()
             context["suggestion_received"] = True
     else:
         form = SuggestionForm()
