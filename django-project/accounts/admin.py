@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 
-from accounts.models import ChefPermissionsRequest, RedFlag
-from accounts.models import CreateAccountRequest, Complaint
+from accounts.models import ChefPermissionsRequest, RedFlag, Complaint
+from accounts.models import TerminateAccountRequest, CreateAccountRequest
 
 from dishes.models import Diner
 
@@ -94,3 +94,17 @@ class ComplaintAdmin(admin.ModelAdmin):
 
     def close_complaint(self, request, queryset):
         print("Woop woop woop woop")
+
+@admin.register(TerminateAccountRequest)
+class TerminateAccountRequestAdmin(admin.ModelAdmin):
+    """
+    Django ModelAdmin class for providing the Delete User Account
+    functionality.
+    """
+    list_display = ["user"]
+    actions = ["delete_account"]
+
+    def delete_account(self, request, queryset):
+        for terminateAccountRequest in queryset:
+            user = terminateAccountRequest.user
+            user.delete()
