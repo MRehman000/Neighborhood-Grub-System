@@ -7,7 +7,18 @@ class CreateAccountRequestForm(forms.ModelForm):
     captcha = CaptchaField()
     class Meta:
         model = CreateAccountRequest
-        fields = ["username", "first_name", "last_name", "email"]
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "latitude",
+            "longitude"
+        ]
+        widgets = {
+            "latitude": forms.HiddenInput(),
+            "longitude": forms.HiddenInput()
+        }
 
 class TerminateAccountRequestForm(forms.Form):
     NO = 0

@@ -23,8 +23,6 @@
 			}
 			.input{
 
-				width: 275px;
-				height: 395px;
 				background-color: rgba(0,0,0,0.7);
 				margin: 0 auto;
 				margin-top: 120px;
@@ -106,41 +104,15 @@
 			<h2>Sign up</h2>
 			<form method="post">
 			  {% csrf_token %}
-			  {{ form }}
+        <table>
+          {{ form.as_table }}
+        </table>
 			  <button type="submit">Submit</button>
 			</form>
 		</div>
 	<h1>Click on your current location to save your address</h1>
 	{% include "accounts/includes/google-maps-signup-page.html" %}
-	<input type="hidden" id="latField" value="" />
-    <input type="hidden" id="longField" value="" />
-    <p>Address</p>
+  <p>Address</p>
 	<input type="text" id="UserAddress" value="" />
 	</body>
-
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-
-<h2>Sign up</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form }}
-  <button type="submit">Submit application!</button>
-</form>
-
-
--->
-
