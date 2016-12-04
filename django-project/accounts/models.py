@@ -9,6 +9,12 @@ class CreateAccountRequest(models.Model):
 
     Attributes:
 
+    user:
+        The User object created as a result of this request being approved.
+
+    username:
+        The username for the account, if it is created.
+
     first name:
         The first name of the person applying for an NGS account.
 
@@ -24,6 +30,17 @@ class CreateAccountRequest(models.Model):
 
     longitude:
         The default longitude coordinates for this account.
+
+    status:
+        The status of this account. Status descriptions are given below.
+
+        pending:
+            A system administrator has yet to review this request and take an
+            action on it.
+        approved:
+            A system administrator has approved this request.
+        rejected:
+            A system administrator has rejected this request.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     username = models.CharField(max_length=150, unique=True)
@@ -65,6 +82,26 @@ class ChefPermissionsRequest(models.Model):
     Django class representing a chef permissions request.
 
     Attributes:
+
+    user:
+    first_dish_name:
+    first_dish_image:
+    second_dish_name:
+    second_dish_image:
+    third_dish_name:
+    third_dish_image:
+    video_biography:
+
+    status:
+        The status of this account. Status descriptions are given below.
+
+        pending:
+            A system administrator has yet to review this request and take an
+            action on it.
+        approved:
+            A system administrator has approved this request.
+        rejected:
+            A system administrator has rejected this request.
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -90,6 +127,16 @@ class ChefPermissionsRequest(models.Model):
         max_length=256,
         upload_to="chef-permissions-requests-uploads/"
     )
+
+    PENDING, APPROVED, REJECTED = 0, 1, 2
+
+    STATUS_CHOICES = (
+        (PENDING, "Pending"),
+        (APPROVED, "Approved"),
+        (REJECTED, "Rejected")
+    )
+
+    status = models.IntegerField(choices=STATUS_CHOICES, default=PENDING)
 
 class Suggestion(models.Model):
     """
