@@ -20,7 +20,13 @@ def signup(request):
 
 def account(request):
     is_chef = hasattr(request.user, "chef")
-    context = {"is_chef": is_chef}
+    user = request.user
+    requests = user.chefpermissionsrequest_set
+    pending_requests = requests.filter(status=ChefPermissionsRequest.PENDING)
+    context = {
+        "is_chef": is_chef,
+        "pending_requests": pending_requests.count()
+    }
     return render(request, "accounts/account.html", context)
 
 def terminate(request):
