@@ -10,6 +10,8 @@
   {% if is_chef %}
     <a href="/dishes/chefs/{{ user.chef.id }}/edit/">Edit profile</a>
     <a href="/dishes/posts/manage/">Manage Posts</a>
+  {% elif pending_requests %}
+    <p>Your chef permissions request is pending</p>
   {% else %}
     <a href="request-chef-permissions/">Request Chefs Permissions</a>
   {% endif %}
