@@ -30,12 +30,17 @@ def terminate(request):
         if form.is_valid():
             choice = int(form.cleaned_data["choice"])
             if choice == TerminateAccountRequestForm.YES:
-                TerminateAccountRequest.objects.create(user=request.user)
-                context["request_confirmed"] = True
+                try:
+                    TerminateAccountRequest.objects.get(user=request.user)
+                    return redirect("account")
+                except TerminateAccountRequest.DoesNotExist:
+                    TerminateAccountRequest.objects.create(user=request.user)
+                    context["request_confirmed"] = True
             else:
                 return redirect("account")
     else:
         form = TerminateAccountRequestForm()
+    context["form"] = form
     return render(request, "accounts/user_confirm_terminate.html", context)
 
 def request_chef_permissions(request):
