@@ -30,8 +30,14 @@ class DishPostForm(forms.ModelForm):
             "serving_size",
             "price",
             "last_call",
-            "meal_time"
+            "meal_time",
+            "latitude",
+            "longitude"
         ]
+        widgets = {
+            "latitude": forms.HiddenInput(),
+            "longitude": forms.HiddenInput()
+        }
 
 class FeedbackForm(forms.ModelForm):
     class Meta:
