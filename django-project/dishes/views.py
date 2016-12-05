@@ -31,16 +31,40 @@ def orders_and_requests(request):
     if not request.user.is_authenticated:
         return redirect("dishes")
     else:
-        diner = Diner.objects.get(user=request.user)
-        orders = Order.objects.filter(diner=diner)
-        requests = DishRequest.objects.filter(diner=diner)
+        diner = request.user.diner
+
+        pending_orders = diner.order_set.filter(status=Order.OPEN)
+        closed_orders = diner.order_set.filter(status__gt=Order.OPEN)
+
+        diner_requests = diner.dishrequest_set
+        pending_requests = diner_requests.filter(status=DishRequest.OPEN)
+        closed_requests = diner_requests.filter(status__gt=DishRequest.OPEN)
+
         is_chef = hasattr(request.user, "chef")
+
         context = {
-            "orders": orders,
-            "requests": requests,
+            "orders": pending_orders,
+            "has_history": closed_orders.count() or closed_requests.count(),
+            "requests": pending_requests,
             "is_chef": is_chef
         }
         return render(request, "dishes/orders-requests.html", context)
+
+def orders_and_requests_history(request):
+    if not request.user.is_authenticated:
+        return redirect("dishes")
+    else:
+        diner = request.user.diner
+
+        orders = diner.order_set.filter(status__gt=Order.OPEN)
+        requests = diner.dishrequest_set.filter(status__gt=DishRequest.OPEN)
+
+        context = {
+            "orders": orders,
+            "requests": requests
+        }
+
+        return render(request, "dishes/orders-requests-history.html", context)
 
 def requests(request):
     dish_requests = DishRequest.objects.all()
@@ -101,6 +125,10 @@ def order_feedback(request, order_id):
 
 def cancel_order(request, order_id):
     if request.method == "POST":
+        order = get_object_or_404(Order, pk=order_id)
+        if request.user == order.diner.user:
+            order.status = Order.CANCELLED
+            order.save()
         return redirect("orders_and_requests")
     order = get_object_or_404(Order, pk=order_id)
     context = {"order": order}
