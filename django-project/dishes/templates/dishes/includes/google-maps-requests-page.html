@@ -98,22 +98,22 @@
       }
         
         //Create a marker at CCNY
-        {% for c in dish_posts %}
+        {% for dishes in dish_requests %}
          var marker = new google.maps.Marker({
-          position: {lat: {{c.latitude}}, lng: {{c.longitude}}},
+          position: {lat: {{dishes.latitude}}, lng: {{dishes.longitude}}},
           map: map,
-          title: 'City College of New York'
+          title: 'NGS Request'
         });
         
         var content = '<div id="content">'+ 
             '<div id="Dish">'+
             '</div>'+
-            '<h3 id="firstHeading" class="firstHeading">{{c.dish.name}}</h3>'+
+            '<h3 id="firstHeading" class="firstHeading">{{dishes.dish.name}}</h3>'+
             '<div id="bodyContent">'+
-            '<p>' +  '{{c.dish.description}}' + '</p>'+
-            '<p>Chef: {{c.chef.user.username}}</p>'+
-            '<p>Servings: {{c.available_servings}}</p>'+ 
-            '<p>Price: {{c.price}}</p>'+
+            '<p>' +  '{{dishes.dish.description}}' + '</p>'+
+            '<p>User: {{dishes.diner.user.username}}</p>'+
+            '<p>Servings: {{dishes.available_servings}}</p>'+ 
+            '<p>Price: {{dishes.price}}</p>'+
             '</div>'+
             '</div>';
         
@@ -140,7 +140,7 @@
        google.maps.event.addListener(marker,'click', 
         (function(marker){ 
           return function() {
-             location.href = "/dishes/posts/{{ c.id }}/"
+             location.href = "/dishes/requests/{{ dishes.id }}/"
           };
         })(marker)); 
         {% endfor %}
