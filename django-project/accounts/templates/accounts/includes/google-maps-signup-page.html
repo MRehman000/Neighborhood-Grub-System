@@ -111,7 +111,7 @@
                             // Extract the first 9 characters that make up the values
                             // of latitude and longitude.
                             var newLatVal = ("" + event.latLng.lat()).substr(0, 9);
-                            var newLngVal = ("" + event.latLng.lat()).substr(0, 9);
+                            var newLngVal = ("" + event.latLng.lng()).substr(0, 9);
                             document.getElementById('id_latitude').value = newLatVal;
                             document.getElementById('id_longitude').value = newLngVal;
                             document.getElementById('UserAddress').value = add;
