@@ -1,5 +1,6 @@
 {% include "ngs/header.html" %}
 
+{% if orders %}
 <h2>Orders</h2>
 <ul>
 {% for order in orders %}
@@ -27,9 +28,12 @@
   </li>
 {% endfor %}
 </ul>
+{% endif %}
+
 {% if is_chef %}
 <a href="/dishes/posts/create/">Post a Dish</a>
 {% endif %}
+
 <h2>Requests</h2>
 <ul>
 {% for request in requests %}
@@ -59,3 +63,7 @@
 {% endfor %}
 </ul>
 <a href="/dishes/requests/create/">Make a Request</a>
+
+{% if has_history %}
+<a href="/dishes/orders-requests/history/">History</a>
+{% endif %}
