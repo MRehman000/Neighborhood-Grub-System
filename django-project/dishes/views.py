@@ -255,14 +255,17 @@ def create_post(request):
     return render(request, "dishes/create_post.html", context)
 
 def manage_posts(request):
-    dish_posts = DishPost.objects.filter(chef=request.user.chef)
+    chef = request.user.chef
+    dish_posts = chef.dishpost_set.filter(status=DishPost.OPEN)
     context = {"dish_posts": dish_posts}
     return render(request, "dishes/manage_posts.html", context)
 
 def cancel_post(request, dish_post_id):
-    if request.method == "POST":
-        return redirect("manage_posts")
     dish_post = get_object_or_404(DishPost, pk=dish_post_id)
+    if request.method == "POST":
+        dish_post.status = DishPost.CANCELLED
+        dish_post.save()
+        return redirect("manage_posts")
     context = {"dish_post": dish_post}
     return render(request, "dishes/cancel_post.html", context)
 
