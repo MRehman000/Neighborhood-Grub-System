@@ -199,9 +199,11 @@ def edit_request(request, dish_request_id):
     return render(request, "dishes/edit_request.html", context)
 
 def cancel_request(request, dish_request_id):
-    if request.method == "POST":
-        return redirect("orders_and_requests")
     dish_request = get_object_or_404(DishRequest, pk=dish_request_id)
+    if request.method == "POST":
+        dish_request.status = DishRequest.CANCELLED
+        dish_request.save()
+        return redirect("orders_and_requests")
     context = {"request": dish_request}
     return render(request, "dishes/cancel_request.html", context)
 
