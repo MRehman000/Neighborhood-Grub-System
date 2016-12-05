@@ -140,10 +140,14 @@ class DishPost(models.Model):
     longitude= models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
 
     OPEN = 0
+
     COMPLETE = 1
+
+    OPEN, CANCELLED, COMPLETE = range(3)
 
     STATUS_CHOICES = (
         (OPEN, "Open"),
+        (CANCELLED, "Cancelled"),
         (COMPLETE, "Complete")
     )
 
