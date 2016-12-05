@@ -160,7 +160,7 @@ def create_request(request):
             dish_data.update(dish_form.cleaned_data)
             dish = Dish.objects.create(**dish_data)
 
-            # Create the DishPost
+            # Create the DishRequest
             # Similarly, collate data not contained
             # in the validated DishRequestForm.
             dish_request_data = {
@@ -217,11 +217,39 @@ def create_post(request):
                                       data=request.POST)
         dish_form = DishForm(prefix="dish", data=request.POST)
         if dish_post_form.is_valid() and dish_form.is_valid():
-            # Create the Dish and DishPost
+            # Bind some more programmer friendly references
+            diner = request.user.diner
+            chef = request.user.chef
+            dish_post_form_data = dish_post_form.cleaned_data
+
+            # Create the Dish
+            # The DishForm only has the fields "name" and "description"
+            # Before we can create the dish we have to collate more
+            # information
+            dish_data = {
+                "default_price": dish_post_form_data["price"],
+                "serving_size": dish_post_form_data["serving_size"],
+            }
+            dish_data.update(dish_form.cleaned_data)
+            dish = Dish.objects.create(**dish_data)
+
+            # Create the DishPost
+            # Similarly, collate data not contained
+            # in the validated DishRequestForm.
+            dish_post_data = {
+                "chef": chef,
+                "dish": dish,
+                "latitude": diner.latitude,
+                "longitude": diner.longitude
+            }
+            dish_post_data.update(**dish_post_form_data)
+            dish_post = DishPost.objects.create(**dish_post_data)
+
             return redirect("orders_and_requests")
     else:
         dish_post_form = DishPostForm(prefix="dish_post")
         dish_form = DishForm(prefix="dish")
+
     context["dish_post_form"] = dish_post_form
     context["dish_form"] = dish_form
     return render(request, "dishes/create_post.html", context)
