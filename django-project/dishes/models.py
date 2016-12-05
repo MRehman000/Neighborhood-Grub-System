@@ -12,8 +12,20 @@ class Diner(models.Model):
 
     user:
         The User account associated with this Diner instance.
+
+    latitude:
+        The latitude coordinate of this user's default location.
+
+    longitude:
+        The longitude coordinate of this user's default location.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    latitude = models.DecimalField(max_digits=9,
+                                   decimal_places=6,
+                                   default=decimal.Decimal(0.0))
+    longitude = models.DecimalField(max_digits=9,
+                                    decimal_places=6,
+                                    default=decimal.Decimal(0.0))
 
 class Chef(models.Model):
     """
@@ -56,7 +68,9 @@ class Dish(models.Model):
     """
     name = models.CharField(max_length=128)
     description = models.TextField("Dish Description")
-    default_price = models.DecimalField(max_digits=4, decimal_places=2)
+    default_price = models.DecimalField(max_digits=4,
+                                        decimal_places=2,
+                                        null=True)
     cuisine_tags = models.ManyToManyField(CuisineTag)
     serving_size = models.DecimalField(max_digits=3,
                                        decimal_places=1,
