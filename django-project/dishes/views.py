@@ -275,10 +275,12 @@ def edit_post(request, dish_post_id):
     dish = dish_post.dish
     if request.method == "POST":
         dish_post_form = DishPostForm(prefix="dish_post",
-                                      data=request.POST)
-        dish_form = DishForm(prefix="dish", data=request.POST)
+                                      data=request.POST,
+                                      instance=dish_post)
+        dish_form = DishForm(prefix="dish", data=request.POST, instance=dish)
         if dish_post_form.is_valid() and dish_form.is_valid():
-            # Update the Dish and DishPost
+            dish_post_form.save()
+            dish_form.save()
             return redirect("manage_posts")
     else:
         dish_post_form = DishPostForm(prefix="dish_post", instance=dish_post)
