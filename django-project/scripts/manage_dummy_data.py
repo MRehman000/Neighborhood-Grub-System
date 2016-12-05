@@ -32,8 +32,16 @@ users = {
 }
 
 diners = {
-    0: {"user": 0},
-    1: {"user": 1}
+    0: {
+        "user": 0,
+        "latitude": decimal.Decimal(41.019751),
+        "longitude": decimal.Decimal(-73.616714)
+    },
+    1: {
+        "user": 1,
+        "latitude": decimal.Decimal(40.991531),
+        "longitude": decimal.Decimal(-73.670672)
+    }
 }
 
 chefs = {
