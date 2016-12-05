@@ -3,8 +3,10 @@
 <p>Please edit the details of this post</p>
 <form method="post">
   {% csrf_token %}
-  {{ dish_form }}
-  {{ dish_post_form }}
+  <table>
+    {{ dish_form.as_table }}
+    {{ dish_post_form.as_table }}
+  </table>
   <button type="submit">Submit</button>
 </form>
 <form action="/dishes/posts/manage/">
