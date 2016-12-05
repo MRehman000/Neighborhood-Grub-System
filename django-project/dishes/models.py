@@ -198,14 +198,10 @@ class DishRequest(models.Model):
     latitude = models.DecimalField(max_digits = 9, decimal_places = 6,default=decimal.Decimal(0.0))
     longitude= models.DecimalField(max_digits = 9, decimal_places = 6,default=decimal.Decimal(0.0))
 
-    OPEN = 0
-    CLOSED = 1
-    CANCELLED = 2
-    COMPLETE = 3
+    OPEN, CANCELLED, COMPLETE = range(3)
 
     STATUS_CHOICES = (
         (OPEN, "Open"),
-        (CLOSED, "Closed"),
         (CANCELLED, "Cancelled"),
         (COMPLETE, "Complete")
     )
@@ -231,10 +227,32 @@ class Order(models.Model):
 
     num_servings:
         The number of servings of the Dish the Diner wishes to order.
+
+    status:
+        The status of this order. Status descriptions are given below.
+
+        Open:
+            This order is currently open and waiting to be filled.
+
+        Cancelled:
+            This order has been cancelled.
+
+        Completed:
+            This order has been completed.
     """
     diner = models.ForeignKey(Diner, on_delete=models.SET_NULL, null=True)
     dish_post = models.ForeignKey(DishPost, on_delete=models.PROTECT)
     num_servings = models.IntegerField(default=1)
+
+    OPEN, CANCELLED, COMPLETE = range(3)
+
+    STATUS_CHOICES = (
+        (OPEN, "Open"),
+        (CANCELLED, "Cancelled"),
+        (COMPLETE, "Complete")
+    )
+
+    status = models.IntegerField(choices=STATUS_CHOICES, default=OPEN)
 
     def total(self):
         return self.num_servings * self.dish_post.price
