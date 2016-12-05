@@ -111,7 +111,7 @@
             '<h3 id="firstHeading" class="firstHeading">{{dishes.dish.name}}</h3>'+
             '<div id="bodyContent">'+
             '<p>' +  '{{dishes.dish.description}}' + '</p>'+
-            '<p>Chef: {{dishes.diner.user.username}}</p>'+
+            '<p>User: {{dishes.diner.user.username}}</p>'+
             '<p>Servings: {{dishes.available_servings}}</p>'+ 
             '<p>Price: {{dishes.price}}</p>'+
             '</div>'+
@@ -140,7 +140,7 @@
        google.maps.event.addListener(marker,'click', 
         (function(marker){ 
           return function() {
-             location.href = "/dishes/posts/{{ dishes.id }}/"
+             location.href = "/dishes/requests/{{ dishes.id }}/"
           };
         })(marker)); 
         {% endfor %}

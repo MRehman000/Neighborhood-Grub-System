@@ -99,7 +99,57 @@ dishes = {
         "default_price": decimal.Decimal(3.00),
         "description": "Cheesecake NY style",
         "serving_size": decimal.Decimal(8.0)
+    },
+    7: {
+        "name": "Tuna Salad",
+        "default_price": decimal.Decimal(5.00),
+        "description": "Fresh Tuna with lettuce, onions and other healthy things",
+        "serving_size": decimal.Decimal(1.0)
+    },
+    8: {
+        "name": "Cheeseburgers",
+        "default_price": decimal.Decimal(4.00),
+        "description": "Burgers fresh off the grill",
+        "serving_size": decimal.Decimal(10.0)
+    },
+    9: {
+        "name": "Pizza",
+        "default_price": decimal.Decimal(2.00),
+        "description": "Homemade pizza with homemade sauce and cheese",
+        "serving_size": decimal.Decimal(8.0)
+    },
+    10: {
+        "name": "Biryani",
+        "default_price": decimal.Decimal(8.00),
+        "description": "Great tasting basmati rice and chicken cooked the Pakistani way",
+        "serving_size": decimal.Decimal(2.0)
+    },
+    11: {
+        "name": "Mango Lassi",
+        "default_price": decimal.Decimal(3.00),
+        "description": "Indian yogurt beverage, its got lots of different flavors<br>people like to drink it on a hot summer's day",
+        "serving_size": decimal.Decimal(8.0)
+    },
+    12: {
+        "name": "Tandoori Chicken",
+        "default_price": decimal.Decimal(4.00),
+        "description": "Spicy chicken seasoned with traditional Indian spices",
+        "serving_size": decimal.Decimal(5.0)
+    },
+    13: {
+        "name": "Vegetable Samosas",
+        "default_price": decimal.Decimal(1.50),
+        "description": "Potatoes, chickpeas, and onions wrapped inside a bread and fried",
+        "serving_size": decimal.Decimal(10.0)
+    },
+    14: {
+        "name": "Chicken Makhni",
+        "default_price": decimal.Decimal(3.00),
+        "description": "Chicken cooked in butter and cream, also known as Butter Chicken",
+        "serving_size": decimal.Decimal(8.0)
     }
+
+
 }
 
 dish_posts = {
@@ -123,7 +173,6 @@ dish_posts = {
         "serving_size": decimal.Decimal(1),
         "last_call": timezone.now() + datetime.timedelta(days=3),
         "meal_time": timezone.now() + datetime.timedelta(days=4),
-
         "latitude": decimal.Decimal(40.8197061),
         "longitude": decimal.Decimal(-73.9505599)
     },
@@ -136,7 +185,6 @@ dish_posts = {
         "serving_size": decimal.Decimal(1),
         "last_call": timezone.now() + datetime.timedelta(days=3),
         "meal_time": timezone.now() + datetime.timedelta(days=4),
-
         "latitude": decimal.Decimal(40.7197061),
         "longitude": decimal.Decimal(-73.9505599)
     },
@@ -148,7 +196,6 @@ dish_posts = {
         "serving_size": decimal.Decimal(1),
         "last_call": timezone.now() + datetime.timedelta(days=3),
         "meal_time": timezone.now() + datetime.timedelta(days=4),
-
         "latitude": decimal.Decimal(40.9197061),
         "longitude": decimal.Decimal(-73.9505599)
     },
@@ -160,7 +207,6 @@ dish_posts = {
         "serving_size": decimal.Decimal(1),
         "last_call": timezone.now() + datetime.timedelta(days=3),
         "meal_time": timezone.now() + datetime.timedelta(days=4),
-
         "latitude": decimal.Decimal(40.8197061),
         "longitude": decimal.Decimal(-73.2505599)
     },
@@ -172,7 +218,6 @@ dish_posts = {
         "serving_size": decimal.Decimal(1),
         "last_call": timezone.now() + datetime.timedelta(days=3),
         "meal_time": timezone.now() + datetime.timedelta(days=4),
-
         "latitude": decimal.Decimal(41.8197061),
         "longitude": decimal.Decimal(-73.9505599)
     },
@@ -184,19 +229,17 @@ dish_posts = {
         "serving_size": decimal.Decimal(1),
         "last_call": timezone.now() + datetime.timedelta(days=3),
         "meal_time": timezone.now() + datetime.timedelta(days=4),
-
         "latitude": decimal.Decimal(40.8197061),
         "longitude": decimal.Decimal(-72.9505599)
     },
     7: {
         "chef": 0,
         "max_servings": 4,
-        "dish": 2,
+        "dish": 3,
         "price": decimal.Decimal(51.00),
         "serving_size": decimal.Decimal(1),
         "last_call": timezone.now() + datetime.timedelta(days=3),
         "meal_time": timezone.now() + datetime.timedelta(days=4),
-
         "latitude": decimal.Decimal(40.8197061),
         "longitude": decimal.Decimal(-74.005599)
     },
@@ -208,7 +251,6 @@ dish_posts = {
         "serving_size": decimal.Decimal(1),
         "last_call": timezone.now() + datetime.timedelta(days=3),
         "meal_time": timezone.now() + datetime.timedelta(days=4),
-
         "latitude": decimal.Decimal(40.2397061),
         "longitude": decimal.Decimal(-73.94059)
     },
@@ -220,9 +262,8 @@ dish_posts = {
         "serving_size": decimal.Decimal(1),
         "last_call": timezone.now() + datetime.timedelta(days=3),
         "meal_time": timezone.now() + datetime.timedelta(days=4),
-
-        "latitude": decimal.Decimal(38.11961),
-        "longitude": decimal.Decimal(-72.5505599)
+        "latitude": decimal.Decimal(40.963703),
+        "longitude": decimal.Decimal(-73.858758)
     },
 
     10: {
@@ -233,7 +274,6 @@ dish_posts = {
         "serving_size": decimal.Decimal(1),
         "last_call": timezone.now() + datetime.timedelta(days=3),
         "meal_time": timezone.now() + datetime.timedelta(days=4),
-
         "latitude": decimal.Decimal(40.8197031),
         "longitude": decimal.Decimal(-73.96128)
     },
@@ -245,9 +285,8 @@ dish_posts = {
         "serving_size": decimal.Decimal(1),
         "last_call": timezone.now() + datetime.timedelta(days=3),
         "meal_time": timezone.now() + datetime.timedelta(days=4),
-
-        "latitude": decimal.Decimal(40.8197001),
-        "longitude": decimal.Decimal(-73.938)
+        "latitude": decimal.Decimal(40.6450574),
+        "longitude": decimal.Decimal(-73.9999147)
     },
     12: {
         "chef": 0,
@@ -257,9 +296,8 @@ dish_posts = {
         "serving_size": decimal.Decimal(1),
         "last_call": timezone.now() + datetime.timedelta(days=3),
         "meal_time": timezone.now() + datetime.timedelta(days=4),
-
-        "latitude": decimal.Decimal(40.87009),
-        "longitude": decimal.Decimal(-73.96021)
+        "latitude": decimal.Decimal(40.8505949),
+        "longitude": decimal.Decimal(-73.8791922)
     }
 }
 
@@ -274,12 +312,66 @@ orders = {
 dish_requests = {
     0: {
         "diner": 0,
-        "dish": 2,
+        "dish": 11,
         "portion_size": decimal.Decimal(1.1),
         "num_servings": 5,
         "price": decimal.Decimal(6.50),
-        "meal_time": timezone.now() + datetime.timedelta(days=7)
-    }
+        "meal_time": timezone.now() + datetime.timedelta(days=7),
+        "latitude": decimal.Decimal(40.6675515),
+        "longitude": decimal.Decimal(-73.9869256)
+    },
+    1: {
+        "diner": 0,
+        "dish": 9,
+        "portion_size": decimal.Decimal(1.1),
+        "num_servings": 5,
+        "price": decimal.Decimal(6.50),
+        "meal_time": timezone.now() + datetime.timedelta(days=7),
+        "latitude": decimal.Decimal(40.7486386),
+        "longitude": decimal.Decimal(-73.895272)
+    },
+    2: {
+        "diner": 0,
+        "dish": 10,
+        "portion_size": decimal.Decimal(1.1),
+        "num_servings": 5,
+        "price": decimal.Decimal(6.50),
+        "meal_time": timezone.now() + datetime.timedelta(days=7),
+        "latitude": decimal.Decimal(40.6486386),
+        "longitude": decimal.Decimal(-73.87915727)
+    },
+    3: {
+        "diner": 0,
+        "dish": 12,
+        "portion_size": decimal.Decimal(1.1),
+        "num_servings": 5,
+        "price": decimal.Decimal(6.50),
+        "meal_time": timezone.now() + datetime.timedelta(days=7),
+        "latitude": decimal.Decimal(40.8505949),
+        "longitude": decimal.Decimal(-73.8791922)
+    },
+    4: {
+        "diner": 0,
+        "dish": 13,
+        "portion_size": decimal.Decimal(1.1),
+        "num_servings": 5,
+        "price": decimal.Decimal(6.50),
+        "meal_time": timezone.now() + datetime.timedelta(days=7),
+        "latitude": decimal.Decimal(40.7483135),
+        "longitude": decimal.Decimal(-73.8851868)
+    },
+    5: {
+        "diner": 0,
+        "dish": 14,
+        "portion_size": decimal.Decimal(1.1),
+        "num_servings": 5,
+        "price": decimal.Decimal(6.50),
+        "meal_time": timezone.now() + datetime.timedelta(days=7),
+        "latitude": decimal.Decimal(40.7523781),
+        "longitude": decimal.Decimal(-73.9200795)
+    },
+    
+
 }
 
 red_flags = {
