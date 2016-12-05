@@ -418,10 +418,10 @@ def load():
         users[user_info] = user
         user.save()
 
-    for diner_info in diners:
-        diner_user = users[diners[diner_info]["user"]]
-        diner = Diner.objects.create(user=diner_user)
-        diners[diner_info] = diner
+    for key in diners:
+        diners[key]["user"] = users[diners[key]["user"]]
+        diner = Diner.objects.create(**diners[key])
+        diners[key] = diner
 
     for chef_info in chefs:
         chefs[chef_info]["user"] = users[chefs[chef_info]["user"]]
