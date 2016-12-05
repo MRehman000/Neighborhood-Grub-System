@@ -112,12 +112,6 @@ class DishPost(models.Model):
         Open:
             At least 1 serving of the Dish Post is still available so a Diner
             may still order the Dish.
-        Closed:
-            The Dish has not yet been served, but is not availalbe for further
-            orders. This may be because the maximum number of orders has been
-            reached, or the Dish is past the order point.
-        Cancelled:
-            The Chef has cancelled this Dish Post.
         Complete:
             The Dish has been served and the Chef has been paid.
     """
@@ -130,25 +124,25 @@ class DishPost(models.Model):
     meal_time = models.DateTimeField("Meal Time")
     latitude = models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
     longitude= models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
+
     OPEN = 0
-    CLOSED = 1
-    CANCELLED = 2
-    COMPLETE = 3
+    COMPLETE = 1
 
     STATUS_CHOICES = (
         (OPEN, "Open"),
-        (CLOSED, "Closed"),
-        (CANCELLED, "Cancelled"),
         (COMPLETE, "Complete")
     )
 
     status = models.IntegerField(choices=STATUS_CHOICES, default=OPEN)
 
     def available_servings(self):
-        servings_ordered = 0
-        for order in self.order_set.all():
-            servings_ordered += order.num_servings
-        return self.max_servings - servings_ordered
+        if self.status == DishPost.COMPLETE:
+            return 0
+        else:
+            servings_ordered = 0
+            for order in self.order_set.all():
+                servings_ordered += order.num_servings
+            return self.max_servings - servings_ordered
 
 class DishRequest(models.Model):
     """
