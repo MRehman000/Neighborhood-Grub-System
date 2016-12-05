@@ -1,7 +1,9 @@
 from django.shortcuts import get_object_or_404, render, redirect
 
-from dishes.models import DishPost, Diner, Order, DishRequest, Chef
-from dishes.models import OrderFeedback, RateChef, RateDiner
+from dishes.models import (
+    DishPost, Diner, Order, DishRequest, Chef,
+    OrderFeedback, RateChef, RateDiner, Dish
+)
 from dishes.forms import DishForm, DishRequestForm, DishPostForm, ChefForm
 from dishes.forms import FeedbackForm, RateChefForm, RateDinerForm
 
@@ -137,11 +139,39 @@ def cancel_order(request, order_id):
 def create_request(request):
     context = {}
     if request.method == "POST":
+        dish_form = DishForm(prefix="dish", data=request.POST)
         dish_request_form = DishRequestForm(prefix="dish_request",
                                             data=request.POST)
-        dish_form = DishForm(prefix="dish", data=request.POST)
         if dish_request_form.is_valid() and dish_form.is_valid():
-            # Create the Dish and DishRequest
+            # Bind some more programmer friendly references
+            diner = request.user.diner
+            dish_request_form_data = dish_request_form.cleaned_data
+
+            # Create the Dish
+            # The DishForm only has the fields "name" and "description"
+            # Before we can create the dish we have to collate more
+            # information
+            dish_data = {
+                "default_price": dish_request_form_data["price"],
+                "serving_size": dish_request_form_data["portion_size"],
+                "latitude": diner.latitude,
+                "longitude": diner.longitude
+            }
+            dish_data.update(dish_form.cleaned_data)
+            dish = Dish.objects.create(**dish_data)
+
+            # Create the DishPost
+            # Similarly, collate data not contained
+            # in the validated DishRequestForm.
+            dish_request_data = {
+                "diner": diner,
+                "dish": dish,
+                "latitude": diner.latitude,
+                "longitude": diner.longitude
+            }
+            dish_request_data.update(dish_request_form_data)
+            dish_request = DishRequest.objects.create(**dish_request_data)
+
             return redirect("orders_and_requests")
     else:
         dish_request_form = DishRequestForm(prefix="dish_request")
