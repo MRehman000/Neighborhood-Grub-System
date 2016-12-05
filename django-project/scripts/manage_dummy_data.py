@@ -37,7 +37,12 @@ diners = {
 }
 
 chefs = {
-    0: {"user": 1}
+    0: {
+        "user": 1,
+        "name": "Mark Twain",
+        "blurb": "Satirist in the prosaic and culinary arts.",
+        "experience": "Frying bacon and scrambling eggs. Caveat emptor."
+    }
 }
 
 cuisine_tags = {
@@ -106,9 +111,9 @@ dish_posts = {
         "serving_size": decimal.Decimal(0.7),
         "last_call": timezone.now() + datetime.timedelta(days=1),
         "meal_time": timezone.now() + datetime.timedelta(days=2),
-
         "latitude": decimal.Decimal(40.8197061),
-        "longitude": decimal.Decimal(-73.96078)
+        "longitude": decimal.Decimal(-73.96078),
+        "status": DishPost.COMPLETE
     },
     1: {
         "chef": 0,
@@ -319,8 +324,8 @@ def load():
         diners[diner_info] = diner
 
     for chef_info in chefs:
-        chef_user = users[chefs[chef_info]["user"]]
-        chef = Chef.objects.create(user=chef_user)
+        chefs[chef_info]["user"] = users[chefs[chef_info]["user"]]
+        chef = Chef.objects.create(**chefs[chef_info])
         chefs[chef_info] = chef
 
     for tag_info in cuisine_tags:
