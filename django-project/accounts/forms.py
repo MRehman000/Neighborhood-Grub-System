@@ -1,11 +1,24 @@
 from django import forms
 from accounts.models import CreateAccountRequest, ChefPermissionsRequest
 from accounts.models import Suggestion
+from captcha.fields import CaptchaField
 
 class CreateAccountRequestForm(forms.ModelForm):
+    captcha = CaptchaField()
     class Meta:
         model = CreateAccountRequest
-        fields = ["first_name", "last_name", "email"]
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "latitude",
+            "longitude"
+        ]
+        widgets = {
+            "latitude": forms.HiddenInput(),
+            "longitude": forms.HiddenInput()
+        }
 
 class TerminateAccountRequestForm(forms.Form):
     NO = 0

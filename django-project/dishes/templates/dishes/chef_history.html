@@ -1,0 +1,15 @@
+{% include "ngs/header.html" %}
+
+<h2>{{ chef.name }} Dish Posts History</h2>
+{% if past_dish_posts %}
+  <ul>
+    {% for dish_post in past_dish_posts %}
+      <li>
+        <a href="/dishes/posts/{{ dish_post.id }}/">{{dish_post.dish.name}}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% include "dishes/includes/google-maps.html" %}
+{% else %}
+  <p>{{ chef.name }} has no history.</p>
+{% endif %}

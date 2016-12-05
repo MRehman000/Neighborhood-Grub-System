@@ -2,6 +2,7 @@ import decimal
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Diner(models.Model):
     """
@@ -11,8 +12,20 @@ class Diner(models.Model):
 
     user:
         The User account associated with this Diner instance.
+
+    latitude:
+        The latitude coordinate of this user's default location.
+
+    longitude:
+        The longitude coordinate of this user's default location.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    latitude = models.DecimalField(max_digits=9,
+                                   decimal_places=6,
+                                   default=decimal.Decimal(0.0))
+    longitude = models.DecimalField(max_digits=9,
+                                    decimal_places=6,
+                                    default=decimal.Decimal(0.0))
 
 class Chef(models.Model):
     """
@@ -24,6 +37,13 @@ class Chef(models.Model):
         The User account associated with this Chef instance.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=128)
+    blurb = models.TextField("Blurb")
+    experience = models.TextField("Experience")
+    followers = models.ManyToManyField(Diner, related_name="followees")
+
+    def count_followers(self):
+        return self.followers.all().count()
 
 class CuisineTag(models.Model):
     """
@@ -48,11 +68,20 @@ class Dish(models.Model):
     """
     name = models.CharField(max_length=128)
     description = models.TextField("Dish Description")
-    default_price = models.DecimalField(max_digits=4, decimal_places=2)
+    default_price = models.DecimalField(max_digits=4,
+                                        decimal_places=2,
+                                        null=True)
     cuisine_tags = models.ManyToManyField(CuisineTag)
     serving_size = models.DecimalField(max_digits=3,
                                        decimal_places=1,
                                        default=decimal.Decimal(1.0))
+
+
+    latitude = models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
+    longitude= models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
+
+
+
 
 class DishPost(models.Model):
     """
@@ -97,12 +126,6 @@ class DishPost(models.Model):
         Open:
             At least 1 serving of the Dish Post is still available so a Diner
             may still order the Dish.
-        Closed:
-            The Dish has not yet been served, but is not availalbe for further
-            orders. This may be because the maximum number of orders has been
-            reached, or the Dish is past the order point.
-        Cancelled:
-            The Chef has cancelled this Dish Post.
         Complete:
             The Dish has been served and the Chef has been paid.
     """
@@ -113,15 +136,17 @@ class DishPost(models.Model):
     serving_size = models.DecimalField(max_digits=3, decimal_places=1)
     last_call = models.DateTimeField("Last Call")
     meal_time = models.DateTimeField("Meal Time")
+    latitude = models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
+    longitude= models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
 
     OPEN = 0
-    CLOSED = 1
-    CANCELLED = 2
-    COMPLETE = 3
+
+    COMPLETE = 1
+
+    OPEN, CANCELLED, COMPLETE = range(3)
 
     STATUS_CHOICES = (
         (OPEN, "Open"),
-        (CLOSED, "Closed"),
         (CANCELLED, "Cancelled"),
         (COMPLETE, "Complete")
     )
@@ -129,10 +154,13 @@ class DishPost(models.Model):
     status = models.IntegerField(choices=STATUS_CHOICES, default=OPEN)
 
     def available_servings(self):
-        servings_ordered = 0
-        for order in self.order_set.all():
-            servings_ordered += order.num_servings
-        return self.max_servings - servings_ordered
+        if self.status == DishPost.COMPLETE:
+            return 0
+        else:
+            servings_ordered = 0
+            for order in self.order_set.all():
+                servings_ordered += order.num_servings
+            return self.max_servings - servings_ordered
 
 class DishRequest(models.Model):
     """
@@ -185,14 +213,13 @@ class DishRequest(models.Model):
     price = models.DecimalField(max_digits=4, decimal_places=2)
     meal_time = models.DateTimeField("Meal Time")
 
-    OPEN = 0
-    CLOSED = 1
-    CANCELLED = 2
-    COMPLETE = 3
+    latitude = models.DecimalField(max_digits = 9, decimal_places = 6,default=decimal.Decimal(0.0))
+    longitude= models.DecimalField(max_digits = 9, decimal_places = 6,default=decimal.Decimal(0.0))
+
+    OPEN, CANCELLED, COMPLETE = range(3)
 
     STATUS_CHOICES = (
         (OPEN, "Open"),
-        (CLOSED, "Closed"),
         (CANCELLED, "Cancelled"),
         (COMPLETE, "Complete")
     )
@@ -218,10 +245,32 @@ class Order(models.Model):
 
     num_servings:
         The number of servings of the Dish the Diner wishes to order.
+
+    status:
+        The status of this order. Status descriptions are given below.
+
+        Open:
+            This order is currently open and waiting to be filled.
+
+        Cancelled:
+            This order has been cancelled.
+
+        Completed:
+            This order has been completed.
     """
     diner = models.ForeignKey(Diner, on_delete=models.SET_NULL, null=True)
     dish_post = models.ForeignKey(DishPost, on_delete=models.PROTECT)
     num_servings = models.IntegerField(default=1)
+
+    OPEN, CANCELLED, COMPLETE = range(3)
+
+    STATUS_CHOICES = (
+        (OPEN, "Open"),
+        (CANCELLED, "Cancelled"),
+        (COMPLETE, "Complete")
+    )
+
+    status = models.IntegerField(choices=STATUS_CHOICES, default=OPEN)
 
     def total(self):
         return self.num_servings * self.dish_post.price
@@ -229,7 +278,7 @@ class Order(models.Model):
 class OrderFeedback(models.Model):
     """
     Django model class representing feedback from a diner about an
-    order that has been placed and received (i.e. completed)
+    order that has been placed and received (i.e. completed).
 
     Attributes:
 
@@ -252,3 +301,49 @@ class OrderFeedback(models.Model):
 
     def __unicode__(self):
         return self.title
+
+class RateChef(models.Model):
+    """
+    Django model class representing the rating between 1 and 5 of
+    chef by a diner.
+
+    Attributes:
+
+    chef:
+        The chef being rated
+
+    rating: number between 1 and 5
+    """
+
+    chef = models.ForeignKey(Chef, on_delete=models.SET_NULL, null=True)
+    rating = models.IntegerField(validators=[MinValueValidator(1),
+                                             MaxValueValidator(5)])
+
+    def average_rating(self):
+        curr_sum = 0
+        for rating in RateChef.objects.all():
+            curr_sum += rating.rating
+        return curr_sum/len(RateChef.objects.all)
+
+
+class RateDiner(models.Model):
+    """
+    Django model class representing the rating of diner by a chef
+    with a score between 1 and 5
+
+    Attributes:
+
+    diner:
+     The diner being rated
+
+    rating: between 1 and 5
+    """
+    diner = models.ForeignKey(Chef, on_delete=models.SET_NULL, null=True)
+    rating = models.IntegerField(validators=[MinValueValidator(1),
+                                             MaxValueValidator(5)])
+
+    def average_rating(self):
+        curr_sum = 0
+        for rating in RateDiner.objects.all():
+            curr_sum += rating.rating
+        return curr_sum/len(RateDiner.objects.all)

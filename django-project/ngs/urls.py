@@ -29,4 +29,5 @@ urlpatterns = [
     url(r"^accounts/", include("accounts.urls")),
     url(r"^dishes/", include("dishes.urls")),
     url(r'^admin/', admin.site.urls),
+    url(r"^captcha/", include("captcha.urls")),
 ]

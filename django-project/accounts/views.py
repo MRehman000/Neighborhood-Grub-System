@@ -10,7 +10,7 @@ def signup(request):
     if request.method == "POST":
         form = CreateAccountRequestForm(request.POST)
         if form.is_valid():
-            CreateAccountRequest.objects.create(**form.cleaned_data)
+            form.save()
             return redirect("index")
     else:
         form = CreateAccountRequestForm()
@@ -19,7 +19,14 @@ def signup(request):
     return render(request, "accounts/signup.html", context)
 
 def account(request):
-    context = {}
+    is_chef = hasattr(request.user, "chef")
+    user = request.user
+    requests = user.chefpermissionsrequest_set
+    pending_requests = requests.filter(status=ChefPermissionsRequest.PENDING)
+    context = {
+        "is_chef": is_chef,
+        "pending_requests": pending_requests.count()
+    }
     return render(request, "accounts/account.html", context)
 
 def terminate(request):
@@ -29,12 +36,17 @@ def terminate(request):
         if form.is_valid():
             choice = int(form.cleaned_data["choice"])
             if choice == TerminateAccountRequestForm.YES:
-                TerminateAccountRequest.objects.create(user=request.user)
-                context["request_confirmed"] = True
+                try:
+                    TerminateAccountRequest.objects.get(user=request.user)
+                    return redirect("account")
+                except TerminateAccountRequest.DoesNotExist:
+                    TerminateAccountRequest.objects.create(user=request.user)
+                    context["request_confirmed"] = True
             else:
                 return redirect("account")
     else:
         form = TerminateAccountRequestForm()
+    context["form"] = form
     return render(request, "accounts/user_confirm_terminate.html", context)
 
 def request_chef_permissions(request):
@@ -56,7 +68,7 @@ def suggestion(request):
     if request.method == "POST":
         form = SuggestionForm(request.POST)
         if form.is_valid():
-            Suggestion.objects.create(**form.cleaned_data)
+            form.save()
             context["suggestion_received"] = True
     else:
         form = SuggestionForm()

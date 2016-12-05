@@ -1,0 +1,20 @@
+{% include "ngs/header.html" %}
+
+<h2>Post a Dish</h2>
+<p>Please fill out the details of your post</p>
+<form method="post">
+  {% csrf_token %}
+  <table>
+  {{ dish_form.as_table }}
+  {{ dish_post_form.as_table }}
+  </table>
+  <button type="submit">Submit</button>
+  <input type="hidden" id="latField" value="" />
+  <input type="hidden" id="longField" value="" />
+  <p>"Input your Address or Select it from the map below"</p><input type="text" id="UserAddress" value="[Get Address]" />
+  
+</form>
+{% include "dishes/includes/google-maps-create-order.html" %}
+<form action="/dishes/orders-requests/">
+  <button type="submit">Cancel</button>
+</form>
