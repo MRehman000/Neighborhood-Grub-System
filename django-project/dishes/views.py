@@ -1,12 +1,12 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from dishes.models import DishPost, Diner, Order, DishRequest, Chef, OrderFeedback, RateChef, RateDiner
-from dishes.forms import DishForm, DishRequestForm, DishPostForm, FeedbackForm, RateChefForm, RateDinerForm
-from dishes.forms import ChefForm
 
-
+from dishes.models import DishPost, Diner, Order, DishRequest, Chef
+from dishes.models import OrderFeedback, RateChef, RateDiner
+from dishes.forms import DishForm, DishRequestForm, DishPostForm, ChefForm
+from dishes.forms import FeedbackForm, RateChefForm, RateDinerForm
 
 def posts(request):
-    dish_posts = DishPost.objects.all()
+    dish_posts = DishPost.objects.filter(status=DishPost.OPEN)
     is_chef = hasattr(request.user, "chef")
     context = {"dish_posts": dish_posts, "is_chef": is_chef}
     return render(request, "dishes/posts.html", context)
@@ -56,8 +56,23 @@ def request_detail(request, dish_request_id):
 
 def chef_detail(request, chef_id):
     chef = get_object_or_404(Chef, pk=chef_id)
-    context = {"chef": chef}
+    open_dish_posts = chef.dishpost_set.filter(status=DishPost.OPEN)
+    has_history = open_dish_posts.count() < chef.dishpost_set.count()
+    context = {
+        "chef": chef,
+        "open_dish_posts": open_dish_posts,
+        "has_history": has_history,
+    }
     return render(request, "dishes/chef_detail.html", context)
+
+def chef_history(request, chef_id):
+    chef = get_object_or_404(Chef, pk=chef_id)
+    past_dish_posts = chef.dishpost_set.filter(status=DishPost.COMPLETE)
+    context = {
+        "chef": chef,
+        "past_dish_posts": past_dish_posts,
+    }
+    return render(request, "dishes/chef_history.html", context)
 
 def rate_chef(request, chef_id):
     chef = get_object_or_404(Chef, pk=chef_id)
