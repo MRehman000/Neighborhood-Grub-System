@@ -1,6 +1,6 @@
 {% include "ngs/header.html" %}
 
-<h2>Chef {{chef.user.username}} Profile</h2>
+<h2>About Chef {{chef.user.username}}</h2>
 <table>
   <tr>
     <td>Name</td><td>{{ chef.name }}</td>
@@ -15,3 +15,18 @@
     <td>Followers</td><td>{{ chef.count_followers }}</td>
   </tr>
 </table>
+{% if open_dish_posts %}
+<h2>Available Dishes</h2>
+  <table>
+  {% for dish_post in open_dish_posts %}
+    <tr>
+      <td>
+        <a href="/dishes/posts/{{ dish_post.id }}/">{{dish_post.dish.name}}</a>
+      </td>
+    </tr>
+  {% endfor %}
+  </table>
+{% endif %}
+{% if has_history %}
+<a href="history/">History</a>
+{% endif %}
