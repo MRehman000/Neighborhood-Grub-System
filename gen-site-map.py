@@ -23,6 +23,8 @@ edges = (
     ("orders-requests", "cancel request"),
     ("orders-requests", "create post"),
     ("orders-requests", "orders-requests-history"),
+    ("orders-requests", "order feedback"),
+    ("order feedback", "order complain"),
     ("account", "orders-requests"),
     ("account", "manage posts"),
     ("account", "edit chef profile"),
