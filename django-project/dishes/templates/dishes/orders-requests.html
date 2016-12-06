@@ -24,7 +24,11 @@
         <td>Total</td><td>${{ order.total }}</td>
       </tr>
     </table>
-    <a href="/dishes/orders/{{ order.id }}/cancel/">Cancel order</a>
+    {% if order.status == DishPost.OPEN %}
+      <a href="/dishes/orders/{{ order.id }}/cancel/">Cancel order</a>
+    {% else %}
+      <a href="/dishes/orders/{{ order.id }}/feedback/">Give Feedback</a>
+    {% endif %}
   </li>
 {% endfor %}
 </ul>
