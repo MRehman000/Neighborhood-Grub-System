@@ -262,10 +262,11 @@ class Order(models.Model):
     dish_post = models.ForeignKey(DishPost, on_delete=models.PROTECT)
     num_servings = models.IntegerField(default=1)
 
-    OPEN, CANCELLED, COMPLETE = range(3)
+    OPEN, PENDING_FEEDBACK, CANCELLED, COMPLETE = range(4)
 
     STATUS_CHOICES = (
         (OPEN, "Open"),
+        (PENDING_FEEDBACK, "Pending Feedback"),
         (CANCELLED, "Cancelled"),
         (COMPLETE, "Complete")
     )
@@ -282,22 +283,25 @@ class OrderFeedback(models.Model):
 
     Attributes:
 
-    diner:
-        The Diner placing the order.
+    order:
+        The order this feedback is about.
 
-    dish_post:
-        The Dish Post the diner is ordering.
-
-    title:
-        short "reaction" about the dish
+    date:
+        The date and time the feedback was received.
 
     feedback:
-        The feedback from the diner about the order
+        The feedback from the diner about the order.
+
+    tip:
+        The amount of tip the Diner has given with this order.
     """
-    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
-    title = models.CharField(max_length=140)
-    date = models.DateTimeField()
+    order = models.OneToOneField(Order, on_delete=models.SET_NULL, null=True)
+    date = models.DateTimeField(auto_now_add=True)
     feedback = models.TextField()
+    tip = models.DecimalField(max_digits=4,
+                              decimal_places=2,
+                              default=decimal.Decimal(0.0))
+
 
     def __unicode__(self):
         return self.title
@@ -347,3 +351,37 @@ class RateDiner(models.Model):
         for rating in RateDiner.objects.all():
             curr_sum += rating.rating
         return curr_sum/len(RateDiner.objects.all)
+
+class Rating(models.Model):
+    """
+    Django model class representing a rating of a user.
+
+    Attributes:
+
+    rater:
+        The user submitting the rating.
+
+    ratee:
+        The user being rated.
+
+    rating:
+        The score given the ratee by the rater in the range 1 to 5.
+
+    struck:
+        Whether the ratee has been suspended as a result of this rating.
+
+    date:
+        The date and time when the rating was submitted.
+    """
+    rater = models.ForeignKey(User,
+                              on_delete=models.SET_NULL,
+                              null=True,
+                              related_name="ratings_made")
+    ratee = models.ForeignKey(User,
+                              on_delete=models.SET_NULL,
+                              null=True,
+                              related_name="ratings_received")
+    rating = models.IntegerField(validators=[MinValueValidator(1),
+                                             MaxValueValidator(5)])
+    struck = models.BooleanField(default=False)
+    date = models.DateTimeField(auto_now_add=True)
