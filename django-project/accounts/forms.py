@@ -1,7 +1,10 @@
 from django import forms
-from accounts.models import CreateAccountRequest, ChefPermissionsRequest
-from accounts.models import Suggestion
 from captcha.fields import CaptchaField
+
+from accounts.models import (
+    CreateAccountRequest, ChefPermissionsRequest,
+    Suggestion, Complaint
+)
 
 class CreateAccountRequestForm(forms.ModelForm):
     captcha = CaptchaField()
@@ -42,3 +45,8 @@ class SuggestionForm(forms.ModelForm):
     class Meta:
         model = Suggestion
         fields = ["suggestion"]
+
+class ComplaintForm(forms.ModelForm):
+    class Meta:
+        model = Complaint
+        fields = ["description"]
