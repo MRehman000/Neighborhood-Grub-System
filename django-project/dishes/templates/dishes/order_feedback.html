@@ -13,7 +13,13 @@ Please provide a review of your order
   </table>
   <button type="submit">Submit</button>
 </form>
-{% endif %}
 {% if not has_complained %}
 <a href="complain/">Complain</a>
+{% endif %}
+{% if not is_following %}
+<form method="POST" action="follow/">
+  {% csrf_token %}
+  <button type="submit">Follow this chef!</button>
+</form>
+{% endif %}
 {% endif %}
