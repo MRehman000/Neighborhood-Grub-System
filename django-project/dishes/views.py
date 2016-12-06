@@ -108,6 +108,15 @@ def chef_history(request, chef_id):
     }
     return render(request, "dishes/chef_history.html", context)
 
+def order_follow(request, order_id):
+    order = get_object_or_404(Order, pk=order_id)
+    diner = order.diner
+    chef = order.dish_post.chef
+    if request.method == "POST":
+        chef.followers.add(diner)
+        chef.save()
+    return redirect("orders_and_requests")
+
 def rate_chef(request, chef_id):
     chef = get_object_or_404(Chef, pk=chef_id)
     if request.method == "POST":
@@ -154,6 +163,10 @@ def order_feedback(request, order_id):
         feedback_form = FeedbackForm()
         rating_form = RatingForm()
 
+    chef = order.dish_post.chef
+    diner = order.diner
+    context["is_following"] = chef.followers.filter(id=diner.id).count()
+    print(context["is_following"])
     context["feedback_form"] = feedback_form
     context["rating_form"] = rating_form
     context["has_complained"] = hasattr(order, "complaint")
