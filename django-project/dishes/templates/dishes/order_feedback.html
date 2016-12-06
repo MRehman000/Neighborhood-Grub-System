@@ -7,7 +7,13 @@
 Please provide a review of your order
 <form method="post">
   {% csrf_token %}
-  {{ form }}
+  <table>
+    {{ rating_form.as_table }}
+    {{ feedback_form.as_table }}
+  </table>
   <button type="submit">Submit</button>
 </form>
+{% endif %}
+{% if not has_complained %}
+<a href="complain/">Complain</a>
 {% endif %}
