@@ -3,6 +3,8 @@ import decimal
 from django.db import models
 from django.contrib.auth.models import User
 
+from dishes.models import Order
+
 class CreateAccountRequest(models.Model):
     """
     Django class representing a Create Account Request.
@@ -159,6 +161,18 @@ class RedFlag(models.Model):
     user:
         The user who is flagged by this RedFlag instance.
 
+    reason:
+        The coded reason why the user has been flagged. Code descriptions are
+        below.
+
+        Critical:
+            This user has been flagged because they have met the criteria of
+            giving 3 lowest ratings and 3 complaints.
+
+        Generous:
+            This user has been flagged because they have given 5 highest
+            ratings for the last 5 transactions.
+
     status:
         The status of this RedFlag. Status descriptions are below.
 
@@ -170,7 +184,17 @@ class RedFlag(models.Model):
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    PENDING, CLOSED = 0, 1
+    CRITICAL, GENEROUS = range(2)
+
+    REASON_CHOICES = (
+        (CRITICAL, "User has given 3 lowest ratings and 3 complaints."),
+        (GENEROUS, ("User has given 5 highest ratings "
+                   "in the last 5 transactions."))
+    )
+
+    reason = models.IntegerField(choices=REASON_CHOICES)
+
+    PENDING, CLOSED = range(2)
 
     STATUS_CHOICES = (
         (PENDING, "Pending"),
@@ -194,6 +218,10 @@ class Complaint(models.Model):
     description:
         A description of the complaint the complainant is making.
 
+    struck:
+        Whether the complainant has been suspended as a result of making
+        this complaint.
+
     status:
         The status of this complaint. Status descriptions are given below.
 
@@ -205,11 +233,13 @@ class Complaint(models.Model):
     """
     complainant = models.ForeignKey(User,
                                     on_delete=models.CASCADE,
-                                    related_name="complaint_allegation")
+                                    related_name="complaint_allegations")
     complainee = models.ForeignKey(User,
                                    on_delete=models.CASCADE,
-                                   related_name="complaint_receipt")
+                                   related_name="complaint_receipts")
     description = models.TextField("Complaint Description")
+    struck = models.BooleanField(default=False)
+    order = models.OneToOneField(Order, on_delete=models.CASCADE)
 
     PENDING, CLOSED = 0, 1
 
@@ -219,3 +249,23 @@ class Complaint(models.Model):
     )
 
     status = models.IntegerField(choices=STATUS_CHOICES, default=PENDING)
+
+class SuspensionInfo(models.Model):
+    """
+    Django class representing the number of times a user has been suspended.
+
+    Attributes:
+
+    user:
+        The user with which this SuspensionCount is associated.
+    count:
+        The number of times the user has been suspended.
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
+    suspended = models.BooleanField(default=False)
+    count = models.IntegerField(default=0)
+
+    def suspend(self):
+        self.suspended = True
+        self.count = self.count + 1
+        self.save()
