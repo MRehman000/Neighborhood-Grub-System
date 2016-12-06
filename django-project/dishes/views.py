@@ -1,11 +1,17 @@
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404, render, redirect
 
 from dishes.models import (
     DishPost, Diner, Order, DishRequest, Chef,
-    OrderFeedback, RateChef, RateDiner, Dish
+    OrderFeedback, RateChef, RateDiner, Dish, Rating
 )
-from dishes.forms import DishForm, DishRequestForm, DishPostForm, ChefForm
-from dishes.forms import FeedbackForm, RateChefForm, RateDinerForm
+from dishes.forms import (
+    DishForm, DishRequestForm, DishPostForm, ChefForm,
+    FeedbackForm, RateChefForm, RateDinerForm, RatingForm
+)
+
+from accounts.models import RedFlag, Complaint
+from accounts.forms import ComplaintForm
 
 def posts(request):
     dish_posts = DishPost.objects.filter(status=DishPost.OPEN)
@@ -34,9 +40,10 @@ def orders_and_requests(request):
         return redirect("dishes")
     else:
         diner = request.user.diner
+        orders = diner.order_set
 
-        pending_orders = diner.order_set.filter(status=Order.OPEN)
-        closed_orders = diner.order_set.filter(status__gt=Order.OPEN)
+        pending_orders = orders.filter(status__lt=Order.CANCELLED)
+        closed_orders = orders.filter(status__gte=Order.CANCELLED)
 
         diner_requests = diner.dishrequest_set
         pending_requests = diner_requests.filter(status=DishRequest.OPEN)
@@ -45,6 +52,7 @@ def orders_and_requests(request):
         is_chef = hasattr(request.user, "chef")
 
         context = {
+            "DishPost": DishPost,
             "orders": pending_orders,
             "has_history": closed_orders.count() or closed_requests.count(),
             "requests": pending_requests,
@@ -115,24 +123,75 @@ def order_feedback(request, order_id):
     context = {}
     order = get_object_or_404(Order, pk=order_id)
     if request.method == "POST":
-        form = FeedbackForm(request.POST)
-        if form.is_valid():
-            OrderFeedback.objects.create(**form.cleaned_data)
-            context["feedback_submitted"] = True
-        else:
-            form = FeedbackForm()
-        context["form"] = form
-        return render(request, "dishes/orders.html", context)
+        feedback_form = FeedbackForm(request.POST)
+        rating_form = RatingForm(request.POST)
+        if feedback_form.is_valid() and rating_form.is_valid():
+            # Bind references
+            rater = request.user
+            ratee = order.dish_post.chef.user
+            # Create the OrderFeedback
+            feedback_data = {"order": order}
+            feedback_data.update(feedback_form.cleaned_data)
+            OrderFeedback.objects.create(**feedback_data)
+            # Create the Rating
+            rating_data = {
+                "rater": rater,
+                "ratee": ratee
+            }
+            rating_data.update(rating_form.cleaned_data)
+            Rating.objects.create(**rating_data)
+            # Update the order status
+            order.status = Order.COMPLETE
+            order.save()
+            # TODO: Transfer the tip.
+            if not ratee.suspensioninfo.suspended:
+                check_suspend_ratee(ratee)
 
+            check_redflag_rater(rater)
+            context["feedback_submitted"] = True
+            return render(request, "dishes/order_feedback.html", context)
+    else:
+        feedback_form = FeedbackForm()
+        rating_form = RatingForm()
+
+    context["feedback_form"] = feedback_form
+    context["rating_form"] = rating_form
+    context["has_complained"] = hasattr(order, "complaint")
+    return render(request, "dishes/order_feedback.html", context)
+
+def order_complain(request, order_id):
+    context = {}
+    order = get_object_or_404(Order, pk=order_id)
+    if hasattr(order, "complaint"):
+        return redirect("orders_and_requests")
+    if request.method == "POST":
+        complaint_form = ComplaintForm(request.POST)
+        if complaint_form.is_valid():
+            # Bind references
+            complainant = request.user
+            complainee = order.dish_post.chef.user
+            complaint_data = {
+                "complainant": complainant,
+                "complainee": complainee,
+                "order": order
+            }
+            complaint_data.update(complaint_form.cleaned_data)
+            Complaint.objects.create(**complaint_data)
+            check_redflag_complainant(complainant)
+            return redirect("orders_and_requests")
+    else:
+        complaint_form = ComplaintForm()
+
+    context["form"] = complaint_form
+    return render(request, "dishes/order_complain.html", context)
 
 def cancel_order(request, order_id):
+    order = get_object_or_404(Order, pk=order_id)
     if request.method == "POST":
-        order = get_object_or_404(Order, pk=order_id)
         if request.user == order.diner.user:
             order.status = Order.CANCELLED
             order.save()
         return redirect("orders_and_requests")
-    order = get_object_or_404(Order, pk=order_id)
     context = {"order": order}
     return render(request, "dishes/cancel_order.html", context)
 
@@ -320,3 +379,76 @@ def edit_chef(request, chef_id):
     context["chef_form"] = chef_form
     return render(request, "dishes/edit_chef.html", context)
 
+def check_suspend_ratee(ratee):
+    """
+    Check if a user should be suspended based on their received ratings.
+    """
+    # Check if the ratee has 3 ratings less than 2 for
+    # which the ratee has not yet been suspended.
+    ratings = ratee.ratings_received
+    bad_ratings = ratings.filter(rating__lte=2, struck=False)
+    if bad_ratings.count() >= 3:
+        # Fetch 3 of the bad ratings
+        # Mark them as struck
+        for bad_rating in bad_ratings.all()[:3]:
+            bad_rating.struck = True
+            bad_rating.save()
+        # Suspend the ratee's account
+        ratee.suspensioninfo.suspend()
+    # Check if the ratee's average rating is out of bounds.
+    elif ratings.count() >= 3:
+        avg = ratings.all().aggregate(Avg("rating"))["rating__avg"]
+        if avg < 2.0 or avg > 4.0:
+            # Suspend the ratee's account
+            ratee.suspensioninfo.suspend()
+
+    check_force_quit(ratee)
+
+def check_force_quit(user):
+    """
+    Check if a user should be forced out of the system based on their
+    suspensions.
+    """
+    if user.suspensioninfo.count == 3:
+        user.is_active = False
+        user.save()
+
+def check_redflag_rater(rater):
+    """
+    Check if a user should be flagged based on the ratings they give.
+    """
+    if check_redflag_complainant(rater):
+        return
+    latest_ratings = rater.ratings_made.order_by("-date")[:5]
+    if not any(map(lambda r: r.struck or r.rating < 5, latest_ratings)):
+        for rating in latest_ratings:
+            rating.struck = True
+            rating.save()
+        RedFlag.objects.create(user=rater, reason=RedFlag.GENEROUS)
+
+def check_redflag_complainant(complainant):
+    """
+    Check if a user should be flagged based on the complaints they have
+    alleged.
+    """
+    lowest_ratings = complainant.ratings_made.filter(rating=1, struck=False)
+    complaints = complainant.complaint_allegations.filter(struck=False)
+
+    if lowest_ratings.count() >= 3 and complaints.count() >= 3:
+        # Fetch three of the lowest ratings
+        # Mark them as struck
+        for low_rating in lowest_ratings.all()[:3]:
+            low_rating.struck = True
+            low_rating.save()
+
+        # Fetch three of the complaints
+        # Mark them as struck
+        for complaint in complaints.all()[:3]:
+            complaint.struck = True
+            complaint.save()
+
+        # Flag the user
+        RedFlag.objects.create(user=complainant, reason=RedFlag.CRITICAL)
+        return True
+    else:
+        return False
