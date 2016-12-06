@@ -179,8 +179,8 @@ dish_posts = {
         "dish": 1,
         "price": decimal.Decimal(5.00),
         "serving_size": decimal.Decimal(1),
-        "last_call": timezone.now() + datetime.timedelta(days=3),
-        "meal_time": timezone.now() + datetime.timedelta(days=4),
+        "last_call": timezone.now() - datetime.timedelta(days=4),
+        "meal_time": timezone.now() - datetime.timedelta(days=3),
         "latitude": decimal.Decimal(40.8197061),
         "longitude": decimal.Decimal(-73.9505599)
     },
@@ -314,6 +314,30 @@ orders = {
         "diner": 0,
         "dish_post": 0,
         "num_servings": 1
+    },
+    1: {
+        "diner": 0,
+        "dish_post": 4,
+        "num_servings": 2,
+        "status": Order.PENDING_FEEDBACK
+    },
+    2: {
+        "diner": 0,
+        "dish_post": 12,
+        "num_servings": 1,
+        "status": Order.PENDING_FEEDBACK
+    },
+    3: {
+        "diner": 0,
+        "dish_post": 11,
+        "num_servings": 2,
+        "status": Order.PENDING_FEEDBACK
+    },
+    4: {
+        "diner": 0,
+        "dish_post": 10,
+        "num_servings": 1,
+        "status": Order.PENDING_FEEDBACK
     }
 }
 
@@ -383,13 +407,14 @@ dish_requests = {
 }
 
 red_flags = {
-    0: { "user": 0 }
+    0: { "user": 0, "reason": 0 }
 }
 
 complaints = {
     0: {
         "complainant": 0,
         "complainee": 1,
+        "order": 0,
         "description": "She smiled at me too warmly."
     }
 }
@@ -407,6 +432,11 @@ create_account_requests = {
         "last_name": "least",
         "email": "sig@byte.com"
     }
+}
+
+suspension_info = {
+    0: {"user": 0},
+    1: {"user": 1}
 }
 
 def load():
@@ -462,6 +492,7 @@ def load():
     for key in complaints:
         complaints[key]["complainant"] = users[complaints[key]["complainant"]]
         complaints[key]["complainee"] = users[complaints[key]["complainee"]]
+        complaints[key]["order"] = orders[complaints[key]["order"]]
         complaint = Complaint.objects.create(**complaints[key])
         complaints[key] = complaint
 
@@ -470,6 +501,12 @@ def load():
                                     **create_account_requests[key]
                                 )
         create_account_requests[key] = create_account_request
+
+    for key in suspension_info:
+        suspension_info[key]["user"] = users[suspension_info[key]["user"]]
+        suspension_count = SuspensionInfo.objects.create(**suspension_info[key])
+        suspension_info[key] = suspension_count
+
 
     User.objects.create_superuser("admin",
                                   "admin@example.com",
@@ -488,7 +525,8 @@ def delete():
         Dish,
         RedFlag,
         Complaint,
-        CreateAccountRequest
+        CreateAccountRequest,
+        SuspensionInfo
     ]
 
     for model in models:
