@@ -3,9 +3,10 @@ import os
 from django.contrib import admin
 from django.contrib.auth.models import User
 
-from accounts.models import ChefPermissionsRequest, RedFlag, Complaint
-from accounts.models import TerminateAccountRequest, CreateAccountRequest
-
+from accounts.models import (
+    ChefPermissionsRequest, RedFlag, Complaint,
+    TerminateAccountRequest, CreateAccountRequest
+)
 from dishes.models import Diner, Chef
 
 @admin.register(CreateAccountRequest)
@@ -159,10 +160,20 @@ class RedFlagAdmin(admin.ModelAdmin):
     """
     Django ModelAdmin class for providing the Review Red Flag functionality.
     """
+    list_display = ["user", "reason"]
     actions = ["close_red_flag"]
 
     def close_red_flag(self, request, queryset):
-        print("Rut rut rut rut")
+        for red_flag in queryset:
+            red_flag.status = RedFlag.CLOSED
+            red_flag.save()
+
+    def get_queryset(self, request):
+        """
+        Limit the CreateAccountRequest queryset to those that are pending.
+        """
+        qs = super(RedFlagAdmin, self).get_queryset(request)
+        return qs.filter(status=RedFlag.PENDING)
 
 @admin.register(Complaint)
 class ComplaintAdmin(admin.ModelAdmin):
