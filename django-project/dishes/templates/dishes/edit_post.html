@@ -7,8 +7,12 @@
     {{ dish_form.as_table }}
     {{ dish_post_form.as_table }}
   </table>
+  <input type="hidden" id="latField" value="" />
+  <input type="hidden" id="longField" value="" />
+  <p>Your address is </p><input type="text" id="UserAddress" value="[Get Address]" />
   <button type="submit">Submit</button>
 </form>
+{% include "dishes/includes/google-maps-edit-post.html" %}
 <form action="/dishes/posts/manage/">
   <button type="submit">Cancel</button>
 </form>
