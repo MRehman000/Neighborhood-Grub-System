@@ -3,7 +3,7 @@ import decimal
 from django.db import models
 from django.contrib.auth.models import User
 
-from dishes.models import Order
+from dishes.models import Order, DishPost, DishRequest
 
 class CreateAccountRequest(models.Model):
     """
@@ -258,6 +258,7 @@ class SuspensionInfo(models.Model):
 
     user:
         The user with which this SuspensionCount is associated.
+
     count:
         The number of times the user has been suspended.
     """
@@ -269,3 +270,49 @@ class SuspensionInfo(models.Model):
         self.suspended = True
         self.count = self.count + 1
         self.save()
+
+class Balance(models.Model):
+    """
+    Django class representing the balance a user has on their account.
+
+    Attributes:
+
+    user:
+        The user with which this Balance is associated.
+
+    amount:
+        The amount of the user's balance.
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=11,
+                                 decimal_places=6,
+                                 default=decimal.Decimal(0.0))
+    is_vip = models.BooleanField(default=False)
+
+    def credit(self, amt):
+        self.amount = self.amount + amt
+        self.update_vip_status()
+
+    def debit(self, amt):
+        self.amount = self.amount - amt
+        self.update_vip_status()
+
+    VIP_THRESHOLD = decimal.Decimal(5000)
+
+    def update_vip_status(self):
+        self.is_vip = self.amount > Balance.VIP_THRESHOLD
+        ntransactions = 0
+        diner = self.user.diner
+        orders = diner.order_set.filter(status=Order.COMPLETE)
+        dishrequests = diner.dishrequest_set.filter(status=DishRequest.COMPLETE)
+        ntransactions += orders.count()
+        ntransactions += dishrequests.count()
+        if hasattr(self.user, "chef"):
+            dishposts = self.user.chef.dishpost_set.filter(status=DishPost.COMPLETE)
+            ntransactions += dishposts.count()
+        if ntransactions > 5:
+            self.is_vip = hasattr(self.user, "complaint_receipts")
+        self.save()
+
+    def has_funds(self, amt):
+        return self.amount >= amt
