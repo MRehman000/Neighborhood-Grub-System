@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 
-from accounts.forms import ChefPermissionsRequestForm, CreateAccountRequestForm
-from accounts.forms import TerminateAccountRequestForm, SuggestionForm
+from accounts.forms import (
+    ChefPermissionsRequestForm, CreateAccountRequestForm,
+    TerminateAccountRequestForm, SuggestionForm, DepositForm,
+    WithdrawalForm
+)
 
 from accounts.models import *
 from dishes.models import *
@@ -75,3 +78,36 @@ def suggestion(request):
 
     context["form"] = form
     return render(request, "accounts/suggestion.html", context)
+
+def deposit(request):
+    context = {}
+    if request.method == "POST":
+        form = DepositForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data["amount"]
+            request.user.balance.credit(amount)
+            return redirect("account")
+    else:
+        form = DepositForm()
+    context["form"] = form
+    return render(request, "accounts/deposit.html", context)
+
+def withdraw(request):
+    overdrawn = False
+    context = {}
+    user = request.user
+    if request.method == "POST":
+        form = WithdrawalForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data["amount"]
+            if amount <= user.balance.amount:
+                user.balance.debit(amount)
+                return redirect("account")
+            else:
+                overdrawn = True
+    else:
+        form = WithdrawalForm()
+
+    context["overdrawn"] = overdrawn
+    context["form"] = form
+    return render(request, "accounts/withdraw.html", context)
