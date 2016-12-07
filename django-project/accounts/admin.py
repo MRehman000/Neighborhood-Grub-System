@@ -170,7 +170,7 @@ class RedFlagAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         """
-        Limit the CreateAccountRequest queryset to those that are pending.
+        Limit the RedFlag queryset to those that are pending.
         """
         qs = super(RedFlagAdmin, self).get_queryset(request)
         return qs.filter(status=RedFlag.PENDING)
@@ -180,10 +180,21 @@ class ComplaintAdmin(admin.ModelAdmin):
     """
     Django ModelAdmin class for providing the Review Complaint functionality.
     """
+    list_display = ["complainant", "complainee", "description"]
     actions = ["close_complaint"]
 
     def close_complaint(self, request, queryset):
-        print("Woop woop woop woop")
+        for complaint in queryset:
+            complaint.status = Complaint.CLOSED
+            complaint.save()
+
+    def get_queryset(self, request):
+        """
+        Limit the Complaint queryset to those that are pending.
+        """
+        qs = super(ComplaintAdmin, self).get_queryset(request)
+        return qs.filter(status=Complaint.PENDING)
+
 
 @admin.register(TerminateAccountRequest)
 class TerminateAccountRequestAdmin(admin.ModelAdmin):
