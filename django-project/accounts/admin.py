@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from accounts.models import (
     ChefPermissionsRequest, RedFlag, Complaint,
     TerminateAccountRequest, CreateAccountRequest,
-    SuspensionInfo
+    SuspensionInfo, Balance
 )
 from dishes.models import Diner, Chef
 
@@ -53,6 +53,10 @@ class CreateAccountRequestAdmin(admin.ModelAdmin):
             user.save()
             # Create Diner object.
             diner = Diner.objects.create(user=user)
+            # Create SuspensionInfo object.
+            suspensioninfo = SuspensionInfo.objects.create(user=user)
+            # Create Balance object.
+            balance = Balance.objects.create(user=user)
             # Update the status of this Create Account Request
             createAccountRequest.status = CreateAccountRequest.APPROVED
             createAccountRequest.save()
