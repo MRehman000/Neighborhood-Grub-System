@@ -439,6 +439,11 @@ suspension_info = {
     1: {"user": 1}
 }
 
+balances = {
+    0: {"user": 0, "amount": decimal.Decimal(100)},
+    1: {"user": 1}
+}
+
 def load():
 
     for user_info in users:
@@ -507,6 +512,10 @@ def load():
         suspension_count = SuspensionInfo.objects.create(**suspension_info[key])
         suspension_info[key] = suspension_count
 
+    for key in balances:
+        balances[key]["user"] = users[balances[key]["user"]]
+        balance = Balance.objects.create(**balances[key])
+        balances[key] = balance
 
     User.objects.create_superuser("admin",
                                   "admin@example.com",
@@ -526,7 +535,9 @@ def delete():
         RedFlag,
         Complaint,
         CreateAccountRequest,
-        SuspensionInfo
+        SuspensionInfo,
+        Balance,
+        OrderFeedback
     ]
 
     for model in models:
