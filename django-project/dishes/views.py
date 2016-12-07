@@ -141,7 +141,12 @@ def order_feedback(request, order_id):
             # Create the OrderFeedback
             feedback_data = {"order": order}
             feedback_data.update(feedback_form.cleaned_data)
-            OrderFeedback.objects.create(**feedback_data)
+            order_feedback = OrderFeedback.objects.create(**feedback_data)
+            # Transfer the tip.
+            tip_amt = order_feedback.tip
+            if rater.balance.has_funds(tip_amt):
+                rater.balance.debit(tip_amt)
+                ratee.balance.credit(tip_amt)
             # Create the Rating
             rating_data = {
                 "rater": rater,
@@ -152,7 +157,6 @@ def order_feedback(request, order_id):
             # Update the order status
             order.status = Order.COMPLETE
             order.save()
-            # TODO: Transfer the tip.
             if not ratee.suspensioninfo.suspended:
                 check_suspend_ratee(ratee)
 
