@@ -1,5 +1,29 @@
 {% include "ngs/header.html" %}
 
+
+
+<!--
+MD JUST PUT THE STYLING SOMEWHERE ELSE
+-->
+<style>
+
+a.Chef {
+	color: blue;
+	padding: 10px;
+	font-size: 20px;
+}
+
+</style>
+
+{% include "dishes/includes/google-maps-dish-posts.html" %}
+
+{% if is_chef %}
+<a class = "Chef" href="/dishes/posts/create/">Post a Dish</a><br>
+{% endif %}
+{% if user.is_authenticated %}
+<a class = "Chef" href="/dishes/orders-requests/">Orders</a><br>
+{% endif %}
+
 <h2>Dish Posts</h2>
 {% if dish_posts %}
   <ul>
@@ -13,10 +37,5 @@
 {% else %}
   <p>No Dish Posts are available.</p>
 {% endif %}
-{% if is_chef %}
-<br><a href="/dishes/posts/create/">Post a Dish</a><br>
-{% endif %}
-{% if user.is_authenticated %}
-<a href="/dishes/orders-requests/">Orders</a>
-{% endif %}
- {% include "dishes/includes/google-maps-dish-posts.html" %}
+
+ 
