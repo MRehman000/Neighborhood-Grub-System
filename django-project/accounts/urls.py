@@ -4,6 +4,8 @@ from . import views
 
 urlpatterns = [
     url(r"^$", views.account, name="account"),
+    url(r"^deposit/$", views.deposit, name="deposit"),
+    url(r"^withdraw/$", views.withdraw, name="withdraw"),
     url(r"^signup/$", views.signup, name="signup"),
     url(r"^terminate/$", views.terminate, name="request-terminate"),
     url(r"^request-chef-permissions/$",
