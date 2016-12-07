@@ -2,6 +2,11 @@
 
 {% if user.is_authenticated %}
 <h2>{{ user.username }} Account</h2>
+<table>
+  <tr>
+    <td>Account Balance</td><td>{{ user.balance.amount | floatformat:2 }}</td>
+  </tr>
+</table>
 <ul>
   <li>
     <a href="terminate/">Request account termination</a>
@@ -18,6 +23,12 @@
   </li>
   <li>
     <a href="/dishes/orders-requests/">Orders and Requests</a>
+  </li>
+  <li>
+    <a href="deposit/">Deposit</a>
+  </li>
+  <li>
+    <a href="withdraw/">Withdraw</a>
   </li>
 </ul>
 {% else %}

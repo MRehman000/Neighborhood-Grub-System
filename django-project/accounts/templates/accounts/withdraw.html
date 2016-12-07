@@ -1,0 +1,12 @@
+{% include "ngs/header.html" %}
+{% if overdrawn %}
+<p>You cannot withdraw that much</p>
+{% endif %}
+<p>How much would you like to withdraw?</p>
+<form method="POST">
+  {% csrf_token %}
+  <table>
+    {{ form.as_table }}
+  </table>
+  <button type="submit">Make Withdrawal</button>
+</form>

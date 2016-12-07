@@ -1,0 +1,9 @@
+{% include "ngs/header.html" %}
+<p>How much would you like to deposit?</p>
+<form method="POST">
+  {% csrf_token %}
+  <table>
+    {{ form.as_table }}
+  </table>
+  <button type="submit">Make Deposit</button>
+</form>
