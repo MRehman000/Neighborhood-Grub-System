@@ -15,6 +15,8 @@ urlpatterns = [
         name="feedback"),
     url(r"^orders/(?P<order_id>[0-9]+)/feedback/complain/$",
         views.order_complain),
+    url(r"^orders/(?P<order_id>[0-9]+)/feedback/follow/$",
+        views.order_follow),
     url(r"^posts/$", views.posts),
     url(r"^posts/manage/$", views.manage_posts, name="manage_posts"),
     url(r"^posts/create/$", views.create_post),
