@@ -1,3 +1,5 @@
+import decimal
+
 from django import forms
 from captcha.fields import CaptchaField
 
@@ -50,3 +52,13 @@ class ComplaintForm(forms.ModelForm):
     class Meta:
         model = Complaint
         fields = ["description"]
+
+class DepositForm(forms.Form):
+    amount = forms.DecimalField(min_value=decimal.Decimal(0.0),
+                                max_value=decimal.Decimal(1000),
+                                decimal_places=2)
+
+class WithdrawalForm(forms.Form):
+    amount = forms.DecimalField(min_value=decimal.Decimal(0.0),
+                                max_value=decimal.Decimal(1000),
+                                decimal_places=2)
