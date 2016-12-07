@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 
 from accounts.models import (
     ChefPermissionsRequest, RedFlag, Complaint,
-    TerminateAccountRequest, CreateAccountRequest
+    TerminateAccountRequest, CreateAccountRequest,
+    SuspensionInfo
 )
 from dishes.models import Diner, Chef
 
@@ -209,3 +210,11 @@ class TerminateAccountRequestAdmin(admin.ModelAdmin):
         for terminateAccountRequest in queryset:
             user = terminateAccountRequest.user
             user.delete()
+
+@admin.register(SuspensionInfo)
+class SuspensionInfoAdmin(admin.ModelAdmin):
+    """
+    Django ModelAdmin class for providing the functionality for suspending and
+    reactivating a user functionality.
+    """
+    list_display = ["user", "suspended", "count"]
