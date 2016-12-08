@@ -89,10 +89,9 @@ class ChefForm(forms.ModelForm):
 class DishSuggestionForm(forms.ModelForm):
     class Meta:
 	model = DishSuggestions
-	suggestion = forms.Charfield()
+	suggestion = forms.CharField()
 
 	
 	def ask_watson(self):
 	    cuisine_tag = self.cleaned_data['suggestion']
-	    combined_operations = ['taxonomy']	
-	    return alchemy_language.combined(text=cuisine_tag
+	    return alchemy_language.taxonomy(text=cuisine_tag)
