@@ -316,3 +316,41 @@ class Balance(models.Model):
 
     def has_funds(self, amt):
         return self.amount >= amt
+
+class RemoveSuspensionRequest(models.Model):
+    """
+    Django class representing a request to remove a suspension.
+
+    Attributes:
+
+    user:
+        The user that is requesting to have the suspension on her account
+        removed.
+
+    justification:
+        An justification for removing the suspension on the user's account.
+        For example "Mea culpa, I've learned my lesson."
+
+    status:
+        The status of the Remove Suspension Request. Status descriptions are
+        below.
+
+        PENDING:
+            A superuser has not yet made a decision on the request.
+        APPROVED:
+            A superuser has reviewed and approved the request.
+        DENIED:
+            A superuser has reviewed and denied the request.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    justification = models.TextField()
+
+    PENDING, APPROVED, DENIED = range(3)
+
+    STATUS_CHOICES = (
+        (PENDING, "Pending"),
+        (APPROVED, "Approved"),
+        (DENIED, "Denied")
+    )
+
+    status = models.IntegerField(choices=STATUS_CHOICES, default=PENDING)
