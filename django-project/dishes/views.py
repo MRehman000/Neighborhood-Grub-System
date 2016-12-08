@@ -469,3 +469,18 @@ def check_redflag_complainant(complainant):
         return True
     else:
         return False
+
+def get_suggestions(request, order_id):
+	order = get_object_or_404(Order, pk=dish_post_id)
+	if request.method == "POST":
+		form = DishSuggestionForm(request.POST)
+		if form.is_valid():
+			cuisine_tag = order.dish_post.dish.cuisinetag.name
+			#Basic suggestion model:
+			#Apply classification to get the label
+			#Get a count for each label
+			#Return Dish Posts for label with highest count
+	else:
+		form = DishSuggestionForm()
+	return render(request, "dishes/dish_suggestions.html", context=None)
+		
