@@ -94,4 +94,5 @@ class DishSuggestionForm(forms.ModelForm):
 	
 	def ask_watson(self):
 	    cuisine_tag = self.cleaned_data['suggestion']
-	    return alchemy_language.taxonomy(text=cuisine_tag)
+	    classification = alchemy_language.taxonomy(text=cuisine_tag)
+	    return classification['label']
