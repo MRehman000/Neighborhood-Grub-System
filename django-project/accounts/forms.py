@@ -5,7 +5,7 @@ from captcha.fields import CaptchaField
 
 from accounts.models import (
     CreateAccountRequest, ChefPermissionsRequest,
-    Suggestion, Complaint
+    Suggestion, Complaint, RemoveSuspensionRequest
 )
 
 class CreateAccountRequestForm(forms.ModelForm):
@@ -62,3 +62,8 @@ class WithdrawalForm(forms.Form):
     amount = forms.DecimalField(min_value=decimal.Decimal(0.0),
                                 max_value=decimal.Decimal(1000),
                                 decimal_places=2)
+
+class RemoveSuspensionRequestForm(forms.ModelForm):
+    class Meta:
+        model = RemoveSuspensionRequest
+        fields = ["justification"]
