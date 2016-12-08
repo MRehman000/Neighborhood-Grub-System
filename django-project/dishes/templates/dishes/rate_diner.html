@@ -7,11 +7,3 @@
   {{ form }}
   <button type="submit">Submit</button>
 </form>
-
-<p> Average rating: {{rating.average_rating}}</p>
-
-
-{% for rating in rating.diner.all %}
-{% empty %}
-    <p> This diner has not yet been rated</p>
-{% endfor %}
