@@ -2,12 +2,13 @@ from django.db.models import Avg
 from django.shortcuts import get_object_or_404, render, redirect
 
 from dishes.models import (
-    DishPost, Diner, Order, DishRequest, Chef,
+    DishPost, Diner, Order, DishRequest, Chef, Bid,
     OrderFeedback, RateChef, RateDiner, Dish, Rating
 )
 from dishes.forms import (
-    DishForm, DishRequestForm, DishPostForm, ChefForm,
-    FeedbackForm, RateChefForm, RateDinerForm, RatingForm
+    DishForm, DishRequestForm, DishPostForm,
+    ChefForm, FeedbackForm, RateChefForm,
+    RateDinerForm, RatingForm, BidForm
 )
 
 from accounts.models import RedFlag, Complaint
@@ -20,8 +21,42 @@ def posts(request):
     return render(request, "dishes/posts.html", context)
 
 def post_detail(request, dish_post_id):
+    context = {}
+    diner = request.user.diner
     dish_post = get_object_or_404(DishPost, pk=dish_post_id)
-    context = {"dish_post": dish_post}
+    if request.method == "POST":
+        form = BidForm(request.POST)
+        if form.is_valid():
+            # Verify the bid price is not less than the asking price.
+            # Verify the bid num servings is not greater than the
+            # available number of servings.
+            bid_price = form.cleaned_data["price"]
+            nservings = form.cleaned_data["num_servings"]
+            total = bid_price*nservings
+            balance = diner.user.balance
+            if bid_price >= dish_post.min_price and\
+               nservings <= dish_post.available_servings() and\
+               total <= balance.amount:
+                # Create the corresponding bid.
+                bid_data = {
+                    "price": bid_price,
+                    "num_servings": nservings,
+                    "diner": diner,
+                    "dish_post": dish_post
+                }
+                Bid.objects.create(**bid_data)
+                return redirect("orders_and_requests")
+            else:
+                context["message"] = ("Bid price must not be less than "
+                                      "the minimum price, the requested "
+                                      "number of servings cannot be more "
+                                      "than the available number of servings "
+                                      "and you must have sufficient funds to "
+                                      "place this bid.")
+    else:
+        form = BidForm()
+    context["dish_post"] = dish_post
+    context["form"] = form
     if request.user.is_authenticated:
         context["user"] = request.user
     return render(request, "dishes/post_detail.html", context)
@@ -342,15 +377,17 @@ def manage_posts(request):
     }
     return render(request, "dishes/manage_posts.html", context)
 
-def manage_post_orders(request, dish_post_id):
+def manage_post_detail(request, dish_post_id):
     dish_post = get_object_or_404(DishPost, pk=dish_post_id)
     orders = dish_post.order_set.all()
+    bids = dish_post.bid_set.filter(status=Bid.PENDING)
     context = {
         "dish_post": dish_post,
         "orders": orders,
-        "Order": Order
+        "Order": Order,
+        "bids": bids
     }
-    return render(request, "dishes/manage_post_orders.html", context)
+    return render(request, "dishes/manage_post_detail.html", context)
 
 def cancel_post(request, dish_post_id):
     dish_post = get_object_or_404(DishPost, pk=dish_post_id)
@@ -430,6 +467,34 @@ def edit_chef(request, chef_id):
     context["chef_form"] = chef_form
     return render(request, "dishes/edit_chef.html", context)
 
+def reject_bid(request, dish_post_id, bid_id):
+    if request.method == "POST":
+        bid = get_object_or_404(Bid, pk=bid_id)
+        bid.status = Bid.REJECTED
+        bid.save()
+    return redirect("manage_post_detal", dish_post_id)
+
+def accept_bid(request, dish_post_id, bid_id):
+    if request.method == "POST":
+        bid = get_object_or_404(Bid, pk=bid_id)
+        bid.status = Bid.ACCEPTED
+        order = Order.objects.create(
+            diner=bid.diner,
+            dish_post=bid.dish_post,
+            bid=bid,
+            num_servings=bid.num_servings
+        )
+        bid.save()
+        # Deduct the total price from the Diner's balance.
+        diner_balance = bid.diner.user.balance
+        diner_balance.amount = diner_balance.amount - bid.total()
+        diner_balance.save()
+        # Add the total price to the Chef's balance.
+        chef_balance = bid.dish_post.chef.user.balance
+        chef_balance.amount = chef_balance.amount + bid.total()
+        chef_balance.save()
+    return redirect("manage_post_detal", dish_post_id)
+
 def check_suspend_ratee(ratee):
     """
     Check if a user should be suspended based on their received ratings.
@@ -503,3 +568,4 @@ def check_redflag_complainant(complainant):
         return True
     else:
         return False
+
