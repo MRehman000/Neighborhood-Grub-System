@@ -100,7 +100,7 @@ class DishPost(models.Model):
     dish:
         Foreign key field referencing the Dish the Chef is going to cook.
 
-    price:
+    min_price:
         Decimal field that stores the price of one serving of this Dish.
 
     max_servings:
@@ -132,7 +132,7 @@ class DishPost(models.Model):
     chef = models.ForeignKey(Chef, on_delete=models.SET_NULL, null=True)
     max_servings = models.IntegerField(default=1)
     dish = models.ForeignKey(Dish, on_delete=models.PROTECT)
-    price = models.DecimalField(max_digits=4, decimal_places=2)
+    min_price = models.DecimalField("Minimum Price", max_digits=4, decimal_places=2)
     serving_size = models.DecimalField(max_digits=3, decimal_places=1)
     last_call = models.DateTimeField("Last Call")
     meal_time = models.DateTimeField("Meal Time")
@@ -230,6 +230,31 @@ class DishRequest(models.Model):
     def total(self):
         return self.price * self.num_servings
 
+class Bid(models.Model):
+    """
+    Django model class representing a bid on a dish post.
+    """
+    diner = models.ForeignKey(Diner, on_delete=models.SET_NULL, null=True)
+    dish_post = models.ForeignKey(DishPost,
+                                  on_delete=models.SET_NULL,
+                                  null=True)
+    num_servings = models.IntegerField(default=1)
+    price = models.DecimalField(max_digits=4, decimal_places=2)
+
+    PENDING, ACCEPTED, REJECTED = range(3)
+
+    STATUS_CHOICES = (
+        (PENDING, "Pending"),
+        (ACCEPTED, "Accepted"),
+        (REJECTED, "Rejected")
+    )
+
+    status = models.IntegerField(choices=STATUS_CHOICES, default=PENDING)
+
+    def total(self):
+        return self.num_servings * self.price
+
+
 class Order(models.Model):
     """
     Django model class representing an Order made by a Diner for a Posted Dish.
@@ -243,6 +268,9 @@ class Order(models.Model):
 
     dish_post:
         The Dish Post the diner is ordering.
+
+    bid:
+        The bid that was placed to create this order.
 
     num_servings:
         The number of servings of the Dish the Diner wishes to order.
@@ -267,6 +295,7 @@ class Order(models.Model):
     """
     diner = models.ForeignKey(Diner, on_delete=models.SET_NULL, null=True)
     dish_post = models.ForeignKey(DishPost, on_delete=models.PROTECT)
+    bid = models.ForeignKey(Bid, on_delete=models.CASCADE)
     num_servings = models.IntegerField(default=1)
     diner_rated = models.BooleanField(default=False)
     chef_rated = models.BooleanField(default=False)
@@ -283,7 +312,7 @@ class Order(models.Model):
     status = models.IntegerField(choices=STATUS_CHOICES, default=OPEN)
 
     def total(self):
-        return self.num_servings * self.dish_post.price
+        return self.bid.total()
 
 class OrderFeedback(models.Model):
     """
