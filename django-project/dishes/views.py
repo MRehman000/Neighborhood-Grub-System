@@ -155,6 +155,7 @@ def order_feedback(request, order_id):
             rating_data.update(rating_form.cleaned_data)
             Rating.objects.create(**rating_data)
             # Update the order status
+            order.diner_rated = True
             order.status = Order.COMPLETE
             order.save()
             if not ratee.suspensioninfo.suspended:
@@ -332,9 +333,24 @@ def create_post(request):
 
 def manage_posts(request):
     chef = request.user.chef
-    dish_posts = chef.dishpost_set.filter(status=DishPost.OPEN)
-    context = {"dish_posts": dish_posts}
+    dish_posts = chef.dishpost_set
+    open_dish_posts = dish_posts.filter(status=DishPost.OPEN)
+    pending_dish_posts = dish_posts.filter(status=DishPost.PENDING_FEEDBACK)
+    context = {
+        "open_dish_posts": open_dish_posts,
+        "pending_dish_posts": pending_dish_posts
+    }
     return render(request, "dishes/manage_posts.html", context)
+
+def manage_post_orders(request, dish_post_id):
+    dish_post = get_object_or_404(DishPost, pk=dish_post_id)
+    orders = dish_post.order_set.all()
+    context = {
+        "dish_post": dish_post,
+        "orders": orders,
+        "Order": Order
+    }
+    return render(request, "dishes/manage_post_orders.html", context)
 
 def cancel_post(request, dish_post_id):
     dish_post = get_object_or_404(DishPost, pk=dish_post_id)
@@ -372,16 +388,34 @@ def follow_chef(request, chef_id):
     context["Following"] = True
     return render(request, "dishes/chef_detail.html", context)
 
-def rate_diner(request, diner_id):
-    diner = get_object_or_404(Diner, pk=diner_id)
+def rate_diner(request, order_id):
+    context = {}
+    order = get_object_or_404(Order, pk=order_id)
+    diner = order.diner
     if request.method == "POST":
-        form = RateDinerForm(request.POST)
+        form = RatingForm(request.POST)
         if form.is_valid():
-            int_rating = request.POST["rating"]
-            rating = RateDiner.objectscreate(diner, rating=int_rating)
-        else:
-            form = RateDinerForm()
-    return redirect(request,"dishes/rate_diner.html")
+            rater = request.user
+            ratee = diner.user
+            # Create the Rating
+            rating_data = {
+                "rater": rater,
+                "ratee": ratee
+            }
+            rating_data.update(form.cleaned_data)
+            Rating.objects.create(**rating_data)
+            order.chef_rated = True
+            order.save()
+            # Execute suspension and flagging checks
+            # on the rater and ratee.
+            if not ratee.suspensioninfo.suspended:
+                check_suspend_ratee(ratee)
+            check_redflag_rater(rater)
+            return redirect("manage_posts")
+    else:
+        form = RatingForm()
+    context["form"] = form
+    return render(request, "dishes/rate_diner.html", context)
 
 def edit_chef(request, chef_id):
     context = {}
