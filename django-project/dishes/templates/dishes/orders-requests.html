@@ -15,7 +15,7 @@
         <td>Chef</td><td>{{order.dish_post.chef.user.username}}</td>
       </tr>
       <tr>
-        <td>Serving Price</td><td>${{order.dish_post.price}}</td>
+        <td>Serving Price</td><td>${{ order.bid.price }}</td>
       </tr>
       <tr>
         <td>Servings Ordered</td><td>{{order.num_servings}}</td>
@@ -37,7 +37,7 @@
 {% endif %}
 
 <h2>Requests</h2>
-{% if pending_requests %}
+{% if requests %}
 <ul>
 {% for request in requests %}
   <li>
