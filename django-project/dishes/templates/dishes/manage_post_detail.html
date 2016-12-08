@@ -37,3 +37,32 @@
 {% else %}
   <p>No orders have been placed for this dish post</p>
 {% endif %}
+<h3>Bids</h3>
+{% if bids %}
+  {% for bid in bids %}
+  <table>
+    <tr>
+      <td>Diner</td><td>{{ bid.diner }}</td>
+    </tr>
+    <tr>
+      <td>Servings</td><td>{{ bid.num_servings }}</td>
+    </tr>
+    <tr>
+      <td>Serving Price</td><td>{{ bid.price }}</td>
+    </tr>
+    <tr>
+      <td>Total</td><td>{{ bid.total }}</td>
+    </tr>
+  </table>
+  <form action="bids/{{ bid.id }}/accept/" method="post">
+    {% csrf_token %}
+    <button type="submit">Accept</button>
+  </form>
+  <form action="bids/{{ bid.id }}/reject/" method="post">
+    {% csrf_token %}
+    <button type="submit">Reject</button>
+  </form>
+  {% endfor %}
+{% else %}
+<p>No bids currently active on this dish post</p>
+{% endif %}
