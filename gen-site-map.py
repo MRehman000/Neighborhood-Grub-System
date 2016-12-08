@@ -39,6 +39,7 @@ edges = (
     ("edit chef profile", "chef profile"),
     ("manage posts", "cancel post"),
     ("manage posts", "edit post"),
+    ("manage posts", "manage post orders"),
     ("edit post", "manage posts"),
     ("cancel post", "manage posts"),
     ("create request", "orders-requests"),
@@ -69,6 +70,7 @@ page_to_template_path = (
     ("manage posts",            "ngs/django-project/dishes/templates/dishes/manage_posts.html"),
     ("create request",          "ngs/django-project/dishes/templates/dishes/create_post.html"),
     ("edit request",            "ngs/django-project/dishes/templates/dishes/edit_request.html"),
+    ("suspended",               "ngs/django-project/accounts/templates/accounts/suspended.html"),
 )
 
 def main():
