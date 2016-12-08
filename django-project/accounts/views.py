@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from accounts.forms import (
     ChefPermissionsRequestForm, CreateAccountRequestForm,
     TerminateAccountRequestForm, SuggestionForm, DepositForm,
-    WithdrawalForm
+    WithdrawalForm, RemoveSuspensionRequestForm
 )
 
 from accounts.models import *
@@ -111,3 +111,23 @@ def withdraw(request):
     context["overdrawn"] = overdrawn
     context["form"] = form
     return render(request, "accounts/withdraw.html", context)
+
+def suspended(request):
+    context = {"RemoveSuspensionRequest": RemoveSuspensionRequest}
+    user = request.user
+    if request.method == "POST":
+        form = RemoveSuspensionRequestForm(request.POST)
+        if form.is_valid():
+            data = {"user": user}
+            data.update(form.cleaned_data)
+            RemoveSuspensionRequest.objects.create(**data)
+    else:
+        form = RemoveSuspensionRequestForm()
+    context["form"] = form
+    if RemoveSuspensionRequest.objects.filter(
+        status=RemoveSuspensionRequest.PENDING,
+        user=user):
+        context["pending_request"] = True
+    else:
+        context["pending_request"] = False
+    return render(request, "accounts/suspended.html", context)
