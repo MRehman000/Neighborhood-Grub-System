@@ -139,28 +139,29 @@ class DishPost(models.Model):
     latitude = models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
     longitude= models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
 
-    OPEN = 0
-
-    COMPLETE = 1
-
-    OPEN, CANCELLED, COMPLETE = range(3)
+    OPEN, PENDING_FEEDBACK, CANCELLED, COMPLETE = range(4)
 
     STATUS_CHOICES = (
         (OPEN, "Open"),
+        (PENDING_FEEDBACK, "Pending Feedback"),
         (CANCELLED, "Cancelled"),
         (COMPLETE, "Complete")
     )
 
     status = models.IntegerField(choices=STATUS_CHOICES, default=OPEN)
 
+    def servings_ordered(self):
+        acc = 0
+        for order in self.order_set.all():
+            acc += order.num_servings
+        return acc
+
     def available_servings(self):
         if self.status == DishPost.COMPLETE:
             return 0
         else:
-            servings_ordered = 0
-            for order in self.order_set.all():
-                servings_ordered += order.num_servings
-            return self.max_servings - servings_ordered
+            return self.max_servings - self.servings_ordered()
+
 
 class DishRequest(models.Model):
     """
@@ -246,6 +247,12 @@ class Order(models.Model):
     num_servings:
         The number of servings of the Dish the Diner wishes to order.
 
+    diner_rated:
+        Indicates whether the diner has rated the chef for this order.
+
+    chef_rated:
+        Indicates whether the chef has rated the diner for this order.
+
     status:
         The status of this order. Status descriptions are given below.
 
@@ -261,6 +268,8 @@ class Order(models.Model):
     diner = models.ForeignKey(Diner, on_delete=models.SET_NULL, null=True)
     dish_post = models.ForeignKey(DishPost, on_delete=models.PROTECT)
     num_servings = models.IntegerField(default=1)
+    diner_rated = models.BooleanField(default=False)
+    chef_rated = models.BooleanField(default=False)
 
     OPEN, PENDING_FEEDBACK, CANCELLED, COMPLETE = range(4)
 
