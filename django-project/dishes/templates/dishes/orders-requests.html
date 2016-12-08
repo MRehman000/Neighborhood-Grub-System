@@ -1,7 +1,7 @@
 {% include "ngs/header.html" %}
 
-{% if orders %}
 <h2>Orders</h2>
+{% if orders %}
 <ul>
 {% for order in orders %}
   <li>
@@ -32,13 +32,12 @@
   </li>
 {% endfor %}
 </ul>
-{% endif %}
-
-{% if is_chef %}
-<a href="/dishes/posts/create/">Post a Dish</a>
+{% else %}
+<p>You do not have any pending orders</p>
 {% endif %}
 
 <h2>Requests</h2>
+{% if pending_requests %}
 <ul>
 {% for request in requests %}
   <li>
@@ -66,6 +65,9 @@
   </li>
 {% endfor %}
 </ul>
+{% else %}
+<p>You do not have any pending requests</p>
+{% endif %}
 <a href="/dishes/requests/create/">Make a Request</a>
 
 {% if has_history %}
