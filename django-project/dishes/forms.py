@@ -2,7 +2,7 @@ from django import forms
 from dishes.models import (
     Dish, DishRequest, DishPost, Chef,
     OrderFeedback, RateChef, RateDiner,
-    Rating, Bid
+    Rating, Bid, Offer
 )
 
 
@@ -21,7 +21,7 @@ class DishRequestForm(forms.ModelForm):
         fields = [
             "portion_size",
             "num_servings",
-            "price",
+            "min_price",
             "meal_time"
         ]
 
@@ -85,3 +85,8 @@ class BidForm(forms.ModelForm):
             "num_servings",
             "price"
         ]
+
+class OfferForm(forms.ModelForm):
+    class Meta:
+        model = Offer
+        fields = ["price"]
