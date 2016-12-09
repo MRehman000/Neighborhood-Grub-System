@@ -3,12 +3,13 @@ from django.shortcuts import get_object_or_404, render, redirect
 
 from dishes.models import (
     DishPost, Diner, Order, DishRequest, Chef, Bid,
-    OrderFeedback, RateChef, RateDiner, Dish, Rating
+    OrderFeedback, RateChef, RateDiner, Dish, Rating,
+    Offer
 )
 from dishes.forms import (
     DishForm, DishRequestForm, DishPostForm,
     ChefForm, FeedbackForm, RateChefForm,
-    RateDinerForm, RatingForm, BidForm
+    RateDinerForm, RatingForm, BidForm, OfferForm
 )
 
 from accounts.models import RedFlag, Complaint
@@ -70,7 +71,7 @@ def order_dish(request, dish_post_id):
                                  num_servings=num_servings)
     return redirect("orders_and_requests")
 
-def orders_and_requests(request):
+def orders_and_accepted_requests(request):
     if not request.user.is_authenticated:
         return redirect("dishes")
     else:
@@ -81,8 +82,8 @@ def orders_and_requests(request):
         closed_orders = orders.filter(status__gte=Order.CANCELLED)
 
         diner_requests = diner.dishrequest_set
-        pending_requests = diner_requests.filter(status=DishRequest.OPEN)
-        closed_requests = diner_requests.filter(status__gt=DishRequest.OPEN)
+        pending_requests = diner_requests.filter(status=DishRequest.ACCEPTED)
+        closed_requests = diner_requests.filter(status__gt=DishRequest.ACCEPTED)
 
         is_chef = hasattr(request.user, "chef")
 
@@ -112,15 +113,84 @@ def orders_and_requests_history(request):
         return render(request, "dishes/orders-requests-history.html", context)
 
 def requests(request):
-    dish_requests = DishRequest.objects.all()
+    dish_requests = DishRequest.objects.filter(status=DishRequest.OPEN)
     context = {"dish_requests": dish_requests}
     return render(request, "dishes/requests.html", context)
 
-def request_detail(request, dish_request_id):
+def request_offers(request, dish_request_id):
     dish_request = get_object_or_404(DishRequest, pk=dish_request_id)
-    context = {"dish_request": dish_request}
-    if request.user.is_authenticated:
-        context["user"] = request.user
+    offers = dish_request.offer_set.filter(status=Offer.PENDING)
+    context = {
+        "dish_request": dish_request,
+        "offers": offers
+    }
+    return render(request, "dishes/request_offers.html", context)
+
+def reject_offer(request, dish_request_id, offer_id):
+    if request.method == "POST":
+        offer = get_object_or_404(Offer, pk=offer_id)
+        offer.status = Offer.REJECTED
+        offer.save()
+    return redirect("requests_offers", dish_request_id)
+
+def accept_offer(request, dish_request_id, offer_id):
+    if request.method == "POST":
+        dish_request = get_object_or_404(DishRequest, pk=dish_request_id)
+        offer = get_object_or_404(Offer, pk=offer_id)
+        # Verify the diner has the money.
+        diner_balance = request.user.balance
+        chef_balance = offer.chef.user.balance
+        if diner_balance.is_vip:
+            total = decimal.Decimal(0.90) * offer.total()
+        else:
+            total = offer.total()
+        if diner_balance.amount < total:
+            offers = dish_request.offer_set.filter(status=Offer.PENDING)
+            context = {
+                "dish_request": dish_request,
+                "offers": offers,
+                "message": "You must have sufficient funds to accept an offer."
+            }
+            return render(request, "dishes/requests_offers.html", context)
+        # Update the offer status
+        offer.status = Offer.ACCEPTED
+        for offr in offer.dish_request.offer_set.all():
+            if offr != offer:
+                offr.status = Offer.REJECTED
+                offr.save()
+        offer.save()
+        dish_request.status = DishRequest.ACCEPTED
+        dish_request.save()
+        # Transfer the money.
+        diner_balance.debit(total)
+        chef_balance.credit(offer.total())
+    return redirect("orders_and_requests")
+
+def request_detail(request, dish_request_id):
+    context = {}
+    user = request.user
+    dish_request = get_object_or_404(DishRequest, pk=dish_request_id)
+    if request.method == "POST":
+        form = OfferForm(request.POST)
+        if form.is_valid():
+            # Verify that the price is greater or equal to the min price.
+            offer_price = form.cleaned_data["price"]
+            if offer_price >= dish_request.min_price:
+                # Create the Offer
+                Offer.objects.create(chef=user.chef,
+                                     dish_request=dish_request,
+                                     price=offer_price)
+                return redirect("list-requests")
+            else:
+                context["message"] = ("The offer price must be greater "
+                                      "or equal to the minimum price.")
+    else:
+        form = OfferForm()
+    if user.is_authenticated:
+        context["user"] = user
+    context["dish_request"] = dish_request
+    context["is_chef"] = hasattr(request.user, "chef")
+    context["form"] = form
     return render(request, "dishes/request_detail.html", context)
 
 def chef_detail(request, chef_id):
@@ -291,6 +361,12 @@ def create_request(request):
     context["dish_request_form"] = dish_request_form
     context["dish_form"] = dish_form
     return render(request, "dishes/create_request.html", context)
+
+def manage_open_requests(request):
+    diner = request.user.diner
+    open_requests = diner.dishrequest_set.filter(status=DishRequest.OPEN)
+    context = {"dish_requests": open_requests}
+    return render(request, "dishes/manage_requests.html", context)
 
 def edit_request(request, dish_request_id):
     context = {}
@@ -487,12 +563,14 @@ def accept_bid(request, dish_post_id, bid_id):
         bid.save()
         # Deduct the total price from the Diner's balance.
         diner_balance = bid.diner.user.balance
-        diner_balance.amount = diner_balance.amount - bid.total()
-        diner_balance.save()
+        if diner_balance.is_vip:
+            total = decimal.Decimal(0.90) * bid.total()
+        else:
+            total = bid.total()
+        diner_balance.debit(total)
         # Add the total price to the Chef's balance.
         chef_balance = bid.dish_post.chef.user.balance
-        chef_balance.amount = chef_balance.amount + bid.total()
-        chef_balance.save()
+        chef_balance.credit(bid.total())
     return redirect("manage_post_detal", dish_post_id)
 
 def check_suspend_ratee(ratee):
@@ -568,4 +646,3 @@ def check_redflag_complainant(complainant):
         return True
     else:
         return False
-
