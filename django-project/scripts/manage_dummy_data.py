@@ -243,36 +243,46 @@ dish_posts = {
     }
 }
 
+bids = {
+    0: {
+        "diner": 0,
+        "dish_post": 0,
+        "num_servings": 1,
+        "price": decimal.Decimal(6.75)
+    },
+}
+
 orders = {
     0: {
         "diner": 0,
         "dish_post": 0,
+        "bid": 0,
         "num_servings": 1
     },
-    1: {
-        "diner": 0,
-        "dish_post": 1,
-        "num_servings": 2,
-        "status": Order.PENDING_FEEDBACK
-    },
-    2: {
-        "diner": 0,
-        "dish_post": 2,
-        "num_servings": 1,
-        "status": Order.PENDING_FEEDBACK
-    },
-    3: {
-        "diner": 0,
-        "dish_post": 3,
-        "num_servings": 2,
-        "status": Order.PENDING_FEEDBACK
-    },
-    4: {
-        "diner": 0,
-        "dish_post": 4,
-        "num_servings": 1,
-        "status": Order.PENDING_FEEDBACK
-    }
+#    1: {
+#        "diner": 0,
+#        "dish_post": 1,
+#        "num_servings": 2,
+#        "status": Order.PENDING_FEEDBACK
+#    },
+#    2: {
+#        "diner": 0,
+#        "dish_post": 2,
+#        "num_servings": 1,
+#        "status": Order.PENDING_FEEDBACK
+#    },
+#    3: {
+#        "diner": 0,
+#        "dish_post": 3,
+#        "num_servings": 2,
+#        "status": Order.PENDING_FEEDBACK
+#    },
+#    4: {
+#        "diner": 0,
+#        "dish_post": 4,
+#        "num_servings": 1,
+#        "status": Order.PENDING_FEEDBACK
+#    }
 }
 
 dish_requests = {
@@ -281,7 +291,7 @@ dish_requests = {
         "dish": 11,
         "portion_size": decimal.Decimal(1.1),
         "num_servings": 5,
-        "price": decimal.Decimal(6.50),
+        "min_price": decimal.Decimal(6.50),
         "meal_time": timezone.now() + datetime.timedelta(days=7),
         "latitude": decimal.Decimal(40.6675515),
         "longitude": decimal.Decimal(-73.9869256)
@@ -291,7 +301,7 @@ dish_requests = {
         "dish": 9,
         "portion_size": decimal.Decimal(1.1),
         "num_servings": 5,
-        "price": decimal.Decimal(6.50),
+        "min_price": decimal.Decimal(6.50),
         "meal_time": timezone.now() + datetime.timedelta(days=7),
         "latitude": decimal.Decimal(40.7486386),
         "longitude": decimal.Decimal(-73.895272)
@@ -301,7 +311,7 @@ dish_requests = {
         "dish": 10,
         "portion_size": decimal.Decimal(1.1),
         "num_servings": 5,
-        "price": decimal.Decimal(6.50),
+        "min_price": decimal.Decimal(6.50),
         "meal_time": timezone.now() + datetime.timedelta(days=7),
         "latitude": decimal.Decimal(40.6486386),
         "longitude": decimal.Decimal(-73.87915727)
@@ -311,7 +321,7 @@ dish_requests = {
         "dish": 12,
         "portion_size": decimal.Decimal(1.1),
         "num_servings": 5,
-        "price": decimal.Decimal(6.50),
+        "min_price": decimal.Decimal(6.50),
         "meal_time": timezone.now() + datetime.timedelta(days=7),
         "latitude": decimal.Decimal(40.8505949),
         "longitude": decimal.Decimal(-73.8791922)
@@ -321,7 +331,7 @@ dish_requests = {
         "dish": 13,
         "portion_size": decimal.Decimal(1.1),
         "num_servings": 5,
-        "price": decimal.Decimal(6.50),
+        "min_price": decimal.Decimal(6.50),
         "meal_time": timezone.now() + datetime.timedelta(days=7),
         "latitude": decimal.Decimal(40.7483135),
         "longitude": decimal.Decimal(-73.8851868)
@@ -331,7 +341,7 @@ dish_requests = {
         "dish": 14,
         "portion_size": decimal.Decimal(1.1),
         "num_servings": 5,
-        "price": decimal.Decimal(6.50),
+        "min_price": decimal.Decimal(6.50),
         "meal_time": timezone.now() + datetime.timedelta(days=7),
         "latitude": decimal.Decimal(40.7523781),
         "longitude": decimal.Decimal(-73.9200795)
@@ -411,9 +421,16 @@ def load():
         dish_post = DishPost.objects.create(**dish_posts[key])
         dish_posts[key] = dish_post
 
+    for key in bids:
+        bids[key]["diner"] = diners[bids[key]["diner"]]
+        bids[key]["dish_post"] = dish_posts[bids[key]["dish_post"]]
+        bid = Bid.objects.create(**bids[key])
+        bids[key] = bid
+
     for key in orders:
         orders[key]["diner"] = diners[orders[key]["diner"]]
         orders[key]["dish_post"] = dish_posts[orders[key]["dish_post"]]
+        orders[key]["bid"] = bids[orders[key]["bid"]]
         order = Order.objects.create(**orders[key])
         orders[key] = order
 
@@ -462,6 +479,7 @@ def delete():
         Diner,
         Chef,
         CuisineTag,
+        Bid,
         Order,
         DishPost,
         DishRequest,
