@@ -184,7 +184,7 @@ class DishRequest(models.Model):
         Integer field that indicates the number of servings the Diner is
         requesting the Chef to cook.
 
-    price:
+    min_price:
         Decimal field that stores the price of one serving of this Dish.
 
     meal_time:
@@ -211,16 +211,17 @@ class DishRequest(models.Model):
     dish = models.ForeignKey(Dish, on_delete=models.PROTECT)
     portion_size = models.DecimalField(max_digits=3, decimal_places=1)
     num_servings = models.IntegerField(default=1)
-    price = models.DecimalField(max_digits=4, decimal_places=2)
+    min_price = models.DecimalField("Minimum Price", max_digits=4, decimal_places=2)
     meal_time = models.DateTimeField("Meal Time")
 
     latitude = models.DecimalField(max_digits = 9, decimal_places = 6,default=decimal.Decimal(0.0))
     longitude= models.DecimalField(max_digits = 9, decimal_places = 6,default=decimal.Decimal(0.0))
 
-    OPEN, CANCELLED, COMPLETE = range(3)
+    OPEN, ACCEPTED, CANCELLED, COMPLETE = range(4)
 
     STATUS_CHOICES = (
         (OPEN, "Open"),
+        (ACCEPTED, "Accepted"),
         (CANCELLED, "Cancelled"),
         (COMPLETE, "Complete")
     )
@@ -228,7 +229,31 @@ class DishRequest(models.Model):
     status = models.IntegerField(choices=STATUS_CHOICES, default=OPEN)
 
     def total(self):
-        return self.price * self.num_servings
+        return self.min_price * self.num_servings
+
+class Offer(models.Model):
+    """
+    Django model class representing an offer by a Chef on a diner's
+    DishRequest.
+    """
+    chef = models.ForeignKey(Chef, on_delete=models.SET_NULL, null=True)
+    dish_request = models.ForeignKey(DishRequest,
+                                     on_delete=models.SET_NULL,
+                                     null=True)
+    price = models.DecimalField(max_digits=4, decimal_places=2)
+
+    PENDING, ACCEPTED, REJECTED = range(3)
+
+    STATUS_CHOICES = (
+        (PENDING, "Pending"),
+        (ACCEPTED, "Accepted"),
+        (REJECTED, "Rejected")
+    )
+
+    status = models.IntegerField(choices=STATUS_CHOICES, default=PENDING)
+
+    def total(self):
+        return self.dish_request.num_servings * self.price
 
 class Bid(models.Model):
     """
