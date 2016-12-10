@@ -25,7 +25,7 @@
 .input{
 
 		width: 400px;
-		height: 860px;
+		height: auto;
 		background-color: rgba(0,0,0,0.7);
 		margin: 0 auto;
 		margin-top: 100px;
@@ -38,6 +38,7 @@
 		font-family: arial;
 		color: white;
 		margin-bottom: 160px;
+		padding-bottom: 120px;
 	}
 
 .input p{
