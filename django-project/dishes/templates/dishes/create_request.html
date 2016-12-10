@@ -15,7 +15,7 @@
 		        -o-background-size: cover;
 		        background-size: cover;
 			}
-			.input{height: 820px;}
+			/*.input{height: 820px;}*/
 		</style>
 
 	</head>
@@ -34,6 +34,10 @@
 			  
 			  <input type="hidden" id="latField" value="[Get latitude]" />
 			  <input type="hidden" id="longField" value="[Get Longitude]" />
+			  
+			<!-- google map added -->
+			{% include "dishes/includes/google-maps-create-order.html" %}
+			
 			  <div class="button"><button type="submit">Submit</button>
 			</form>
 			<form action="/dishes/orders-requests/">
@@ -43,7 +47,7 @@
 
 		</div>
 
-		{% include "dishes/includes/google-maps-create-order.html" %}
+		<!-- {% include "dishes/includes/google-maps-create-order.html" %} -->
 	</body>
 
 
