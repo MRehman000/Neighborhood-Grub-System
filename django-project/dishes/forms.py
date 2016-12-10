@@ -4,16 +4,6 @@ from dishes.models import (
     OrderFeedback, RateChef, RateDiner, Rating
 )
 
-# Watson Dependencies
-import json
-from os.path import join, dirname
-from watson_developer_cloud import AlchemyLanguageV1
-
-# Getting APIKEY variable from settings.py 
-APIKEY = getattr(settings, "APIKEY", None)
-
-# Watson authentication
-alchemy_language = AlchemyLanguageV1(api_key=APIKEY)
 
 class DishForm(forms.ModelForm):
     class Meta:
@@ -85,13 +75,3 @@ class ChefForm(forms.ModelForm):
             "blurb",
             "experience"
         ]
-
-class DishSuggestionForm(forms.ModelForm):
-    class Meta:
-        model = DishSuggestions
-        suggestion = forms.CharField()
-
-    def ask_watson(self):
-        cuisine_tag = self.cleaned_data['suggestion']
-        classification = alchemy_language.taxonomy(text=cuisine_tag)
-        return classification['label']

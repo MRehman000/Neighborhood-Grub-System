@@ -1,0 +1,16 @@
+{% include "ngs/header.html" %}
+
+<h2>Dish Suggestions</h2>
+{% if dish_suggestions %}
+  <ul>
+    {% for dish_post in dish_suggestions %}
+      <li>
+        <a href="/dishes/dish_suggestions/{{ dish_post.id }}/">{{dish_post.dish.name}}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+{% else %}
+  <p>No Dish Suggestions are available.</p>
+{% endif %}
+{% if is_chef %}

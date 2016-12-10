@@ -1,5 +1,9 @@
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404, render, redirect
+from django.conf import settings
+from watson_developer_cloud import AlchemyLanguageV1
+from collections import Counter
+import operator
 
 from dishes.models import (
     DishPost, Diner, Order, DishRequest, Chef,
@@ -12,6 +16,14 @@ from dishes.forms import (
 
 from accounts.models import RedFlag, Complaint
 from accounts.forms import ComplaintForm
+
+
+
+# Getting APIKEY variable from settings.py
+APIKEY = getattr(settings, "APIKEY", None)
+
+# Watson authentication
+alchemy_language = AlchemyLanguageV1(api_key=APIKEY)
 
 def posts(request):
     dish_posts = DishPost.objects.filter(status=DishPost.OPEN)
@@ -235,6 +247,9 @@ def create_request(request):
             }
             dish_data.update(dish_form.cleaned_data)
             dish = Dish.objects.create(**dish_data)
+            classification = alchemy_language.taxonomy(text=dish.name)
+            setattr(dish, "alchemy_label", classification['taxonomy'][0]['label'])
+            dish.save()
 
             # Create the DishRequest
             # Similarly, collate data not contained
@@ -308,6 +323,9 @@ def create_post(request):
             }
             dish_data.update(dish_form.cleaned_data)
             dish = Dish.objects.create(**dish_data)
+            classification = alchemy_language.taxonomy(text=dish.name)
+            setattr(dish, "alchemy_label", classification['taxonomy'][0]['label'])
+            dish.save()
 
             # Create the DishPost
             # Similarly, collate data not contained
@@ -381,7 +399,7 @@ def rate_diner(request, diner_id):
             rating = RateDiner.objectscreate(diner, rating=int_rating)
         else:
             form = RateDinerForm()
-    return redirect(request,"dishes/rate_diner.html")
+    return redirect(request, "dishes/rate_diner.html")
 
 def edit_chef(request, chef_id):
     context = {}
@@ -470,17 +488,37 @@ def check_redflag_complainant(complainant):
     else:
         return False
 
-def get_suggestions(request, order_id):
-	order = get_object_or_404(Order, pk=dish_post_id)
-	if request.method == "POST":
-		form = DishSuggestionForm(request.POST)
-		if form.is_valid():
-			cuisine_tag = order.dish_post.dish.cuisinetag.name
-			#Basic suggestion model:
-			#Apply classification to get the label
-			#Get a count for each label
-			#Return Dish Posts for label with highest count
-	else:
-		form = DishSuggestionForm()
-	return render(request, "dishes/dish_suggestions.html", context=None)
-		
+def suggest_dishes(request):
+    suggestions = []
+    diner = request.user
+    diner_labels = [order for order in diner.order_set]
+    counted_labels = dict(Counter(diner_labels))
+    suggestions.append(max(counted_labels.items(), key=operator.itemgetter(1))[0])
+    suggestions.append(max(counted_labels.items(), key=operator.itemgetter(1))[1])
+    dish_suggestions = DishPost.objects.filter(status=DishPost.OPEN,
+                                               dish__alchemy_label=suggestions)
+    context = {"dish_suggestions": dish_suggestions}
+    return render(request, "dishes/dish_suggestions.html", context)
+
+"""
+def label_dish(request):
+    context = {}
+    diner = request.user
+    for order in diner.order_set:
+        classification = alchemy_language.taxonomy(text=order.dish_post.dish.name)
+        if request.method == "POST":
+            dish_label_form = DishLabelForm(request.POST)
+            if dish_label_form.is_valid():
+                label_data = {
+                    "order": order,
+                    "label": classification['taxonomy'][0]['label']
+                }
+                label_data.update(dish_label_form.cleaned_data)
+                DishLabel.objects.create(**label_data)
+                return render(request, "dishes/dish_suggestions.html", None)
+        else:
+            dish_label_form = DishLabelForm()
+            context["dish_label_form"] = dish_label_form
+            return render(request, "dishes/dish_suggestions.html", context)
+
+"""

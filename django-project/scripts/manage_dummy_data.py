@@ -62,6 +62,7 @@ cuisine_tags = {
 dishes = {
     0: {
         "name": "Sesame Chicken",
+        "alchemy_label": "/food and drink/cuisines/chinese cuisine",
         "default_price": decimal.Decimal(7.50),
         "description": ("Classic sesame chicken with white rice and choice "
                         "of sauce. More MSG than is legal!!!"),
@@ -69,6 +70,7 @@ dishes = {
     },
     1: {
         "name": "Rice and Beans",
+        "alchemy_label": "/food and drink/food/grains and pasta",
         "default_price": decimal.Decimal(5.75),
         "description": ("Does rice and beans need a description? "
                         "Of course not!"),
@@ -76,6 +78,7 @@ dishes = {
     },
     2: {
         "name": "Beef with Broccoli",
+        "alchemy_label": "/food and drink/food/fruits and vegetables",
         "default_price": decimal.Decimal(6.75),
         "description": "Masscared cow and harvested greens",
         "serving_size": decimal.Decimal(1.0)
@@ -83,6 +86,7 @@ dishes = {
 
     3: {
         "name": "Halal Chicken Over Rice",
+        "alchemy_label": "/food and drink/kosher food",
         "default_price": decimal.Decimal(6.00),
         "description": "Egyptian guy at CCNY with the best Halal!",
         "serving_size": decimal.Decimal(10.0)
@@ -90,6 +94,7 @@ dishes = {
 
     4: {
         "name": "Fish and Chips",
+        "alchemy_label": "/food and drink/food/salads",
         "default_price": decimal.Decimal(4.50),
         "description": "Fried fish served with homemade fries",
         "serving_size": decimal.Decimal(1.0)
@@ -97,6 +102,7 @@ dishes = {
 
     5: {
         "name": "Fried Chicken",
+        "alchemy_label": "/food and drink/food/fast food",
         "default_price": decimal.Decimal(2.50),
         "description": "Classic fried chicken, you won't go back to KFC after eating this!",
         "serving_size": decimal.Decimal(1.0)
@@ -104,54 +110,64 @@ dishes = {
 
     6: {
         "name": "Classic NY Cheesecake",
+        "alchemy_label": "/food and drink/desserts and baking",
         "default_price": decimal.Decimal(3.00),
         "description": "Cheesecake NY style",
         "serving_size": decimal.Decimal(8.0)
     },
     7: {
         "name": "Tuna Salad",
+        "alchemy_label": "/food and drink/food/salads",
         "default_price": decimal.Decimal(5.00),
         "description": "Fresh Tuna with lettuce, onions and other healthy things",
         "serving_size": decimal.Decimal(1.0)
     },
     8: {
         "name": "Cheeseburgers",
+        "alchemy_label": "/food and drink/food/fast food",
         "default_price": decimal.Decimal(4.00),
         "description": "Burgers fresh off the grill",
         "serving_size": decimal.Decimal(10.0)
     },
     9: {
         "name": "Pizza",
+        "alchemy_label": "/food and drink/cuisines/italian cuisine",
         "default_price": decimal.Decimal(2.00),
         "description": "Homemade pizza with homemade sauce and cheese",
         "serving_size": decimal.Decimal(8.0)
     },
     10: {
         "name": "Biryani",
+        "alchemy_label": "/food and drink/food/candy and sweets",
         "default_price": decimal.Decimal(8.00),
         "description": "Great tasting basmati rice and chicken cooked the Pakistani way",
         "serving_size": decimal.Decimal(2.0)
     },
     11: {
         "name": "Mango Lassi",
+        "alchemy_label": "/food and drink/desserts and baking",
         "default_price": decimal.Decimal(3.00),
-        "description": "Indian yogurt beverage, its got lots of different flavors<br>people like to drink it on a hot summer's day",
+        "description": "Indian yogurt beverage, its got lots of different "
+                       "flavors<br>people like to drink it on a hot summer's day",
         "serving_size": decimal.Decimal(8.0)
     },
     12: {
         "name": "Tandoori Chicken",
+        "alchemy_label": "/food and drink/desserts and baking",
         "default_price": decimal.Decimal(4.00),
         "description": "Spicy chicken seasoned with traditional Indian spices",
         "serving_size": decimal.Decimal(5.0)
     },
     13: {
         "name": "Vegetable Samosas",
+        "alchemy_label": "/food and drink/food/candy and sweets",
         "default_price": decimal.Decimal(1.50),
         "description": "Potatoes, chickpeas, and onions wrapped inside a bread and fried",
         "serving_size": decimal.Decimal(10.0)
     },
     14: {
         "name": "Chicken Makhni",
+        "alchemy_label": "/food and drink/food/salads",
         "default_price": decimal.Decimal(3.00),
         "description": "Chicken cooked in butter and cream, also known as Butter Chicken",
         "serving_size": decimal.Decimal(8.0)
