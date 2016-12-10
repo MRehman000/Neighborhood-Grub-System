@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from accounts.models import (
     ChefPermissionsRequest, RedFlag, Complaint,
     TerminateAccountRequest, CreateAccountRequest,
-    SuspensionInfo, Balance
+    SuspensionInfo, Balance, RemoveSuspensionRequest
 )
 from dishes.models import Diner, Chef
 
@@ -222,3 +222,32 @@ class SuspensionInfoAdmin(admin.ModelAdmin):
     reactivating a user functionality.
     """
     list_display = ["user", "suspended", "count"]
+
+@admin.register(RemoveSuspensionRequest)
+class RemoveSuspensionRequestAdmin(admin.ModelAdmin):
+    """
+    Django ModelAdmin class for providing the approve/deny remove suspension
+    request functionality.
+    """
+    list_display = ["user", "justification", "status"]
+    actions = ["approve_request", "deny_request"]
+
+    def get_queryset(self, request):
+        """
+        Limit the RemoveSuspensionRequest queryset to those that are pending.
+        """
+        qs = super(RemoveSuspensionRequestAdmin, self).get_queryset(request)
+        return qs.filter(status=RemoveSuspensionRequest.PENDING)
+
+    def approve_request(self, request, queryset):
+        for request in queryset:
+            user = request.user
+            request.status = RemoveSuspensionRequest.APPROVED
+            request.save()
+            user.suspensioninfo.suspended = False
+            user.suspensioninfo.save()
+
+    def deny_request(self, request, queryset):
+        for request in queryset:
+            request.status = RemoveSuspensionRequest.DENIED
+            request.save()

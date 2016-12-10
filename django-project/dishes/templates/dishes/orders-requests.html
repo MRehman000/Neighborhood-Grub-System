@@ -1,7 +1,7 @@
 {% include "ngs/header.html" %}
 
-{% if orders %}
 <h2>Orders</h2>
+{% if orders %}
 <ul>
 {% for order in orders %}
   <li>
@@ -15,7 +15,7 @@
         <td>Chef</td><td>{{order.dish_post.chef.user.username}}</td>
       </tr>
       <tr>
-        <td>Serving Price</td><td>${{order.dish_post.price}}</td>
+        <td>Serving Price</td><td>${{ order.bid.price }}</td>
       </tr>
       <tr>
         <td>Servings Ordered</td><td>{{order.num_servings}}</td>
@@ -32,13 +32,12 @@
   </li>
 {% endfor %}
 </ul>
-{% endif %}
-
-{% if is_chef %}
-<a href="/dishes/posts/create/">Post a Dish</a>
+{% else %}
+<p>You do not have any pending orders</p>
 {% endif %}
 
 <h2>Requests</h2>
+{% if requests %}
 <ul>
 {% for request in requests %}
   <li>
@@ -66,6 +65,9 @@
   </li>
 {% endfor %}
 </ul>
+{% else %}
+<p>You do not have any accepted requests</p>
+{% endif %}
 <a href="/dishes/requests/create/">Make a Request</a>
 
 {% if has_history %}

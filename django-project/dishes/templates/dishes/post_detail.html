@@ -11,10 +11,10 @@
       <td>Meal Time</td><td>{{dish_post.meal_time}}</td>
     </tr>
     <tr>
-      <td>Serving Price</td><td>${{dish_post.price}}</td>
+      <td>Minimum Serving Price</td><td>${{ dish_post.min_price }}</td>
     </tr>
     <tr>
-      <td>Available Servings</td><td>{{dish_post.available_servings}}</td>
+      <td>Available Servings</td><td>{{ dish_post.available_servings }}</td>
     </tr>
     <tr>
       <td>Chef</td>
@@ -24,14 +24,16 @@
     </tr>
   </table>
   {% if user.is_authenticated and dish_post.available_servings > 0%}
-  <form id="order_form" action="order/" method="post">
+  <h2>Bid</h2>
+  <p>Submit a bid on this dish</p>
+  {% if message %}
+  <p>{{ message }}</p>
+  {% endif %}
+  <form method="post">
     {% csrf_token %}
-    <label for="num_servings">How many servings would you like to order?</label>
-    <input type="number"
-           id="num_servings"
-           name="num_servings"
-           min="0"
-           max="{{dish_post.available_servings}}"/>
+    <table>
+      {{ form.as_table }}
+    </table>
     <button>Submit</button>
   </form>
   {% endif %}
