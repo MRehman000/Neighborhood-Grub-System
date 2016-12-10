@@ -89,4 +89,3 @@ class OfferForm(forms.ModelForm):
     class Meta:
         model = Offer
         fields = ["price"]
-
