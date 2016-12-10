@@ -491,12 +491,12 @@ def check_redflag_complainant(complainant):
 def suggest_dishes(request):
     suggestions = []
     diner = request.user
-    diner_labels = [order for order in diner.order_set]
+    diner_labels = [order for order in Order.objects.filter(diner__user=request.user)]
     counted_labels = dict(Counter(diner_labels))
     suggestions.append(max(counted_labels.items(), key=operator.itemgetter(1))[0])
     suggestions.append(max(counted_labels.items(), key=operator.itemgetter(1))[1])
     dish_suggestions = DishPost.objects.filter(status=DishPost.OPEN,
-                                               dish__alchemy_label=suggestions)
+                                               dish__alchemy_label=suggestions[0])
     context = {"dish_suggestions": dish_suggestions}
     return render(request, "dishes/dish_suggestions.html", context)
 

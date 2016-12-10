@@ -1,6 +1,6 @@
 {% include "ngs/header.html" %}
 
-<h2>Dish Suggestions</h2>
+<h2>Dish Suggestions for {{user.username}}</h2>
 {% if dish_suggestions %}
   <ul>
     {% for dish_post in dish_suggestions %}
@@ -13,4 +13,3 @@
 {% else %}
   <p>No Dish Suggestions are available.</p>
 {% endif %}
-{% if is_chef %}
