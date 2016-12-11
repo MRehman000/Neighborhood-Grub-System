@@ -171,6 +171,13 @@ dishes = {
         "default_price": decimal.Decimal(3.00),
         "description": "Chicken cooked in butter and cream, also known as Butter Chicken",
         "serving_size": decimal.Decimal(8.0)
+    },
+    15: {
+         "name": "Dim Sum",
+        "alchemy_label": "/food and drink/cuisines/chinese cuisine",
+        "default_price": decimal.Decimal(4.00),
+        "description": "A chinese dish of small savory steamed or fried dumplings",
+        "serving_size": decimal.Decimal(5.0) 
     }
 
 
