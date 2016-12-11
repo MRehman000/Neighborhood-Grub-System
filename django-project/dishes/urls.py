@@ -29,6 +29,7 @@ urlpatterns = [
     url(r"^posts/manage/orders/(?P<order_id>[0-9]+)/rate/$",
         views.rate_diner),
     url(r"^posts/create/$", views.create_post),
+    url(r"^dish_suggestions/$", views.suggest_dishes),
     url(r"^posts/(?P<dish_post_id>[0-9]+)/$", views.post_detail),
     url(r"^posts/(?P<dish_post_id>[0-9]+)/order/$", views.order_dish),
     url(r"^posts/(?P<dish_post_id>[0-9]+)/cancel/$", views.cancel_post),
@@ -53,5 +54,4 @@ urlpatterns = [
         views.accept_offer),
     url(r"^chefs/(?P<chef_id>[0-9]+)/rate/$", views.rate_chef),
     url(r"^requests/(?P<dish_request_id>[0-9]+)/rate/$", views.rate_diner),
-    url(r"^dish_suggestions/$", views.suggest_dishes),
 ]

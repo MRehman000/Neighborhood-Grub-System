@@ -62,7 +62,7 @@ cuisine_tags = {
 dishes = {
     0: {
         "name": "Sesame Chicken",
-        "alchemy_label": "/food and drink/cuisines/chinese cuisine",
+        "alchemy_label": "/food and drink/food/fast food",
         "default_price": decimal.Decimal(7.50),
         "description": ("Classic sesame chicken with white rice and choice "
                         "of sauce. More MSG than is legal!!!"),
@@ -256,6 +256,18 @@ dish_posts = {
         "meal_time": timezone.now() + datetime.timedelta(days=4),
         "latitude": decimal.Decimal(40.8197061),
         "longitude": decimal.Decimal(-72.9505599)
+    },
+    7: {
+        "chef": 0,
+        "max_servings": 4,
+        "dish": 8,
+        "min_price": decimal.Decimal(5.00),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+        "latitude": decimal.Decimal(40.716101),
+        "longitude": decimal.Decimal(-73.752738),
+        "status": DishPost.OPEN
     }
 }
 

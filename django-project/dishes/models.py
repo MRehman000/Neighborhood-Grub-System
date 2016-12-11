@@ -70,7 +70,7 @@ class Dish(models.Model):
     """
     name = models.CharField(max_length=128)
     description = models.TextField("Dish Description")
-    alchemy_label = models.TextField(null=True)
+    alchemy_label = models.TextField()
     default_price = models.DecimalField(max_digits=4,
                                         decimal_places=2,
                                         null=True)

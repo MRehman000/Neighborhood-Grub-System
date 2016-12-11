@@ -667,35 +667,14 @@ def check_redflag_complainant(complainant):
 
 def suggest_dishes(request):
     suggestions = []
-    diner = request.user
-    diner_labels = [order for order in Order.objects.filter(diner__user=request.user)]
+    diner_labels = []
+    for o in Order.objects.filter(diner__user=request.user):
+        diner_labels.append(o.dish_post.dish.alchemy_label)
     counted_labels = dict(Counter(diner_labels))
     suggestions.append(max(counted_labels.items(), key=operator.itemgetter(1))[0])
-    suggestions.append(max(counted_labels.items(), key=operator.itemgetter(1))[1])
-    dish_suggestions = DishPost.objects.filter(status=DishPost.OPEN,
-                                               dish__alchemy_label=suggestions[0])
+    print(suggestions)
+    dish_suggestions = DishPost.objects.filter(dish__alchemy_label=suggestions[0], status=DishPost.OPEN)
+    print(dish_suggestions)
     context = {"dish_suggestions": dish_suggestions}
     return render(request, "dishes/dish_suggestions.html", context)
 
-"""
-def label_dish(request):
-    context = {}
-    diner = request.user
-    for order in diner.order_set:
-        classification = alchemy_language.taxonomy(text=order.dish_post.dish.name)
-        if request.method == "POST":
-            dish_label_form = DishLabelForm(request.POST)
-            if dish_label_form.is_valid():
-                label_data = {
-                    "order": order,
-                    "label": classification['taxonomy'][0]['label']
-                }
-                label_data.update(dish_label_form.cleaned_data)
-                DishLabel.objects.create(**label_data)
-                return render(request, "dishes/dish_suggestions.html", None)
-        else:
-            dish_label_form = DishLabelForm()
-            context["dish_label_form"] = dish_label_form
-            return render(request, "dishes/dish_suggestions.html", context)
-
-"""

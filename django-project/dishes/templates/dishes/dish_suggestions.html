@@ -1,15 +1,14 @@
 {% include "ngs/header.html" %}
 
-<h2>Dish Suggestions for {{user.username}}</h2>
+<h2>Dish Suggestions for {{user.username}}:</h2>
 {% if dish_suggestions %}
-  <ul>
-    {% for dish_post in dish_suggestions %}
-      <li>
-        <a href="/dishes/dish_suggestions/{{ dish_post.id }}/">{{dish_post.dish.name}}</a>
-      </li>
+    <ul>
+  {% for dish_suggestion in dish_suggestions %}
+  <li>
+    <a href="/dishes/posts/{{ dish_suggestion.id }}/">{{dish_suggestion.dish.name}} </a>
+   </li>
     {% endfor %}
-  </ul>
-
+    </ul>
 {% else %}
   <p>No Dish Suggestions are available.</p>
 {% endif %}
