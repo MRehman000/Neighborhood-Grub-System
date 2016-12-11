@@ -62,7 +62,7 @@ cuisine_tags = {
 dishes = {
     0: {
         "name": "Sesame Chicken",
-        "alchemy_label": "/food and drink/food/fast food",
+        "alchemy_label": "/food and drink/cuisines/chinese cuisine",
         "default_price": decimal.Decimal(7.50),
         "description": ("Classic sesame chicken with white rice and choice "
                         "of sauce. More MSG than is legal!!!"),
@@ -174,10 +174,17 @@ dishes = {
     },
     15: {
          "name": "Dim Sum",
-        "alchemy_label": "/food and drink/cuisines/chinese cuisine",
-        "default_price": decimal.Decimal(4.00),
-        "description": "A chinese dish of small savory steamed or fried dumplings",
-        "serving_size": decimal.Decimal(5.0) 
+         "alchemy_label": "/food and drink/cuisines/chinese cuisine",
+         "default_price": decimal.Decimal(4.00),
+         "description": "A chinese dish of small savory steamed or fried dumplings",
+         "serving_size": decimal.Decimal(5.0)
+    },
+    16: {
+         "name": "Triple Cheeseburger",
+         "alchemy_label": "/food and drink/food/fast food",
+         "default_price": decimal.Decimal(4.00),
+         "description": "Homemade from grass-fed cows. You won't believe it!",
+         "serving_size": decimal.Decimal(5.0)
     }
 
 
@@ -275,7 +282,31 @@ dish_posts = {
         "latitude": decimal.Decimal(40.716101),
         "longitude": decimal.Decimal(-73.752738),
         "status": DishPost.OPEN
-    }
+    },
+    8: {
+        "chef": 0,
+        "max_servings": 4,
+        "dish": 15,
+        "min_price": decimal.Decimal(5.00),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+        "latitude": decimal.Decimal(40.716321),
+        "longitude": decimal.Decimal(-73.756538),
+        "status": DishPost.OPEN
+    },
+    9: {
+        "chef": 0,
+        "max_servings": 3,
+        "dish": 16,
+        "min_price": decimal.Decimal(6.50),
+        "serving_size": decimal.Decimal(0.7),
+        "last_call": timezone.now() + datetime.timedelta(days=1),
+        "meal_time": timezone.now() + datetime.timedelta(days=2),
+        "latitude": decimal.Decimal(40.8197061),
+        "longitude": decimal.Decimal(-73.96078),
+        "status": DishPost.COMPLETE
+    },
 }
 
 bids = {
@@ -291,6 +322,12 @@ orders = {
     0: {
         "diner": 0,
         "dish_post": 0,
+        "bid": 0,
+        "num_servings": 1
+    },
+    1: {
+        "diner": 0,
+        "dish_post": 9,
         "bid": 0,
         "num_servings": 1
     },
