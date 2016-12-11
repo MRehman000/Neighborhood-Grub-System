@@ -28,7 +28,17 @@ users = {
         "username": "chef_one",
         "email": "best@chef.com",
         "password": "gordonramsey"
-    }
+    },
+    2: {
+        "username": "bar",
+        "email": "bar@bar.com",
+        "password": "barpass"
+    },
+    3: {
+        "username": "tin",
+        "email": "tin@tin.com",
+        "password": "tinpass"
+    },
 }
 
 diners = {
@@ -41,6 +51,16 @@ diners = {
         "user": 1,
         "latitude": decimal.Decimal(40.991531),
         "longitude": decimal.Decimal(-73.670672)
+    },
+    2: {
+        "user": 2,
+        "latitude": decimal.Decimal(40.864331),
+        "longitude": decimal.Decimal(-73.653272)
+    },
+    3: {
+        "user": 3,
+        "latitude": decimal.Decimal(40.864986),
+        "longitude": decimal.Decimal(-73.986272)
     }
 }
 
@@ -185,7 +205,22 @@ dishes = {
          "default_price": decimal.Decimal(4.00),
          "description": "Homemade from grass-fed cows. You won't believe it!",
          "serving_size": decimal.Decimal(5.0)
-    }
+    },
+    17: {
+         "name": "Sushi",
+         "alchemy_label": "/food and drink/cuisines/japanese cuisine",
+         "default_price": decimal.Decimal(4.00),
+         "description": "a Japanese dish consisting of small balls or rolls of vinegar-flavored "
+                        "cold cooked rice served with a garnish of raw fish, vegetables, or egg",
+         "serving_size": decimal.Decimal(5.0)
+    },
+    18: {
+        "name": "Key Lime pie",
+        "alchemy_label": "/food and drink/desserts and baking",
+        "default_price": decimal.Decimal(7.50),
+        "description": "Cheesecake NY style",
+        "serving_size": decimal.Decimal(8.0)
+    },
 
 
 }
@@ -307,6 +342,30 @@ dish_posts = {
         "longitude": decimal.Decimal(-73.96078),
         "status": DishPost.COMPLETE
     },
+    10: {
+        "chef": 0,
+        "max_servings": 3,
+        "dish": 17,
+        "min_price": decimal.Decimal(6.50),
+        "serving_size": decimal.Decimal(1.5),
+        "last_call": timezone.now() + datetime.timedelta(days=1),
+        "meal_time": timezone.now() + datetime.timedelta(days=2),
+        "latitude": decimal.Decimal(40.7658061),
+        "longitude": decimal.Decimal(-73.98987),
+        "status": DishPost.COMPLETE
+    },
+    11: {
+        "chef": 0,
+        "max_servings": 3,
+        "dish": 18,
+        "min_price": decimal.Decimal(7.50),
+        "serving_size": decimal.Decimal(8),
+        "last_call": timezone.now() + datetime.timedelta(days=1),
+        "meal_time": timezone.now() + datetime.timedelta(days=2),
+        "latitude": decimal.Decimal(40.7672061),
+        "longitude": decimal.Decimal(-73.92717),
+        "status": DishPost.COMPLETE
+    },
 }
 
 bids = {
@@ -330,6 +389,18 @@ orders = {
         "dish_post": 9,
         "bid": 0,
         "num_servings": 1
+    },
+    2: {
+        "diner": 2,
+        "dish_post": 10,
+        "bid": 0,
+        "num_servings": 3
+    },
+    3: {
+        "diner": 3,
+        "dish_post": 11,
+        "bid": 0,
+        "num_servings": 2
     },
 #    1: {
 #        "diner": 0,
@@ -452,7 +523,9 @@ create_account_requests = {
 
 suspension_info = {
     0: {"user": 0},
-    1: {"user": 1}
+    1: {"user": 1},
+    2: {"user": 2},
+    3: {"user": 3},
 }
 
 balances = {
