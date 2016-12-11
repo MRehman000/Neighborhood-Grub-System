@@ -1,5 +1,8 @@
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404, render, redirect
+from django.conf import settings
+from watson_developer_cloud import AlchemyLanguageV1
+from collections import Counter
 
 from dishes.models import (
     DishPost, Diner, Order, DishRequest, Chef, Bid,
@@ -14,6 +17,14 @@ from dishes.forms import (
 
 from accounts.models import RedFlag, Complaint
 from accounts.forms import ComplaintForm
+
+
+
+# Getting APIKEY variable from settings.py
+APIKEY = getattr(settings, "APIKEY", None)
+
+# Watson authentication
+alchemy_language = AlchemyLanguageV1(api_key=APIKEY)
 
 def posts(request):
     dish_posts = DishPost.objects.filter(status=DishPost.OPEN)
@@ -341,6 +352,9 @@ def create_request(request):
             }
             dish_data.update(dish_form.cleaned_data)
             dish = Dish.objects.create(**dish_data)
+            classification = alchemy_language.taxonomy(text=dish.name)
+            setattr(dish, "alchemy_label", classification['taxonomy'][0]['label'])
+            dish.save()
 
             # Create the DishRequest
             # Similarly, collate data not contained
@@ -420,6 +434,9 @@ def create_post(request):
             }
             dish_data.update(dish_form.cleaned_data)
             dish = Dish.objects.create(**dish_data)
+            classification = alchemy_language.taxonomy(text=dish.name)
+            setattr(dish, "alchemy_label", classification['taxonomy'][0]['label'])
+            dish.save()
 
             # Create the DishPost
             # Similarly, collate data not contained
@@ -646,3 +663,17 @@ def check_redflag_complainant(complainant):
         return True
     else:
         return False
+
+def suggest_dishes(request):
+    context = {}
+    diner_labels = []
+    for o in Order.objects.filter(diner__user=request.user):
+        diner_labels.append(o.dish_post.dish.alchemy_label)
+    counted_labels = dict(Counter(diner_labels))
+    suggestions = [key for key in counted_labels]
+    dish_suggestions = DishPost.objects.filter(dish__alchemy_label=suggestions[0], status=DishPost.OPEN)
+    dish_suggestions2 = DishPost.objects.filter(dish__alchemy_label=suggestions[1], status=DishPost.OPEN)
+    context["dish_suggestions"] = dish_suggestions
+    context["dish_suggestions2"] = dish_suggestions2
+    return render(request, "dishes/dish_suggestions.html", context)
+
