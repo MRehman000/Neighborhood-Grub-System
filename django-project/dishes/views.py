@@ -3,7 +3,6 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.conf import settings
 from watson_developer_cloud import AlchemyLanguageV1
 from collections import Counter
-import operator
 
 from dishes.models import (
     DishPost, Diner, Order, DishRequest, Chef, Bid,
@@ -666,15 +665,15 @@ def check_redflag_complainant(complainant):
         return False
 
 def suggest_dishes(request):
-    suggestions = []
+    context = {}
     diner_labels = []
     for o in Order.objects.filter(diner__user=request.user):
         diner_labels.append(o.dish_post.dish.alchemy_label)
     counted_labels = dict(Counter(diner_labels))
-    suggestions.append(max(counted_labels.items(), key=operator.itemgetter(1))[0])
-    print(suggestions)
+    suggestions = [key for key in counted_labels]
     dish_suggestions = DishPost.objects.filter(dish__alchemy_label=suggestions[0], status=DishPost.OPEN)
-    print(dish_suggestions)
-    context = {"dish_suggestions": dish_suggestions}
+    dish_suggestions2 = DishPost.objects.filter(dish__alchemy_label=suggestions[1], status=DishPost.OPEN)
+    context["dish_suggestions"] = dish_suggestions
+    context["dish_suggestions2"] = dish_suggestions2
     return render(request, "dishes/dish_suggestions.html", context)
 
