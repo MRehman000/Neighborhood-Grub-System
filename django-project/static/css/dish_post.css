@@ -51,6 +51,7 @@ border: solid 2px #ffd32e;}
 	list-style-type: none;
 	font-size: 16px;
 	border-radius: 12px;
+	background-color:rgb(238,235,232);
 }
 
 .content ul{
@@ -95,6 +96,7 @@ border: solid 2px #ffd32e;}
 	list-style-type: none;
 	font-size: 16px;
 	border-radius: 12px;
+	background-color:rgb(238,235,232);
 }
 
 .content_pending ul{
