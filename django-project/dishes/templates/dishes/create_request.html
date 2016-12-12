@@ -32,12 +32,12 @@
 			  {{ dish_form }}
 			  {{ dish_request_form }}
 			  
-			  <input type="hidden" id="latField" value="[Get latitude]" />
-			  <input type="hidden" id="longField" value="[Get Longitude]" />
+			  <input type="hidden" id="id_dish_post-latitude" value="" />
+			  <input type="hidden" id="id_dish_post-longitude" value="" />
 			  
 			<!-- google map added -->
 			{% include "dishes/includes/google-maps-create-order.html" %}
-			
+			<br><p font-size=10px >Your address is </p><input type="text" id="UserAddress" value="[Get Address]" />
 			  <div class="button"><button type="submit">Submit</button>
 			</form>
 			<form action="/dishes/orders-requests/">

@@ -33,8 +33,9 @@
 			  {{ dish_request_form }}
 			  <input type="hidden" id="latField" value="" />
  			  <input type="hidden" id="longField" value="" />
- 			  <p>Your address is </p><input type="text" id="UserAddress" value="[Get Address]" />
-			  {% include "dishes/includes/google-maps-create-order.html" %}
+ 			  {% include "dishes/includes/google-maps-edit-post.html" %}
+ 			  <br><p>Your address is </p><input type="text" id="UserAddress" value="[Get Address]" />
+			  
 			  <div class="button"><button type="submit">Save Changes </button>
 			</form>
 			<!-- {% include "dishes/includes/google-maps-create-order.html" %} -->
