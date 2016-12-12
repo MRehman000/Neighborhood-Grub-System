@@ -43,6 +43,7 @@
                         <td>Total</td><td>${{ order.total }}</td>
                       </tr>
                     </table>
+                    <a href = "https://www.google.com/maps/dir/Current+Location/{{order.dish_post.latitude}},{{order.dish_post.longitude}}"> Get Direction </a>
                     {% if order.status == DishPost.OPEN %}
                       <a href="/dishes/orders/{{ order.id }}/cancel/">Cancel order</a>
                     {% else %}
