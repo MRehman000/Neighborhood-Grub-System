@@ -424,7 +424,7 @@ dish_posts = {
 
     11 : {
         "chef": 0,
-        "max_servings": 1,
+        "max_servings": 3,
         "dish": 25,
         "min_price": decimal.Decimal(11),
         "serving_size": decimal.Decimal(4),

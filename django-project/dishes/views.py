@@ -1,3 +1,5 @@
+import decimal
+
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404, render, redirect
 from django.conf import settings
@@ -436,7 +438,8 @@ def create_post(request):
             dish_data.update(dish_form.cleaned_data)
             dish = Dish.objects.create(**dish_data)
             classification = alchemy_language.taxonomy(text=dish.name)
-            setattr(dish, "alchemy_label", classification['taxonomy'][0]['label'])
+            if classification["taxonomy"]:
+                setattr(dish, "alchemy_label", classification['taxonomy'][0]['label'])
             dish.save()
 
             # Create the DishPost
