@@ -1,5 +1,91 @@
+{% load static %}
 {% include "ngs/header.html" %}
 
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Post Details</title>
+    <link href="{% static 'css/dish_post.css' %}" rel = "stylesheet" type="text/css"/>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,600italic' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+    
+      /*.input{height: 820px;}*/
+      body{background: url({% static 'img/wood.jpg' %});}
+     .wrap{
+     	padding-bottom:578px;
+     }
+     .wrap h2{
+     	font-size:35px;
+     }
+
+      .about_chef a{
+			color: black;
+		    font-size: 20px;
+		    margin-left: 136px;
+		    padding: 9px;
+			background: #ffd32e;
+		}
+
+		.about_chef a:hover, #current{color:red;}
+    
+		.map{
+			border: 2px solid #ffd32e;
+   			 float: right;
+    		height: 237px;
+    		margin-right: 96px;
+    		width: 403px;
+		}
+
+		.about_chef{
+			float: left;
+		}
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class = "wrap input ">
+      	<h2>{{ chef.name }} Dish Posts History</h2>
+      <div class ="about_chef ">
+
+			{% if past_dish_posts %}
+			  <ul>
+			    {% for dish_post in past_dish_posts %}
+			      <li>
+			        <a href="/dishes/posts/{{ dish_post.id }}/">{{dish_post.dish.name}}</a>
+			      </li>
+			    {% endfor %}
+			  </ul>
+			  
+			{% else %}
+			  <p>{{ chef.name }} has no history.</p>
+			{% endif %}
+			</div>
+
+         <div class="map"> 
+            {% include "dishes/includes/google-maps-dish-posts.html" %}
+        </div>
+    
+      
+    </div>
+
+    
+  </body>
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+<!-- 
 <h2>{{ chef.name }} Dish Posts History</h2>
 {% if past_dish_posts %}
   <ul>
@@ -9,7 +95,8 @@
       </li>
     {% endfor %}
   </ul>
-  {% include "dishes/includes/google-maps.html" %}
+  {% include "dishes/includes/google-maps-dish-posts.html" %}
 {% else %}
   <p>{{ chef.name }} has no history.</p>
 {% endif %}
+ -->
