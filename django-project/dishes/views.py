@@ -345,7 +345,7 @@ def create_request(request):
             # Before we can create the dish we have to collate more
             # information
             dish_data = {
-                "default_price": dish_request_form_data["price"],
+                "default_price": dish_request_form_data["min_price"],
                 "serving_size": dish_request_form_data["portion_size"],
                 "latitude": diner.latitude,
                 "longitude": diner.longitude
@@ -429,7 +429,7 @@ def create_post(request):
             # Before we can create the dish we have to collate more
             # information
             dish_data = {
-                "default_price": dish_post_form_data["price"],
+                "default_price": dish_post_form_data["min_price"],
                 "serving_size": dish_post_form_data["serving_size"],
             }
             dish_data.update(dish_form.cleaned_data)

@@ -1,14 +1,15 @@
 {% include "ngs/header.html" %}
 
-<h2>Dish Requests</h2>
+
 {% if dish_requests %}
-  <ul>
+ {% include "dishes/includes/google-maps-requests-page.html" %}
+ <!--  <ul>
     {% for dish_request in dish_requests %}
       <li>
         <a href="/dishes/requests/{{ dish_request.id }}/">{{dish_request.dish.name}}</a>
       </li>
     {% endfor %}
-  </ul>
+  </ul> -->
 {% else %}
   <p>No Dish Requests are available.</p>
 {% endif %}
@@ -19,9 +20,8 @@
     <a href="/dishes/requests/create/">Make a Request<a>
   </li>
   <li>
-    <a href="/dishes/orders/">View Your Orders</a>
+    <a href="/dishes/orders-requests/">View Your Orders</a>
   </li>
 </ul>
 {% endif %}
 
- {% include "dishes/includes/google-maps-requests-page.html" %}
