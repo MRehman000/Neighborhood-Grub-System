@@ -345,7 +345,7 @@ def create_request(request):
             # Before we can create the dish we have to collate more
             # information
             dish_data = {
-                "default_price": dish_request_form_data["price"],
+                "default_price": dish_request_form_data["min_price"],
                 "serving_size": dish_request_form_data["portion_size"],
                 "latitude": diner.latitude,
                 "longitude": diner.longitude
