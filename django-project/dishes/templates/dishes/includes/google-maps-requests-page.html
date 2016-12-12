@@ -103,6 +103,15 @@
           position: {lat: {{dishes.latitude}}, lng: {{dishes.longitude}}},
           map: map,
           title: 'NGS Request'
+          label: {
+            color: 'black',
+            fontWeight: 'bold',
+            text: '{{dishes.dish.name}}',
+          },
+          icon:  {
+          url: 'http://maps.google.com/mapfiles/ms/micons/restaurant.png',
+          size: new google.maps.Size(20, 32),
+          },
         });
         
         var content = '<div id="content">'+ 

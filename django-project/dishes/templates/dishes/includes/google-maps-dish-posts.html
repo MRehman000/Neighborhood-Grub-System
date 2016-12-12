@@ -59,6 +59,7 @@
       #target {
         width: 345px;
       }
+ 
     </style>
   </head>
   <body>
@@ -69,7 +70,7 @@
 
       function initMap() {
         //Our map will start at CCNY as default
-        var NYCenter = {lat: 40.8200471, lng: -73.9514611};
+        var NYCenter = {lat: 40.721938, lng: -73.947277};
         var mapOptions = {
           mapTypeId: 'roadmap',
           zoom: 14,
@@ -98,11 +99,24 @@
       }
         
         //Create a marker at CCNY
+        
+
         {% for dishes in dish_posts %}
+
          var marker = new google.maps.Marker({
           position: {lat: {{dishes.latitude}}, lng: {{dishes.longitude}}},
           map: map,
-          title: 'NGS Dish'
+          title: 'NGS Dish',
+          label: {
+            color: 'black',
+            fontWeight: 'bold',
+            text: '{{dishes.dish.name}}',
+          },
+          icon:  {
+          url: 'http://maps.google.com/mapfiles/ms/micons/restaurant.png',
+          size: new google.maps.Size(20, 32),
+          },
+
         });
         
         var content = '<div id="content">'+ 
