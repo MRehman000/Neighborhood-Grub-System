@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+
 class Diner(models.Model):
     """
     Django model class representing a Diner.
@@ -26,6 +27,7 @@ class Diner(models.Model):
     longitude = models.DecimalField(max_digits=9,
                                     decimal_places=6,
                                     default=decimal.Decimal(0.0))
+
 
 class Chef(models.Model):
     """
@@ -68,6 +70,7 @@ class Dish(models.Model):
     """
     name = models.CharField(max_length=128)
     description = models.TextField("Dish Description")
+    alchemy_label = models.TextField()
     default_price = models.DecimalField(max_digits=4,
                                         decimal_places=2,
                                         null=True)
@@ -76,10 +79,8 @@ class Dish(models.Model):
                                        decimal_places=1,
                                        default=decimal.Decimal(1.0))
 
-
-    latitude = models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
-    longitude= models.DecimalField(max_digits = 9, decimal_places = 6, default=decimal.Decimal(0.0))
-
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, default=decimal.Decimal(0.0))
+    longitude= models.DecimalField(max_digits=9, decimal_places=6, default=decimal.Decimal(0.0))
 
 
 
@@ -448,3 +449,7 @@ class Rating(models.Model):
                                              MaxValueValidator(5)])
     struck = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
+
+
+
+

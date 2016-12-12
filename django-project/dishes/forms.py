@@ -6,7 +6,6 @@ from dishes.models import (
 )
 
 
-
 class DishForm(forms.ModelForm):
     class Meta:
         model = Dish
@@ -75,7 +74,7 @@ class ChefForm(forms.ModelForm):
         fields = [
             "name",
             "blurb",
-            "experience"
+            "experience",
         ]
 
 class BidForm(forms.ModelForm):

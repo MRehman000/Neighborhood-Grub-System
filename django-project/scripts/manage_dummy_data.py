@@ -28,7 +28,17 @@ users = {
         "username": "chef_one",
         "email": "best@chef.com",
         "password": "gordonramsey"
-    }
+    },
+    2: {
+        "username": "bar",
+        "email": "bar@bar.com",
+        "password": "barpass"
+    },
+    3: {
+        "username": "tin",
+        "email": "tin@tin.com",
+        "password": "tinpass"
+    },
 }
 
 diners = {
@@ -41,6 +51,16 @@ diners = {
         "user": 1,
         "latitude": decimal.Decimal(40.991531),
         "longitude": decimal.Decimal(-73.670672)
+    },
+    2: {
+        "user": 2,
+        "latitude": decimal.Decimal(40.864331),
+        "longitude": decimal.Decimal(-73.653272)
+    },
+    3: {
+        "user": 3,
+        "latitude": decimal.Decimal(40.864986),
+        "longitude": decimal.Decimal(-73.986272)
     }
 }
 
@@ -62,6 +82,7 @@ cuisine_tags = {
 dishes = {
     0: {
         "name": "Sesame Chicken",
+        "alchemy_label": "/food and drink/cuisines/chinese cuisine",
         "default_price": decimal.Decimal(7.50),
         "description": ("Classic sesame chicken with white rice and choice "
                         "of sauce. More MSG than is legal!!!"),
@@ -69,6 +90,7 @@ dishes = {
     },
     1: {
         "name": "Rice and Beans",
+        "alchemy_label": "/food and drink/food/grains and pasta",
         "default_price": decimal.Decimal(5.75),
         "description": ("Does rice and beans need a description? "
                         "Of course not!"),
@@ -76,6 +98,7 @@ dishes = {
     },
     2: {
         "name": "Beef with Broccoli",
+        "alchemy_label": "/food and drink/food/fruits and vegetables",
         "default_price": decimal.Decimal(6.75),
         "description": "Masscared cow and harvested greens",
         "serving_size": decimal.Decimal(1.0)
@@ -83,6 +106,7 @@ dishes = {
 
     3: {
         "name": "Halal Chicken Over Rice",
+        "alchemy_label": "/food and drink/kosher food",
         "default_price": decimal.Decimal(6.00),
         "description": "Egyptian guy at CCNY with the best Halal!",
         "serving_size": decimal.Decimal(10.0)
@@ -90,6 +114,7 @@ dishes = {
 
     4: {
         "name": "Fish and Chips",
+        "alchemy_label": "/food and drink/food/salads",
         "default_price": decimal.Decimal(4.50),
         "description": "Fried fish served with homemade fries",
         "serving_size": decimal.Decimal(1.0)
@@ -97,6 +122,7 @@ dishes = {
 
     5: {
         "name": "Fried Chicken",
+        "alchemy_label": "/food and drink/food/fast food",
         "default_price": decimal.Decimal(2.50),
         "description": "Classic fried chicken, you won't go back to KFC after eating this!",
         "serving_size": decimal.Decimal(1.0)
@@ -104,58 +130,97 @@ dishes = {
 
     6: {
         "name": "Classic NY Cheesecake",
+        "alchemy_label": "/food and drink/desserts and baking",
         "default_price": decimal.Decimal(3.00),
         "description": "Cheesecake NY style",
         "serving_size": decimal.Decimal(8.0)
     },
     7: {
         "name": "Tuna Salad",
+        "alchemy_label": "/food and drink/food/salads",
         "default_price": decimal.Decimal(5.00),
         "description": "Fresh Tuna with lettuce, onions and other healthy things",
         "serving_size": decimal.Decimal(1.0)
     },
     8: {
         "name": "Cheeseburgers",
+        "alchemy_label": "/food and drink/food/fast food",
         "default_price": decimal.Decimal(4.00),
         "description": "Burgers fresh off the grill",
         "serving_size": decimal.Decimal(10.0)
     },
     9: {
         "name": "Pizza",
+        "alchemy_label": "/food and drink/cuisines/italian cuisine",
         "default_price": decimal.Decimal(2.00),
         "description": "Homemade pizza with homemade sauce and cheese",
         "serving_size": decimal.Decimal(8.0)
     },
     10: {
         "name": "Biryani",
+        "alchemy_label": "/food and drink/food/candy and sweets",
         "default_price": decimal.Decimal(8.00),
         "description": "Great tasting basmati rice and chicken cooked the Pakistani way",
         "serving_size": decimal.Decimal(2.0)
     },
     11: {
         "name": "Mango Lassi",
+        "alchemy_label": "/food and drink/desserts and baking",
         "default_price": decimal.Decimal(3.00),
-        "description": "Indian yogurt beverage, its got lots of different flavors<br>people like to drink it on a hot summer's day",
+        "description": "Indian yogurt beverage, its got lots of different "
+                       "flavors<br>people like to drink it on a hot summer's day",
         "serving_size": decimal.Decimal(8.0)
     },
     12: {
         "name": "Tandoori Chicken",
+        "alchemy_label": "/food and drink/desserts and baking",
         "default_price": decimal.Decimal(4.00),
         "description": "Spicy chicken seasoned with traditional Indian spices",
         "serving_size": decimal.Decimal(5.0)
     },
     13: {
         "name": "Vegetable Samosas",
+        "alchemy_label": "/food and drink/food/candy and sweets",
         "default_price": decimal.Decimal(1.50),
         "description": "Potatoes, chickpeas, and onions wrapped inside a bread and fried",
         "serving_size": decimal.Decimal(10.0)
     },
     14: {
         "name": "Chicken Makhni",
+        "alchemy_label": "/food and drink/food/salads",
         "default_price": decimal.Decimal(3.00),
         "description": "Chicken cooked in butter and cream, also known as Butter Chicken",
         "serving_size": decimal.Decimal(8.0)
-    }
+    },
+    15: {
+         "name": "Dim Sum",
+         "alchemy_label": "/food and drink/cuisines/chinese cuisine",
+         "default_price": decimal.Decimal(4.00),
+         "description": "A chinese dish of small savory steamed or fried dumplings",
+         "serving_size": decimal.Decimal(5.0)
+    },
+    16: {
+         "name": "Triple Cheeseburger",
+         "alchemy_label": "/food and drink/food/fast food",
+         "default_price": decimal.Decimal(4.00),
+         "description": "Homemade from grass-fed cows. You won't believe it!",
+         "serving_size": decimal.Decimal(5.0)
+    },
+    17: {
+         "name": "Sushi",
+         "alchemy_label": "/food and drink/cuisines/japanese cuisine",
+         "default_price": decimal.Decimal(4.00),
+         "description": "a Japanese dish consisting of small balls or rolls of vinegar-flavored "
+                        "cold cooked rice served with a garnish of raw fish, vegetables, or egg",
+         "serving_size": decimal.Decimal(5.0)
+    },
+    18: {
+        "name": "Key Lime pie",
+        "alchemy_label": "/food and drink/desserts and baking",
+        "default_price": decimal.Decimal(7.50),
+        "description": "Cheesecake NY style",
+        "serving_size": decimal.Decimal(8.0)
+    },
 
 
 }
@@ -240,7 +305,67 @@ dish_posts = {
         "meal_time": timezone.now() + datetime.timedelta(days=4),
         "latitude": decimal.Decimal(40.8197061),
         "longitude": decimal.Decimal(-72.9505599)
-    }
+    },
+    7: {
+        "chef": 0,
+        "max_servings": 4,
+        "dish": 8,
+        "min_price": decimal.Decimal(5.00),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+        "latitude": decimal.Decimal(40.716101),
+        "longitude": decimal.Decimal(-73.752738),
+        "status": DishPost.OPEN
+    },
+    8: {
+        "chef": 0,
+        "max_servings": 4,
+        "dish": 15,
+        "min_price": decimal.Decimal(5.00),
+        "serving_size": decimal.Decimal(1),
+        "last_call": timezone.now() + datetime.timedelta(days=3),
+        "meal_time": timezone.now() + datetime.timedelta(days=4),
+        "latitude": decimal.Decimal(40.716321),
+        "longitude": decimal.Decimal(-73.756538),
+        "status": DishPost.OPEN
+    },
+    9: {
+        "chef": 0,
+        "max_servings": 3,
+        "dish": 16,
+        "min_price": decimal.Decimal(6.50),
+        "serving_size": decimal.Decimal(0.7),
+        "last_call": timezone.now() + datetime.timedelta(days=1),
+        "meal_time": timezone.now() + datetime.timedelta(days=2),
+        "latitude": decimal.Decimal(40.8197061),
+        "longitude": decimal.Decimal(-73.96078),
+        "status": DishPost.COMPLETE
+    },
+    10: {
+        "chef": 0,
+        "max_servings": 3,
+        "dish": 17,
+        "min_price": decimal.Decimal(6.50),
+        "serving_size": decimal.Decimal(1.5),
+        "last_call": timezone.now() + datetime.timedelta(days=1),
+        "meal_time": timezone.now() + datetime.timedelta(days=2),
+        "latitude": decimal.Decimal(40.7658061),
+        "longitude": decimal.Decimal(-73.98987),
+        "status": DishPost.COMPLETE
+    },
+    11: {
+        "chef": 0,
+        "max_servings": 3,
+        "dish": 18,
+        "min_price": decimal.Decimal(7.50),
+        "serving_size": decimal.Decimal(8),
+        "last_call": timezone.now() + datetime.timedelta(days=1),
+        "meal_time": timezone.now() + datetime.timedelta(days=2),
+        "latitude": decimal.Decimal(40.7672061),
+        "longitude": decimal.Decimal(-73.92717),
+        "status": DishPost.COMPLETE
+    },
 }
 
 bids = {
@@ -258,6 +383,24 @@ orders = {
         "dish_post": 0,
         "bid": 0,
         "num_servings": 1
+    },
+    1: {
+        "diner": 0,
+        "dish_post": 9,
+        "bid": 0,
+        "num_servings": 1
+    },
+    2: {
+        "diner": 2,
+        "dish_post": 10,
+        "bid": 0,
+        "num_servings": 3
+    },
+    3: {
+        "diner": 3,
+        "dish_post": 11,
+        "bid": 0,
+        "num_servings": 2
     },
 #    1: {
 #        "diner": 0,
@@ -380,7 +523,9 @@ create_account_requests = {
 
 suspension_info = {
     0: {"user": 0},
-    1: {"user": 1}
+    1: {"user": 1},
+    2: {"user": 2},
+    3: {"user": 3},
 }
 
 balances = {
