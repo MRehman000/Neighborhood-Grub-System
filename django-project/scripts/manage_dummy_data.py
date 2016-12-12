@@ -692,6 +692,24 @@ bids = {
         "num_servings": 1,
         "price": decimal.Decimal(6.75)
     },
+    1: {
+        "diner": 0,
+        "dish_post": 13,
+        "num_servings": 1,
+        "price": decimal.Decimal(15.75)
+    },
+    2: {
+        "diner": 0,
+        "dish_post": 14,
+        "num_servings": 1,
+        "price": decimal.Decimal(25.50)
+    },
+    3: {
+        "diner": 0,
+        "dish_post": 15,
+        "num_servings": 1,
+        "price": decimal.Decimal(11.50)
+    }
 }
 
 orders = {
@@ -719,30 +737,34 @@ orders = {
         "bid": 0,
         "num_servings": 2
     },
-#    1: {
-#        "diner": 0,
-#        "dish_post": 1,
-#        "num_servings": 2,
-#        "status": Order.PENDING_FEEDBACK
-#    },
-#    2: {
-#        "diner": 0,
-#        "dish_post": 2,
-#        "num_servings": 1,
-#        "status": Order.PENDING_FEEDBACK
-#    },
-#    3: {
-#        "diner": 0,
-#        "dish_post": 3,
-#        "num_servings": 2,
-#        "status": Order.PENDING_FEEDBACK
-#    },
-#    4: {
-#        "diner": 0,
-#        "dish_post": 4,
-#        "num_servings": 1,
-#        "status": Order.PENDING_FEEDBACK
-#    }
+    4: {
+        "diner": 0,
+        "dish_post": 12,
+        "bid": 0,
+        "num_servings": 2,
+        "status": Order.PENDING_FEEDBACK
+    },
+    5: {
+        "diner": 0,
+        "dish_post": 13,
+        "bid": 1,
+        "num_servings": 1,
+        "status": Order.PENDING_FEEDBACK
+    },
+    6: {
+        "diner": 0,
+        "dish_post": 14,
+        "bid": 2,
+        "num_servings": 2,
+        "status": Order.PENDING_FEEDBACK
+    },
+    7: {
+        "diner": 0,
+        "dish_post": 15,
+        "bid": 3,
+        "num_servings": 1,
+        "status": Order.PENDING_FEEDBACK
+    }
 }
 
 dish_requests = {
