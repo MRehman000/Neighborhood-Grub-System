@@ -22,7 +22,7 @@
 		        background-size: cover;
 			}
 			.input{
-
+				width: 400px;
 				background-color: rgba(0,0,0,0.7);
 				margin: 0 auto;
 				margin-top: 120px;
@@ -35,6 +35,8 @@
 				-o-border-radius:20px;
 				font-family: arial;
 				color: white;
+				padding-bottom: 20px;
+				margin-bottom: 100px;
 				}
 			.input input[type="text"]{
 				width: 245px;
@@ -80,13 +82,13 @@
 
 			.input button{
 				background-color: rgb(106, 187, 155);
-    			border: 0 none;
-    			border-radius: 5px;
+			    border: 0 none;
+			    border-radius: 5px;
 			    font-size: 16px;
 			    height: 35px;
 			    margin-bottom: 20px;
-			    margin-left: 76px;
-			    margin-top: 24px;
+			    margin-left: 123px;
+			    margin-top: 526px;
 			    width: 88px;
 			}
 
@@ -94,7 +96,11 @@
 				padding-bottom: 25px;
 			}
 			
-			
+			.map{
+				height: 194px;
+    			width: 358px;
+
+			}
 
 		</style>
 	</head> 
@@ -107,12 +113,22 @@
         <table>
           {{ form.as_table }}
         </table>
+			
+		<div class="map">
+			<p>Address</p>
+			<input type="text" id="UserAddress" value="" />
+			<h3>Click on your current location to save your address</h3>
+			
+			{% include "accounts/includes/google-maps-signup-page.html" %}
+  			<p>Address</p>
+			
+		</div>	
+
 			  <button type="submit">Submit</button>
 			</form>
-		</div>
-	<h1>Click on your current location to save your address</h1>
-	{% include "accounts/includes/google-maps-signup-page.html" %}
-  <p>Address</p>
-	<input type="text" id="UserAddress" value="" />
+		
+		
+	</div>
+	
 	</body>
 </html>
