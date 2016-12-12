@@ -53,8 +53,9 @@
           </table>
           <input type="hidden" id="latField" value="" />
           <input type="hidden" id="longField" value="" />
+          {% include "dishes/includes/google-maps-edit-request.html" %}
           <p>Your address is </p><input type="text" id="UserAddress" value="[Get Address]" />
-          {% include "dishes/includes/google-maps-edit-post.html" %}
+          
 
           <button type="submit">Submit</button>
         </form>
