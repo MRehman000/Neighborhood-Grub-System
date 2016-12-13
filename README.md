@@ -5,7 +5,12 @@ who love to cook and people who love to eat in a community.
 
 # Requirements
 
-These instructions assume that you 
+These instructions have been verified to work on 64-bit Ubuntu 16.04. The
+requirements are:
+
+1. Python 3.4 or greater (3.5.2 preferred).
+2. The Python package manager pip.
+3. The virtual environment builder virtualenv.
 
 # Installation Instructions
 
@@ -33,12 +38,20 @@ Change directory to the Django project directory
 ```
 cd django-project
 ```
+Add the `config.py` file with the API key.
+
+Make the SQL migrations.
+```
+python manage.py makemigrations accounts dishes
+```
+Apply the migrations.
+```
+python manage.py migrate
+```
 Populate the database with mock data
 ```
 python scripts/manage_dummy_data.py load
 ```
-Add the `config.py` file with the API key.
-
 Run the dev server
 ```
 python manage.py runserver 127.0.0.1:8000
