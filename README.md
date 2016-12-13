@@ -57,3 +57,9 @@ Run the dev server
 python manage.py runserver 127.0.0.1:8000
 ```
 The NGS web application will be running and accessible at 127.0.0.1:8000
+
+# Dummy Data
+
+Dummy data for the project is contained in the file
+`ngs/scripts/manage_dummy_data.py`. The information for each dummy user is
+contained in this script, including their passwords.
